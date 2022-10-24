@@ -11,5 +11,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
         public IList<Task> Tasks  { get; set; }
 
         public IList<User> Users { get; set; }
+
+        public Result? Result { get; set; }
     }
 }
