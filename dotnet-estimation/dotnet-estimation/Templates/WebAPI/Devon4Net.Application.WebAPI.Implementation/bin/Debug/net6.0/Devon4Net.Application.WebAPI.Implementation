@@ -598,6 +598,145 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController">
+            <summary>
+            Session controller
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.#ctor(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="sessionService"></param>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.GetSession(System.Int64)">
+            <summary>
+            Gets the entire list of sessions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.Create(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto)">
+            <summary>
+            Creates an Session user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters.SessionConverter">
+            <summary>
+            EmployeeConverter
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters.SessionConverter.ModelToDto(Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session)">
+            <summary>
+            ModelToDto transformation
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters.SessionConverter.DtoToModel(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto)">
+            <summary>
+            DtoToModel transformation
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto">
+            <summary>
+            Session definition
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Id">
+            <summary>
+            the Id
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.InviteToken">
+            <summary>
+            the InviteToken
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.ExpiresAt">
+            <summary>
+            the expiration time
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Tasks">
+            <summary>
+            the Tasks
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Users">
+            <summary>
+            the Users
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Result">
+            <summary>
+            the Result
+            </summary>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto">
+            <summary>
+            User definition
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto.Id">
+            <summary>
+            the Id
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto.Role">
+            <summary>
+            the Role
+            </summary>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
+            <summary>
+            TodoService interface
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.GetSession(System.Int64)">
+            <summary>
+            Get Session with the given id
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
+            <summary>
+            Add an User to a given session
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.GetSessionUsers(System.Int64)">
+            <summary>
+            Get users of a session
+            </summary>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService">
+            <summary>
+            Session service implementation
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session})">
+            <summary>
+            constructor
+            </summary>
+            <param name="SessionRepository"></param>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.GetSession(System.Int64)">
+            <summary>
+            Get the session for the given id
+            </summary>
+            <param name="id">Id of the searched Session</param>
+            <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
+            <summary>
+            Add an user to a given session
+            </summary>
+            <param name="sessionId"></param>
+            <param name="userId"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
             TODOs controller

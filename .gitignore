@@ -1,0 +1,7 @@
+**/bin
+**/*.dll
+*.log
+obj
+bin
+logs
+.vs

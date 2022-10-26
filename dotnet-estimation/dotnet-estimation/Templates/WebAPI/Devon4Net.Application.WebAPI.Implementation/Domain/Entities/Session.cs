@@ -1,6 +1,6 @@
 namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 {
-    public partial class Session 
+    public class Session 
     {
         public long Id { get; set; }
         
