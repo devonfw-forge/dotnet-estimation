@@ -1,7 +1,9 @@
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
-
+    /// <summary>
+    /// ISessionService
+    /// </summary>
     public interface ISessionService
     {
         /// <summary>

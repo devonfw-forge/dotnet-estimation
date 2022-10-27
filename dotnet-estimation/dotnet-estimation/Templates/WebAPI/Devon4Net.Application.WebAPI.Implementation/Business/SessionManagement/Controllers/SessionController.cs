@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
+    /// <summary>
+    /// Session controller
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     [EnableCors("CorsPolicy")]
