@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dkarassa\\source\\repos\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {}
+    "C:\\Projects\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dkarassa\\source\\repos\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {
+    "C:\\Projects\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dkarassa\\source\\repos\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
+        "projectUniqueName": "C:\\Projects\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
         "projectName": "Devon4Net.Application.WebAPI.Implementation",
-        "projectPath": "C:\\Users\\dkarassa\\source\\repos\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
-        "packagesPath": "C:\\Users\\dkarassa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dkarassa\\source\\repos\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\obj\\",
+        "projectPath": "C:\\Projects\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
+        "packagesPath": "C:\\Users\\omoukhli\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\dkarassa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\omoukhli\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -94,8 +92,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -104,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

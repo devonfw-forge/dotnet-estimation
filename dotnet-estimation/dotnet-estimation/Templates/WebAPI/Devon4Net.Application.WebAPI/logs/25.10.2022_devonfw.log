@@ -1,0 +1,94 @@
+2022-10-25 15:04:42.978 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 15:04:43.322 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 15:04:43.323 +02:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-10-25 15:04:47.976 +02:00 [INF] User profile is available. Using 'C:\Users\omoukhli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-10-25 15:04:48.242 +02:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-10-25 15:04:48.251 +02:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-10-25 15:04:48.252 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-10-25 15:04:48.252 +02:00 [INF] Hosting environment: Development
+2022-10-25 15:04:48.252 +02:00 [INF] Content root path: C:\Projects\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-10-25 15:08:05.271 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 15:08:05.520 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 15:08:05.520 +02:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-10-25 15:08:10.126 +02:00 [INF] User profile is available. Using 'C:\Users\omoukhli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-10-25 15:08:10.383 +02:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-10-25 15:08:10.390 +02:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-10-25 15:08:10.390 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-10-25 15:08:10.390 +02:00 [INF] Hosting environment: Development
+2022-10-25 15:08:10.390 +02:00 [INF] Content root path: C:\Projects\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-10-25 15:09:11.518 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/index.html - -
+2022-10-25 15:09:11.766 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/index.html - - - 200 - text/html;charset=utf-8 250.1638ms
+2022-10-25 15:09:11.808 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-standalone-preset.js - -
+2022-10-25 15:09:11.808 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui.css - -
+2022-10-25 15:09:11.809 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-bundle.js - -
+2022-10-25 15:09:11.897 +02:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2022-10-25 15:09:11.897 +02:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2022-10-25 15:09:11.897 +02:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2022-10-25 15:09:11.899 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui.css - - - 200 143943 text/css 91.0638ms
+2022-10-25 15:09:11.899 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-bundle.js - - - 200 1095087 application/javascript 91.0595ms
+2022-10-25 15:09:11.899 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-standalone-preset.js - - - 200 339486 application/javascript 91.0640ms
+2022-10-25 15:09:12.265 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - -
+2022-10-25 15:09:12.339 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/favicon-32x32.png - -
+2022-10-25 15:09:12.346 +02:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2022-10-25 15:09:12.348 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/favicon-32x32.png - - - 200 628 image/png 8.3589ms
+2022-10-25 15:09:12.579 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 313.3643ms
+2022-10-25 15:11:18.665 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 15:11:18.906 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 15:11:18.906 +02:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-10-25 15:11:23.525 +02:00 [INF] User profile is available. Using 'C:\Users\omoukhli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-10-25 15:11:23.778 +02:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-10-25 15:11:23.788 +02:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-10-25 15:11:23.789 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-10-25 15:11:23.789 +02:00 [INF] Hosting environment: Development
+2022-10-25 15:11:23.789 +02:00 [INF] Content root path: C:\Projects\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-10-25 15:11:32.887 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/index.html - -
+2022-10-25 15:11:33.175 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/index.html - - - 200 - text/html;charset=utf-8 289.2557ms
+2022-10-25 15:11:33.492 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - -
+2022-10-25 15:11:33.793 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 300.1843ms
+2022-10-25 15:11:50.130 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/session - -
+2022-10-25 15:11:50.160 +02:00 [INF] Executing endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 15:11:50.175 +02:00 [INF] Route matched with {action = "CreateSession", controller = "Session"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult CreateSession() on controller Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController (Devon4Net.Application.WebAPI.Implementation).
+2022-10-25 15:11:50.190 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2022-10-25 15:11:50.199 +02:00 [INF] Executed action Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation) in 18.8799ms
+2022-10-25 15:11:50.202 +02:00 [INF] Executed endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 15:11:50.203 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/session - - - 200 - text/plain;+charset=utf-8 72.8324ms
+2022-10-25 16:05:08.790 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 16:05:09.070 +02:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-10-25 16:05:09.070 +02:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-10-25 16:05:13.902 +02:00 [INF] User profile is available. Using 'C:\Users\omoukhli\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-10-25 16:05:14.223 +02:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-10-25 16:05:14.239 +02:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-10-25 16:05:14.239 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-10-25 16:05:14.240 +02:00 [INF] Hosting environment: Development
+2022-10-25 16:05:14.240 +02:00 [INF] Content root path: C:\Projects\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-10-25 16:05:19.642 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/index.html - -
+2022-10-25 16:05:19.953 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/index.html - - - 200 - text/html;charset=utf-8 310.4825ms
+2022-10-25 16:05:20.318 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - -
+2022-10-25 16:05:20.535 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 216.7704ms
+2022-10-25 16:06:08.043 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:8085/session application/json 517
+2022-10-25 16:06:08.061 +02:00 [INF] CORS policy execution failed.
+2022-10-25 16:06:08.062 +02:00 [INF] Request origin http://localhost:8085 does not have permission to access the resource.
+2022-10-25 16:06:08.072 +02:00 [INF] Executing endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 16:06:08.096 +02:00 [INF] Route matched with {action = "CreateSession", controller = "Session"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto) on controller Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController (Devon4Net.Application.WebAPI.Implementation).
+2022-10-25 16:06:08.232 +02:00 [INF] Executing ObjectResult, writing value of type 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto'.
+2022-10-25 16:06:08.288 +02:00 [INF] Executed action Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation) in 178.5985ms
+2022-10-25 16:06:08.293 +02:00 [INF] Executed endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 16:06:08.295 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:8085/session application/json 517 - 201 - application/json;+charset=utf-8 251.9913ms
+2022-10-25 16:06:12.415 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:8085/session application/json 517
+2022-10-25 16:06:12.416 +02:00 [INF] CORS policy execution failed.
+2022-10-25 16:06:12.417 +02:00 [INF] Request origin http://localhost:8085 does not have permission to access the resource.
+2022-10-25 16:06:12.418 +02:00 [INF] Executing endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 16:06:12.420 +02:00 [INF] Route matched with {action = "CreateSession", controller = "Session"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto) on controller Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController (Devon4Net.Application.WebAPI.Implementation).
+2022-10-25 16:06:12.427 +02:00 [INF] Executing ObjectResult, writing value of type 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto'.
+2022-10-25 16:06:12.429 +02:00 [INF] Executed action Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation) in 8.011ms
+2022-10-25 16:06:12.429 +02:00 [INF] Executed endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 16:06:12.430 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:8085/session application/json 517 - 201 - application/json;+charset=utf-8 15.1960ms
+2022-10-25 16:06:14.062 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:8085/session application/json 517
+2022-10-25 16:06:14.063 +02:00 [INF] CORS policy execution failed.
+2022-10-25 16:06:14.063 +02:00 [INF] Request origin http://localhost:8085 does not have permission to access the resource.
+2022-10-25 16:06:14.064 +02:00 [INF] Executing endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 16:06:14.064 +02:00 [INF] Route matched with {action = "CreateSession", controller = "Session"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto) on controller Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController (Devon4Net.Application.WebAPI.Implementation).
+2022-10-25 16:06:14.066 +02:00 [INF] Executing ObjectResult, writing value of type 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto'.
+2022-10-25 16:06:14.067 +02:00 [INF] Executed action Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation) in 2.5434ms
+2022-10-25 16:06:14.067 +02:00 [INF] Executed endpoint 'Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession (Devon4Net.Application.WebAPI.Implementation)'
+2022-10-25 16:06:14.068 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:8085/session application/json 517 - 201 - application/json;+charset=utf-8 5.6774ms
