@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
+
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
     /// <summary>
@@ -15,29 +17,37 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     
     public class SessionController: ControllerBase
     {
-        //private readonly ISessionService _sessionService;
-        /*
+        private readonly ISessionService _sessionService;
+        
         public SessionController( ISessionService sessionService)
         {
             _sessionService = sessionService;
         }
-        */
+        
         
 
-
+        /// <summary>
+        /// Creates a session
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("/session")]
         [ProducesResponseType(typeof(SessionDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult CreateSession(SessionDto sessionDto)
+        public async Task<ActionResult> CreateSession(SessionDto sessionDto)
         {
+            
+            /*
             SessionDto session = new SessionDto();
             session.Id = 788;
             session.InviteToken = "invitetoken788";
-            
-            return StatusCode(StatusCodes.Status201Created, session);
+            */
+
+            var result = await _sessionService.CreateSession(sessionDto.ExpiresAt, sessionDto.Tasks, sessionDto.Users);
+
+            return StatusCode(StatusCodes.Status201Created, result);
         }
     }
 

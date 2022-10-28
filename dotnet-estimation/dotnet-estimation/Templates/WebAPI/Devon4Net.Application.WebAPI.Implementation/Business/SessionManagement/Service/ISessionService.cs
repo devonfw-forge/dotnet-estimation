@@ -1,4 +1,5 @@
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
+using LiteDB;
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
     /// <summary>
@@ -13,6 +14,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <param name="tasks"></param>
         /// <param name="users"></param>
         /// <returns></returns>
-        Task<Session> CreateSession(DateTime expiresAt, IList<Domain.Entities.Task> tasks, IList<User> users);
+        Task<BsonValue> CreateSession(DateTime expiresAt, IList<Domain.Entities.Task> tasks, IList<User> users);
     }
 }

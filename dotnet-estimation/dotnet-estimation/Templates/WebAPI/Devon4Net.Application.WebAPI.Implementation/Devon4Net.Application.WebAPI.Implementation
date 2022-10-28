@@ -598,6 +598,81 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController">
+            <summary>
+            Session controller
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto)">
+            <summary>
+            Creates a session
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto">
+            <summary>
+            Session definition
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Id">
+            <summary>
+            the Id
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.InviteToken">
+            <summary>
+            the Invite Token
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.ExpiresAt">
+            <summary>
+            the Expiry Date
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Tasks">
+            <summary>
+            the Tasks to be estimated
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Users">
+            <summary>
+            the Athorized Users
+            </summary>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
+            <summary>
+            ISessionService
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.CreateSession(System.DateTime,System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task},System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User})">
+            <summary>
+            CreateSession
+            </summary>
+            <param name="expiresAt"></param>
+            <param name="tasks"></param>
+            <param name="users"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService">
+            <summary>
+            Session service implementation
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="SessionRepository"></param>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.CreateSession(System.DateTime,System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task},System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User})">
+            <summary>
+            Creates the Session
+            </summary>
+            <param name="expiresAt"></param>
+            <param name="tasks"></param>
+            <param name="users"></param>
+            <returns></returns>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
             TODOs controller
@@ -895,6 +970,28 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Domain.Database.SessionContext">
+            <summary>
+            Session database context definition
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Domain.Database.SessionContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Devon4Net.Application.WebAPI.Implementation.Domain.Database.SessionContext})">
+            <summary>
+            Session context definition
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Domain.Database.SessionContext.Session">
+            <summary>
+            Dbset
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Domain.Database.SessionContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Model rules definition
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Domain.Database.TodoContext">
             <summary>
             Context definition
@@ -995,6 +1092,20 @@
             DeleteEmployeeById
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Domain.RepositoryInterfaces.ISessionRepository">
+            <summary>
+            SessionRepository interface
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Domain.RepositoryInterfaces.ISessionRepository.Create(System.DateTime,System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task},System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User})">
+            <summary>
+            Create
+            </summary>
+            <param name="expiresAt"></param>
+            <param name="tasks"></param>
+            <param name="users"></param>
             <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Domain.RepositoryInterfaces.ITodoRepository">
