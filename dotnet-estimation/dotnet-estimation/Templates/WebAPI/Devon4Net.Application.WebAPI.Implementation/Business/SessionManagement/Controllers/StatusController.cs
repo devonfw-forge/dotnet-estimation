@@ -10,6 +10,7 @@ using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
 
 using Devon4Net.Infrastructure.Logger.Logging;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -25,70 +26,42 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             _sessionService = SessionService;
         }
 
-        [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(typeof(StatusDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("/estimation/v1/status")]
-        public async Task<IActionResult> GetSessionStatus(long requestedSessionId)
+        [Route("/estimation/v1/status/{id:long?}")]
+        public async Task<IActionResult> GetSessionStatus(long? id = null)
         {
-            Devon4NetLogger.Debug($"{requestedSessionId}");
+            Devon4NetLogger.Debug($"{id}");
 
-            if (requestedSessionId == null)
+            if (!id.HasValue)
             {
-                return StatusCode(400);
+                return BadRequest();
             }
 
-            var statusResult = new StatusDto { IsValid = false, CurrentTask = null };
-
-            Session sessionResult = await _sessionService.GetSession(requestedSessionId);
-
-            // TODO: catch if session can not be found! (too simple!)
-            if (sessionResult == null) 
+            try
             {
-                return StatusCode(404);
-            }
+                var (isValid, task) = await _sessionService.GetStatus(id.Value);
 
-            bool sessionIsValid = sessionResult.ExpiresAt > DateTime.Now;
+                var statusResult = new StatusDto
+                {
+                    IsValid = isValid,
+                    CurrentTask = task is null ? null : TaskConverter.ModelToDto(task)
+                };
 
-            statusResult.IsValid = sessionIsValid;
-
-            if (!sessionIsValid)
-            {
                 return new ObjectResult(JsonConvert.SerializeObject(statusResult));
             }
-
-            var openTasks = sessionResult.Tasks.Where(item => item.Status == Status.Open).ToList();
-
-            if (openTasks.Any()) 
+            catch (Exception exception)
             {
-                openTasks.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
-
-                var currentTask = openTasks.First();
-
-                var taskDto = TaskConverter.ModelToDto(currentTask);
-
-                statusResult.CurrentTask = taskDto;
-            } 
-            else
-            {
-                var suspendedTasks = sessionResult.Tasks.Where(item => item.Status == Status.Suspended).ToList();
-
-                suspendedTasks.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
-
-                if (suspendedTasks.Any())
+                return exception switch
                 {
-                    var currentTask = suspendedTasks.First();
-
-                    var taskDto = TaskConverter.ModelToDto(currentTask);
-
-                    statusResult.CurrentTask = taskDto;
-                }
+                    NotFoundException _ => NotFound(),
+                    _ => StatusCode(500),
+                };
             }
-
-            return new ObjectResult(JsonConvert.SerializeObject(statusResult));
         }
     }
 }

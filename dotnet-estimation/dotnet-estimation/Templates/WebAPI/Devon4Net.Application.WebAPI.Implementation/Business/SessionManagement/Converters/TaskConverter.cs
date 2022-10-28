@@ -7,14 +7,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public static TaskDto ModelToDto(Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task task)
         {
-            if (task == null) return new TaskDto();
-
             return new TaskDto
             {
                 Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
-                Url = task.Url
+                Url = task.Url,
+                Status = task.Status,
             };
         }
     }

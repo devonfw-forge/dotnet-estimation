@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos
 {
@@ -15,5 +16,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public string? Description { get; set; }
 
         public string? Url { get; set; }
+
+        public Status Status { get; set; }
     }
 }
