@@ -27,6 +27,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using Devon4Net.Infrastructure.LiteDb.Repository;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Configuration
 {
@@ -97,6 +98,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Configuration
         {
             services.SetupDatabase<TodoContext>(configuration, "Default", DatabaseType.InMemory).ConfigureAwait(false);
             services.SetupDatabase<EmployeeContext>(configuration, "Employee", DatabaseType.InMemory).ConfigureAwait(false);
+            services.AddTransient(typeof(ILiteDbRepository<>), typeof(LiteDbRepository<>));
         }
 
         private static void SetupJwtPolicies(IServiceCollection services)
