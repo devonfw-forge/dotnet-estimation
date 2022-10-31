@@ -32,19 +32,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("/estimation/v1/status/{id:long?}")]
-        public async Task<IActionResult> GetSessionStatus(long? id = null)
+        [Route("/estimation/v1/status/{id:long}")]
+        public async Task<IActionResult> GetSessionStatus(long id)
         {
-            Devon4NetLogger.Debug($"{id}");
-
-            if (!id.HasValue)
-            {
-                return BadRequest();
-            }
+            Devon4NetLogger.Debug($"Get-Request for session status with id: {id}");
 
             try
             {
-                var (isValid, task) = await _sessionService.GetStatus(id.Value);
+                var (isValid, task) = await _sessionService.GetStatus(id);
 
                 var statusResult = new StatusDto
                 {
