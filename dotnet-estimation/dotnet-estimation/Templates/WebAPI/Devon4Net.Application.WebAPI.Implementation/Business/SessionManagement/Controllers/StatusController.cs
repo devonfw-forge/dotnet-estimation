@@ -32,7 +32,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("/estimation/v1/status/{id:long}")]
+        [Route("/estimation/v1/session/{id:long}/status")]
         public async Task<IActionResult> GetSessionStatus(long id)
         {
             Devon4NetLogger.Debug($"Get-Request for session status with id: {id}");
