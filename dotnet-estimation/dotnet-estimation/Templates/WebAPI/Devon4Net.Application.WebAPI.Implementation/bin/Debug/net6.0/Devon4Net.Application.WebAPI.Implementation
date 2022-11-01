@@ -598,6 +598,11 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
+            <summary>
+            TodoService interface
+            </summary>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
             TODOs controller
