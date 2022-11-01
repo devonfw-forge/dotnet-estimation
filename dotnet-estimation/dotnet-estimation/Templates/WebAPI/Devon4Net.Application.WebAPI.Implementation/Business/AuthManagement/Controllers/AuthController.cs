@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Dto;
+using Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service;
+using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Infrastructure.JWT.Common.Const;
 using Devon4Net.Infrastructure.JWT.Handlers;
 using Devon4Net.Infrastructure.Logger.Logging;
@@ -18,16 +20,45 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
     public class AuthController : ControllerBase
     {
         private IJwtHandler JwtHandler { get; }
+        private IAuthService _authService;
 
         /// <summary>
         /// Constructor with DI
         /// </summary>
         /// <param name="jwtHandler"></param>
-        public AuthController(IJwtHandler jwtHandler)
+        public AuthController(IJwtHandler jwtHandler, IAuthService authService)
         {
             JwtHandler = jwtHandler;
+            _authService = authService;
         }
 
+
+        /// <summary>
+        /// Performs the join proces via the user flow
+        /// </summary>
+        /// <returns>LoginResponse class will provide the JWT token to securize the server calls</returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("/v1/join/session")]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> JoinSessionAsync(string user)
+        {
+            if(string.IsNullOrEmpty(user))
+            {
+                Devon4NetLogger.Debug("Session Join user did not provide an username from controller AuthController");
+                return BadRequest("The username can not be empty");
+            }
+            else
+            {
+                Devon4NetLogger.Debug("Executing Login from controller AuthController");
+                var result = await _authService.getTokenUsername(user);
+                return Ok(result);
+            }
+        }
+        /*
         /// <summary>
         /// Performs the login proces via the user/password flow
         /// This is only a sample. Please avoid any logic on the controller.
@@ -41,8 +72,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Login(string user, string password)
+        public async IActionResult Login(string user, string password)
         {
+            var result = await _authService.login(user, password);
+
+            if (result.Token == "" )
             if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password))
             {
                 return BadRequest("The user name of password can not be empty");
@@ -59,6 +93,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
 
             return Ok(new LoginResponse { Token = token });
         }
+        */
 
         /// <summary>
         /// Provides the information related to the logged user
@@ -67,8 +102,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
         /// <returns></returns>
         [HttpGet]
         [HttpOptions]
-        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = AuthConst.DevonSampleUserRole)]
-        // Or use [Authorize(Policy = AuthConst.DevonSamplePolicy)]
+        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
         [Route("/v1/auth/currentuser")]
         [ProducesResponseType(typeof(CurrentUserResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -84,7 +118,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
             if (string.IsNullOrEmpty(token)) return Unauthorized();
 
             var userClaims = JwtHandler.GetUserClaims(token).ToList();
-
             // Return result with claims values
             var result = new CurrentUserResponse
             {
