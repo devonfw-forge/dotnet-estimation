@@ -432,3 +432,4 @@ C:\Users\vsehtman\source\repos\dotnet-estimation\dotnet-estimation\dotnet-estima
 C:\Users\vsehtman\source\repos\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\obj\Debug\net6.0\Devon4Net.Application.WebAPI.pdb
 C:\Users\vsehtman\source\repos\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\obj\Debug\net6.0\Devon4Net.Application.WebAPI.genruntimeconfig.cache
 C:\Users\vsehtman\source\repos\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\obj\Debug\net6.0\ref\Devon4Net.Application.WebAPI.dll
+C:\Users\vsehtman\source\repos\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\bin\Debug\net6.0\Certificates\localhost.pfx

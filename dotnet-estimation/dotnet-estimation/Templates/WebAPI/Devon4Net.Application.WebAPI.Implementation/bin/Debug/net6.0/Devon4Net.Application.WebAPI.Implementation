@@ -33,16 +33,15 @@
             Please remember to avoid the use ob logic in a controller !!!
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler,Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService)">
             <summary>
             Constructor with DI
             </summary>
             <param name="jwtHandler"></param>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.Login(System.String,System.String)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.JoinSessionAsync(System.String)">
             <summary>
-            Performs the login proces via the user/password flow
-            This is only a sample. Please avoid any logic on the controller.
+            Performs the join proces via the user flow
             </summary>
             <returns>LoginResponse class will provide the JWT token to securize the server calls</returns>
         </member>
@@ -107,6 +106,13 @@
             <summary>
             Token
             </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService.getTokenUsername(System.String)">
+            <summary>
+            Generate an AccessToken for a given username
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.EmployeeManagement.Controllers.EmployeeController">
             <summary>
@@ -598,6 +604,7 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+<<<<<<< HEAD
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController">
             <summary>
             Session controller
@@ -615,9 +622,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.Create(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddUserToSession(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto)">
             <summary>
-            Creates an Session user
+            Add a Session user
             </summary>
             <returns></returns>
         </member>
@@ -690,11 +697,14 @@
             the Role
             </summary>
         </member>
+=======
+>>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
             TodoService interface
             </summary>
         </member>
+<<<<<<< HEAD
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.GetSession(System.Int64)">
             <summary>
             Get Session with the given id
@@ -737,6 +747,8 @@
             <param name="role"></param>
             <returns></returns>
         </member>
+=======
+>>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
             TODOs controller

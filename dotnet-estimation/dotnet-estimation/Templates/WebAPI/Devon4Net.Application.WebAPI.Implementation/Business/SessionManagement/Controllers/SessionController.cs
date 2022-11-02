@@ -5,6 +5,8 @@ using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Devon4Net.Infrastructure.JWT.Common.Const;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -36,6 +38,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
         public async Task<ActionResult> GetSession(long id)
         {
             Devon4NetLogger.Debug("Executing GetSession from controller SessionController");
@@ -43,7 +46,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         }
 
         /// <summary>
-        /// Creates an Session user
+        /// Add a Session user
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -51,7 +54,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserDto>> Create(long sessionId, UserDto userDto)
+        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
+        public async Task<ActionResult<UserDto>> AddUserToSession(long sessionId, UserDto userDto)
         {
             Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
             var result = await _sessionService.AddUserToSession(sessionId, userDto.Id,
