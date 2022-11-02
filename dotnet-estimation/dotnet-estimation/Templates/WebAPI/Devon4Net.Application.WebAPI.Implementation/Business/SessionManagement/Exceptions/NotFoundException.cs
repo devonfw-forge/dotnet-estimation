@@ -10,5 +10,4 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public NotFoundException(long id) : base($"Failed to find element matching {id}") {}
     }
-
 }
