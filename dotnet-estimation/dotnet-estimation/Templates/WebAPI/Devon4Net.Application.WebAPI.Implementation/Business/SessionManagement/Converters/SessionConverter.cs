@@ -24,7 +24,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 ExpiresAt = item.ExpiresAt,
                 Tasks = item.Tasks,
                 Users = item.Users,
-                Result = item.Result
             };
         }
 
@@ -44,7 +43,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 ExpiresAt = item.ExpiresAt,
                 Tasks = item.Tasks,
                 Users = item.Users,
-                Result = item.Result
             };
         }
     }
