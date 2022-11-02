@@ -109,7 +109,7 @@
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService.getTokenUsername(System.String)">
             <summary>
-            Login Token creation
+            Generate an AccessToken for a given username
             </summary>
             <param name="user"></param>
             <returns></returns>
