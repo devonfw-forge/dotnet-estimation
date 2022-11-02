@@ -604,7 +604,6 @@
             <param name="command"></param>
             <returns></returns>
         </member>
-<<<<<<< HEAD
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController">
             <summary>
             Session controller
@@ -697,14 +696,11 @@
             the Role
             </summary>
         </member>
-=======
->>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
             TodoService interface
             </summary>
         </member>
-<<<<<<< HEAD
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.GetSession(System.Int64)">
             <summary>
             Get Session with the given id
@@ -747,8 +743,6 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-=======
->>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
             TODOs controller

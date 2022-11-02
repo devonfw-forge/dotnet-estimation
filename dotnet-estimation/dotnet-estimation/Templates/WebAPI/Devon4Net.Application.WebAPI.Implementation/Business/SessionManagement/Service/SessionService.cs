@@ -1,8 +1,9 @@
-<<<<<<< HEAD
 ﻿using System.Linq.Expressions;
 using Devon4Net.Infrastructure.LiteDb.Repository;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
+using System.Collections.Generic;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
@@ -16,39 +17,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// constructor
         /// </summary>
         /// <param name="SessionRepository"></param>
-        public SessionService(ILiteDbRepository<Session> SessionRepository)
-=======
-using System.Linq.Expressions;
-using System.Collections.Generic;
-using Devon4Net.Infrastructure.LiteDb.Repository;
-using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
-using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
-
-namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
-{
-    public class SessionService: ISessionService
-    {
-        private readonly ILiteDbRepository<Session> _sessionRepository;
-
         public SessionService(ILiteDbRepository<Session> SessionRepository) 
->>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         {
             _sessionRepository = SessionRepository;
         }
 
-<<<<<<< HEAD
         /// <summary>
         /// Get the session for the given id
         /// </summary>
         /// <param name="id">Id of the searched Session</param>
         /// <returns></returns>
-=======
->>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         public async Task<Session> GetSession(long id)
         {
             var expression = LiteDB.Query.EQ("_id", id);
 
-<<<<<<< HEAD
             return _sessionRepository.GetFirstOrDefault(expression);
         }
 
@@ -91,9 +73,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             IList<User> noUsers = new User[0];
             return noUsers;
-=======
-            // FIXME: LiteDb also returs null values, when a matching entity does not exist!
-            return _sessionRepository.GetFirstOrDefault(expression);
         }
 
         public async Task<(bool, Domain.Entities.Task?)> GetStatus(long sessionId) {
@@ -146,7 +125,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             return (sessionIsValid, null);
->>>>>>> 41c3a71fc865b7a5013a56dc38674e0f84353060
         }
     }
 }
