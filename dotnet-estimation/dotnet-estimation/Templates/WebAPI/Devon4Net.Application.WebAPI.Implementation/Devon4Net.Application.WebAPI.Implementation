@@ -598,6 +598,17 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.StatusController.AddNewEstimation(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.EstimationDto)">
+            <summary>
+            Add a Session Esstimation 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
+            <summary>
+            TodoService interface
+            </summary>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
             TODOs controller

@@ -15,5 +15,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
         public DateTime CreatedAt { get; set; }
 
         public IList<Estimation> Estimations { get; set; }
+
+        public Result? Result { get; set; }
     }
 }
