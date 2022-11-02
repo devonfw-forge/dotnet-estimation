@@ -74,5 +74,33 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return (sessionIsValid, null);
         }
+
+        /// <summary>
+        /// Add an user to a given session
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="userId"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public async Task<bool> AddUserToSession(long sessionId, string userId, Role role)
+        {
+            var expression = LiteDB.Query.EQ("_id", sessionId);
+            var session = _sessionRepository.GetFirstOrDefault(expression);
+            var newUser = new User
+            {
+                Id = userId,
+                Role = role,
+            };
+
+            if (session != null)
+            {
+                if (!session.Users.Any(x => x.Equals(newUser)))
+                {
+                    session.Users.Add(newUser);
+                    return _sessionRepository.Update(session);
+                }
+            }
+            return false;
+        }
     }
 }
