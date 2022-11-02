@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JbIgMGURRZ44WM3fFpKfYfkR7EYmaRzOe+PjBOZiAEAMIayS4jL242hELd68gDSwcW113f5iOww0ztu81kHlzQ==",
+  "dgSpecHash": "R9M1txYdrlBxeiTXDmcg1PBOG1gbgrm1SY2RXVcz+cehHM4J3/cBJuqAUomCxB5pUN/DALgCoN0Vy53F36GXLg==",
   "success": true,
-  "projectFilePath": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj",
+  "projectFilePath": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\molanger\\.nuget\\packages\\apache.avro\\1.11.0\\apache.avro.1.11.0.nupkg.sha512",
     "C:\\Users\\molanger\\.nuget\\packages\\azure.core\\1.3.0\\azure.core.1.3.0.nupkg.sha512",
