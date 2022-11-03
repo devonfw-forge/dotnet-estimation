@@ -74,5 +74,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return (sessionIsValid, null);
         }
+        
+        public async Task<bool> RemoveUserFromSession(long id, String userId)
+        {
+            var expression = LiteDB.Query.EQ("_id", id);
+            var session = _sessionRepository.GetFirstOrDefault(expression);
+
+            var user = session.Users.SingleOrDefault(i => i.Id == userId);
+
+            if(session != null && user != null) {
+                session.Users.Remove(user);
+                return _sessionRepository.Update(session);                
+            }
+
+            return false;
+        }
     }
 }

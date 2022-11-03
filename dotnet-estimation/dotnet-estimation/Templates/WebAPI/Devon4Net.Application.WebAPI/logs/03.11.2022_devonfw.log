@@ -1,0 +1,310 @@
+2022-11-03 11:43:48.709 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:43:49.170 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:43:49.180 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-11-03 11:43:53.598 +01:00 [INF] User profile is available. Using 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-03 11:43:53.758 +01:00 [INF] Creating key {8146abf7-73ee-4d4e-87fd-24fd798683b8} with creation date 2022-11-03 10:43:53Z, activation date 2022-11-03 10:43:53Z, and expiration date 2023-02-01 10:43:53Z.
+2022-11-03 11:43:53.799 +01:00 [INF] Writing data to file 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys\key-8146abf7-73ee-4d4e-87fd-24fd798683b8.xml'.
+2022-11-03 11:43:53.873 +01:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-11-03 11:43:53.885 +01:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-11-03 11:43:53.890 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-03 11:43:53.892 +01:00 [INF] Hosting environment: Development
+2022-11-03 11:43:53.895 +01:00 [INF] Content root path: C:\Users\zchriste\devon4net6\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-11-03 11:44:19.389 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/ - -
+2022-11-03 11:44:19.420 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:44:19.609 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/ - - - 500 - text/html;+charset=utf-8 223.4981ms
+2022-11-03 11:44:19.832 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/favicon.ico - -
+2022-11-03 11:44:19.836 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:44:19.867 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/favicon.ico - - - 500 - text/plain;+charset=utf-8 34.0790ms
+2022-11-03 11:45:01.427 +01:00 [INF] Application is shutting down...
+2022-11-03 11:45:49.898 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:45:50.142 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:45:50.145 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-11-03 11:45:54.529 +01:00 [INF] User profile is available. Using 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-03 11:45:54.673 +01:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-11-03 11:45:54.690 +01:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-11-03 11:45:54.694 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-03 11:45:54.701 +01:00 [INF] Hosting environment: Development
+2022-11-03 11:45:54.704 +01:00 [INF] Content root path: C:\Users\zchriste\devon4net6\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-11-03 11:46:00.854 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/ - -
+2022-11-03 11:46:00.885 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:46:00.974 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/ - - - 500 - text/html;+charset=utf-8 122.9650ms
+2022-11-03 11:46:01.047 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/favicon.ico - -
+2022-11-03 11:46:01.050 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:46:01.073 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/favicon.ico - - - 500 - text/plain;+charset=utf-8 25.5578ms
+2022-11-03 11:46:24.272 +01:00 [INF] Application is shutting down...
+2022-11-03 11:47:11.007 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:47:11.275 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:47:11.279 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-11-03 11:47:15.581 +01:00 [INF] User profile is available. Using 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-03 11:47:15.732 +01:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-11-03 11:47:15.750 +01:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-11-03 11:47:15.752 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-03 11:47:15.754 +01:00 [INF] Hosting environment: Development
+2022-11-03 11:47:15.757 +01:00 [INF] Content root path: C:\Users\zchriste\devon4net6\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-11-03 11:47:20.963 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/ - -
+2022-11-03 11:47:20.991 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:47:21.082 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/ - - - 500 - text/html;+charset=utf-8 121.8513ms
+2022-11-03 11:47:21.146 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/favicon.ico - -
+2022-11-03 11:47:21.149 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:47:21.259 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/favicon.ico - - - 500 - text/plain;+charset=utf-8 112.9240ms
+2022-11-03 11:47:23.529 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/ - -
+2022-11-03 11:47:23.554 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:47:23.632 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/ - - - 500 - text/html;+charset=utf-8 102.5097ms
+2022-11-03 11:47:23.702 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/favicon.ico - -
+2022-11-03 11:47:23.713 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:47:23.759 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/favicon.ico - - - 500 - text/plain;+charset=utf-8 57.2216ms
+2022-11-03 11:48:00.296 +01:00 [INF] Application is shutting down...
+2022-11-03 11:48:17.778 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:48:18.034 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:48:18.037 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-11-03 11:48:22.358 +01:00 [INF] User profile is available. Using 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-03 11:48:22.511 +01:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-11-03 11:48:22.534 +01:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-11-03 11:48:22.540 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-03 11:48:22.543 +01:00 [INF] Hosting environment: Development
+2022-11-03 11:48:22.547 +01:00 [INF] Content root path: C:\Users\zchriste\devon4net6\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-11-03 11:48:25.650 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/ - -
+2022-11-03 11:48:25.680 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'String' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:48:25.766 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/ - - - 500 - text/html;+charset=utf-8 119.4771ms
+2022-11-03 11:48:25.853 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/favicon.ico - -
+2022-11-03 11:48:25.856 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'String' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.AddParentsWithMatchingLiteralConstraints(List`1 nextParents, DfaNode parent, RoutePatternParameterPart parameterPart, IReadOnlyList`1 parameterPolicyReferences)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessSegment(RouteEndpoint endpoint, List`1 parents, List`1 nextParents, RoutePatternPathSegment segment)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.DfaBuilderWorker.ProcessLevel(Int32 depth)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.BuildDfaTree(Boolean includeLabel)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2022-11-03 11:48:25.881 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/favicon.ico - - - 500 - text/plain;+charset=utf-8 28.6915ms
+2022-11-03 11:49:33.095 +01:00 [INF] Application is shutting down...
+2022-11-03 11:49:45.230 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:49:45.438 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 11:49:45.442 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-11-03 11:49:49.740 +01:00 [INF] User profile is available. Using 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-03 11:49:49.911 +01:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-11-03 11:49:49.927 +01:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-11-03 11:49:49.932 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-03 11:49:49.934 +01:00 [INF] Hosting environment: Development
+2022-11-03 11:49:49.937 +01:00 [INF] Content root path: C:\Users\zchriste\devon4net6\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-11-03 11:49:53.265 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/ - -
+2022-11-03 11:49:53.376 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/ - - - 404 0 - 114.0873ms
+2022-11-03 11:52:27.293 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085//swagger/v1/swagger.json - -
+2022-11-03 11:52:27.311 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085//swagger/v1/swagger.json - - - 404 0 - 18.1168ms
+2022-11-03 11:52:32.745 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - -
+2022-11-03 11:52:33.025 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 280.6369ms
+2022-11-03 11:52:33.190 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/favicon.ico - -
+2022-11-03 11:52:33.193 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/favicon.ico - - - 404 0 - 2.6701ms
+2022-11-03 11:52:37.701 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/ - -
+2022-11-03 11:52:37.707 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/ - - - 404 0 - 5.5542ms
+2022-11-03 11:52:43.639 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/index.html - -
+2022-11-03 11:52:43.641 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/index.html - - - 404 0 - 2.6093ms
+2022-11-03 11:54:01.769 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/ - -
+2022-11-03 11:54:01.772 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/ - - - 404 0 - 3.0514ms
+2022-11-03 11:54:05.330 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/ - -
+2022-11-03 11:54:05.335 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/ - - - 301 0 - 4.6768ms
+2022-11-03 11:54:05.352 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/index.html - -
+2022-11-03 11:54:05.464 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/index.html - - - 200 - text/html;charset=utf-8 111.9480ms
+2022-11-03 11:54:05.521 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui.css - -
+2022-11-03 11:54:05.565 +01:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2022-11-03 11:54:05.569 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui.css - - - 200 143943 text/css 48.1264ms
+2022-11-03 11:54:05.571 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-bundle.js - -
+2022-11-03 11:54:05.589 +01:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2022-11-03 11:54:05.600 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-bundle.js - - - 200 1095087 application/javascript 28.9561ms
+2022-11-03 11:54:05.603 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-standalone-preset.js - -
+2022-11-03 11:54:05.619 +01:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2022-11-03 11:54:05.630 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/swagger-ui-standalone-preset.js - - - 200 339486 application/javascript 26.9423ms
+2022-11-03 11:54:06.011 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - -
+2022-11-03 11:54:06.072 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/favicon-32x32.png - -
+2022-11-03 11:54:06.087 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 76.0789ms
+2022-11-03 11:54:06.092 +01:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2022-11-03 11:54:06.119 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/favicon-32x32.png - - - 200 628 image/png 46.0710ms
+2022-11-03 12:10:43.609 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 12:10:43.881 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 12:10:43.896 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
+2022-11-03 12:10:48.377 +01:00 [INF] User profile is available. Using 'C:\Users\zchriste\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-11-03 12:10:48.731 +01:00 [WRN] Overriding address(es) 'https://localhost:7229, http://localhost:5229'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2022-11-03 12:10:48.785 +01:00 [INF] Now listening on: http://0.0.0.0:8085
+2022-11-03 12:10:48.810 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-11-03 12:10:48.815 +01:00 [INF] Hosting environment: Development
+2022-11-03 12:10:48.826 +01:00 [INF] Content root path: C:\Users\zchriste\devon4net6\dotnet-estimation\dotnet-estimation\dotnet-estimation\Templates\WebAPI\Devon4Net.Application.WebAPI\
+2022-11-03 12:10:56.017 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/index.html - -
+2022-11-03 12:10:56.192 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/index.html - - - 200 - text/html;charset=utf-8 179.9019ms
+2022-11-03 12:10:56.361 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - -
+2022-11-03 12:10:56.558 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:8085/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 196.8701ms
+2022-11-03 12:11:01.235 +01:00 [INF] Application is shutting down...
+2022-11-03 12:27:34.245 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 12:27:34.487 +01:00 [INF] Please setup your database in order to have the RabbitMq messaging backup feature
+2022-11-03 12:27:34.489 +01:00 [INF] RabbitMq messaging backup feature is going to be used via LiteDb
