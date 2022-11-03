@@ -23,7 +23,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         [HttpPut]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(bool), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -34,7 +34,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             try
             {
-                return Accepted(await _sessionService.InvalidateSession(id));
+                return Ok(await _sessionService.InvalidateSession(id));
             }
             catch (Exception exception)
             {
