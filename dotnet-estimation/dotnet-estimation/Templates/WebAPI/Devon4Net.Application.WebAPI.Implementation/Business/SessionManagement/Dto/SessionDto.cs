@@ -12,11 +12,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// the Id
         /// </summary>
         public long Id { get; set; }
-        
-        /// <summary>
-        /// the Invite Token
-        /// </summary>
-        public string InviteToken { get; set; }
 
         /// <summary>
         /// the Expiry Date

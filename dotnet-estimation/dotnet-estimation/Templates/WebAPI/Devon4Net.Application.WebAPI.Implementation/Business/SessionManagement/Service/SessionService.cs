@@ -1,11 +1,10 @@
-using Devon4Net.Domain.UnitOfWork.Service;
-using Devon4Net.Domain.UnitOfWork.UnitOfWork;
+
 using Devon4Net.Infrastructure.Logger.Logging;
 using Devon4Net.Infrastructure.LiteDb.Repository;
-using Devon4Net.Application.WebAPI.Implementation.Domain.Database;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
-using Devon4Net.Application.WebAPI.Implementation.Domain.RepositoryInterfaces;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
 using LiteDB;
+using System.Security.Cryptography;
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
     /// <summary>
@@ -28,20 +27,25 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <summary>
         /// Creates the Session
         /// </summary>
-        /// <param name="expiresAt"></param>
-        /// <param name="tasks"></param>
-        /// <param name="users"></param>
+        /// <param name="sessionDto"></param>
         /// <returns></returns>
-        public async Task<BsonValue> CreateSession(DateTime expiresAt, IList<Domain.Entities.Task> tasks, IList<User> users)
+        public async Task<BsonValue> CreateSession(SessionDto sessionDto)
         {
-            Devon4NetLogger.Debug($"CreateSession method from service SessionService with value : {expiresAt}, {tasks}, {users}");
+            Devon4NetLogger.Debug($"CreateSession method from service SessionService with value : {sessionDto.ExpiresAt}, {sessionDto.Tasks}, {sessionDto.Users}");
 
-            //TODO: Exception Handling for DateTime expiresAt
-            var newSession = new Session();
-            newSession.ExpiresAt = expiresAt;
-            newSession.Tasks = tasks;
-            newSession.Users = users;
-            return _sessionRepository.Create(newSession);
+            return _sessionRepository.Create(new Session{
+                InviteToken = generateToken(),
+                ExpiresAt = sessionDto.ExpiresAt,
+                Tasks = sessionDto.Tasks,
+                Users = sessionDto.Users
+            });
+        }
+        private string generateToken()
+        {   //generates 8 random bytes and returns them as a token string 
+            byte[] randomNumber = new byte[8];
+            RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
+            rngCsp.GetNonZeroBytes(randomNumber);
+            return BitConverter.ToString(randomNumber);
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
+using LiteDB;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -32,22 +33,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         [HttpPost]
         [Route("/session")]
-        [ProducesResponseType(typeof(SessionDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreateSession(SessionDto sessionDto)
         {
-            
-            /*
-            SessionDto session = new SessionDto();
-            session.Id = 788;
-            session.InviteToken = "invitetoken788";
-            */
-
-            var result = await _sessionService.CreateSession(sessionDto.ExpiresAt, sessionDto.Tasks, sessionDto.Users);
-
-            return StatusCode(StatusCodes.Status201Created, result);
+            var result = await _sessionService.CreateSession(sessionDto);
+            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize(result));
         }
     }
 

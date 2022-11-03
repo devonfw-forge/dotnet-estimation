@@ -619,11 +619,6 @@
             the Id
             </summary>
         </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.InviteToken">
-            <summary>
-            the Invite Token
-            </summary>
-        </member>
         <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.ExpiresAt">
             <summary>
             the Expiry Date
@@ -644,13 +639,11 @@
             ISessionService
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.CreateSession(System.DateTime,System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task},System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User})">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto)">
             <summary>
             CreateSession
             </summary>
-            <param name="expiresAt"></param>
-            <param name="tasks"></param>
-            <param name="users"></param>
+            <param name="sessionDto"></param>
             <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService">
@@ -664,13 +657,11 @@
             </summary>
             <param name="SessionRepository"></param>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.CreateSession(System.DateTime,System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task},System.Collections.Generic.IList{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User})">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto)">
             <summary>
             Creates the Session
             </summary>
-            <param name="expiresAt"></param>
-            <param name="tasks"></param>
-            <param name="users"></param>
+            <param name="sessionDto"></param>
             <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
