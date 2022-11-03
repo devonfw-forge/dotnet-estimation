@@ -1,16 +1,14 @@
-using System.Linq.Expressions;
-using System.Collections.Generic;
 using Devon4Net.Infrastructure.LiteDb.Repository;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
-    public class SessionService: ISessionService
+    public class SessionService : ISessionService
     {
         private readonly ILiteDbRepository<Session> _sessionRepository;
 
-        public SessionService(ILiteDbRepository<Session> SessionRepository) 
+        public SessionService(ILiteDbRepository<Session> SessionRepository)
         {
             _sessionRepository = SessionRepository;
         }
@@ -23,16 +21,36 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.GetFirstOrDefault(expression);
         }
 
-        public async Task<(bool, Domain.Entities.Task?)> GetStatus(long sessionId) {
+        public async Task<bool> InvalidateSession(long id)
+        {
+            Session sessionResult = await GetSession(id);
+
+            if (sessionResult == null)
+            {
+                throw new NotFoundException(id);
+            }
+
+            if (!sessionResult.IsValid())
+            {
+                throw new InvalidSessionException(id);
+            }
+
+            sessionResult.ExpiresAt = DateTime.Now;
+
+            return _sessionRepository.Update(sessionResult);
+        }
+
+        public async Task<(bool, Domain.Entities.Task?)> GetStatus(long sessionId)
+        {
             var sessionResult = await GetSession(sessionId);
-            
+
             if (sessionResult == null)
             {
                 throw new NotFoundException(sessionId);
             }
 
-            bool sessionIsValid = sessionResult.isValid();
-            
+            bool sessionIsValid = sessionResult.IsValid();
+
             if (!sessionIsValid)
             {
                 return (false, null);
@@ -41,22 +59,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             // since there can be only one task which is being evaluated,
             // we only query the first object
             var evaluatedTask = sessionResult.Tasks.ToList().Find(item => item.Status == Status.Evaluated);
-            
-            if (evaluatedTask is not null) {
+
+            if (evaluatedTask is not null)
+            {
                 return (sessionIsValid, evaluatedTask);
             }
 
             // else we try to find tasks which are open
             var openTasks = sessionResult.Tasks.Where(item => item.Status == Status.Open).ToList();
 
-            if (openTasks.Any()) 
+            if (openTasks.Any())
             {
                 openTasks.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
 
                 var currentTask = openTasks.First();
 
                 return (sessionIsValid, currentTask);
-            } 
+            }
             else
             {
                 // if there are no open tasks left to be estimated we query for postponed tasks
