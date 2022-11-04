@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj": {}
+    "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {
+    "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
+        "projectUniqueName": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
         "projectName": "Devon4Net.Application.WebAPI.Implementation",
-        "projectPath": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
+        "projectPath": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj",
         "packagesPath": "C:\\Users\\molanger\\.nuget\\packages\\",
-        "outputPath": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\obj\\",
+        "outputPath": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\molanger\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -107,14 +107,14 @@
         }
       }
     },
-    "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj": {
+    "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj",
+        "projectUniqueName": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj",
         "projectName": "Devon4Net.Application.WebAPI",
-        "projectPath": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj",
+        "projectPath": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\Devon4Net.Application.WebAPI.csproj",
         "packagesPath": "C:\\Users\\molanger\\.nuget\\packages\\",
-        "outputPath": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\obj\\",
+        "outputPath": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\molanger\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -131,8 +131,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {
-                "projectPath": "C:\\dotnetbranchtest\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj"
+              "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj": {
+                "projectPath": "C:\\dotnet-estimation\\dotnet-estimation\\dotnet-estimation\\Templates\\WebAPI\\Devon4Net.Application.WebAPI.Implementation\\Devon4Net.Application.WebAPI.Implementation.csproj"
               }
             }
           }

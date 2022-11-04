@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions
 {
-    public class NoOpenOrSuppendedTask : Exception
+    public class NoOpenOrSuspendedTask : Exception
     {
-        public NoOpenOrSuppendedTask() : base($"The Session has no open or supended Taks") { }
+        public NoOpenOrSuspendedTask() : base($"The Session has no open or supended Taks") { }
     }
 }
