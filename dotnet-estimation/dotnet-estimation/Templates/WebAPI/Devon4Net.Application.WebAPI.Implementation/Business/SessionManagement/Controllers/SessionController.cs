@@ -26,6 +26,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             _sessionService = SessionService;
         }
 
+
+        /// <summary>
+        /// Remove a Session user
+        /// </summary>
+        /// <returns></returns>
         [HttpPut]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
