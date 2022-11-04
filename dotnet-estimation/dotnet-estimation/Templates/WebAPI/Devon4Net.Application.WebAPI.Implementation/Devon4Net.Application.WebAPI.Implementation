@@ -624,16 +624,6 @@
             the Expiry Date
             </summary>
         </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Tasks">
-            <summary>
-            the Tasks to be estimated
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Users">
-            <summary>
-            the Athorized Users
-            </summary>
-        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
             ISessionService

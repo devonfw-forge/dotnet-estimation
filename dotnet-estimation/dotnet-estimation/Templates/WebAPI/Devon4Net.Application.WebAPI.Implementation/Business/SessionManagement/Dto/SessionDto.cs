@@ -19,15 +19,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [Required]
         public DateTime ExpiresAt  { get; set; }
 
-        /// <summary>
-        /// the Tasks to be estimated
-        /// </summary>
-        public IList<Domain.Entities.Task> Tasks  { get; set; }
-
-        /// <summary>
-        /// the Athorized Users
-        /// </summary>
-        public IList<User> Users { get; set; }
     }
 }
 

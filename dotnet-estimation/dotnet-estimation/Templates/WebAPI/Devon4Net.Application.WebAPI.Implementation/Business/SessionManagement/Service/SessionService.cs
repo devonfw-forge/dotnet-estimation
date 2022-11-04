@@ -31,13 +31,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         public async Task<BsonValue> CreateSession(SessionDto sessionDto)
         {
-            Devon4NetLogger.Debug($"CreateSession method from service SessionService with value : {sessionDto.ExpiresAt}, {sessionDto.Tasks}, {sessionDto.Users}");
+            Devon4NetLogger.Debug($"CreateSession method from service SessionService with value : {sessionDto.ExpiresAt}");
 
             return _sessionRepository.Create(new Session{
                 InviteToken = generateToken(),
-                ExpiresAt = sessionDto.ExpiresAt,
-                Tasks = sessionDto.Tasks,
-                Users = sessionDto.Users
+                ExpiresAt = sessionDto.ExpiresAt
             });
         }
         private string generateToken()
