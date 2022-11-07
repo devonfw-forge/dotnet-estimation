@@ -93,5 +93,35 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return (sessionIsValid, null);
         }
+
+        public async Task<Estimation> AddNewEstimation(long sessionId, string VoteBy, int Complexity)
+        {
+           var (isvalid, currentTask) = await GetStatus(sessionId);
+           if (!isvalid)
+            {
+                throw new NoLongerValid(sessionId);
+            }
+           if (currentTask == null)
+            {
+                throw new NoOpenOrSuspendedTask();
+            }
+
+           var  newEstimation = new Estimation { VoteBy = VoteBy, Complexity = Complexity};
+
+            var session = await GetSession(sessionId);
+
+            for (int i = 0; i < session.Tasks.Count; i++)
+            {
+                if (session.Tasks[i].Id == currentTask.Id)
+                {
+                    session.Tasks[i].Estimations.Add(newEstimation);
+                }
+            }
+
+            _sessionRepository.Update(session);
+
+            return newEstimation;
+
+        }
     }
 }
