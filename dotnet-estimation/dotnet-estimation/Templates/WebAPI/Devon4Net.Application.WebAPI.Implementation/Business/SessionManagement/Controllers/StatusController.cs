@@ -58,5 +58,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 };
             }
         }
+        /// <summary>
+        /// Add a Session Esstimation 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(EstimationDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<EstimationDto>> AddNewEstimation(long sessionId, EstimationDto estimationDto)
+        {
+            Devon4NetLogger.Debug("Executing AddNewEstimation from controller SessionController");
+            var result = await _sessionService.AddNewEstimation(sessionId, estimationDto.VoteBy, estimationDto.Complexity).ConfigureAwait(false);
+            return StatusCode(StatusCodes.Status201Created, result);
+        }
     }
 }
