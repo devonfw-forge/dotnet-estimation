@@ -1,0 +1,13 @@
+**/bin
+**/*.dll
+*.log
+obj
+bin
+logs
+.vs
+.vscode
+.cache
+/dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/devon4netMessageBackup.db
+/dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/Certificates
+/dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/obj
+/dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI.Implementation/obj
