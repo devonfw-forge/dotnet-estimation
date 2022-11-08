@@ -8,3 +8,4 @@ logs
 .vscode
 /dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/devon4netMessageBackup.db
 /dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/Certificates
+.cache
