@@ -21,18 +21,18 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.GetFirstOrDefault(expression);
         }
 
-        public async Task<bool> InvalidateSession(long id)
+        public async Task<bool> InvalidateSession(long sessionId)
         {
-            Session sessionResult = await GetSession(id);
+            Session sessionResult = await GetSession(sessionId);
 
             if (sessionResult == null)
             {
-                throw new NotFoundException(id);
+                throw new NotFoundException(sessionId);
             }
 
             if (!sessionResult.IsValid())
             {
-                throw new InvalidSessionException(id);
+                throw new InvalidSessionException(sessionId);
             }
 
             sessionResult.ExpiresAt = DateTime.Now;
@@ -96,17 +96,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public async Task<Estimation> AddNewEstimation(long sessionId, string VoteBy, int Complexity)
         {
-           var (isvalid, currentTask) = await GetStatus(sessionId);
-           if (!isvalid)
+            var (isvalid, currentTask) = await GetStatus(sessionId);
+            if (!isvalid)
             {
                 throw new NoLongerValid(sessionId);
             }
-           if (currentTask == null)
+            if (currentTask == null)
             {
                 throw new NoOpenOrSuspendedTask();
             }
 
-           var  newEstimation = new Estimation { VoteBy = VoteBy, Complexity = Complexity};
+            var newEstimation = new Estimation { VoteBy = VoteBy, Complexity = Complexity };
 
             var session = await GetSession(sessionId);
 
