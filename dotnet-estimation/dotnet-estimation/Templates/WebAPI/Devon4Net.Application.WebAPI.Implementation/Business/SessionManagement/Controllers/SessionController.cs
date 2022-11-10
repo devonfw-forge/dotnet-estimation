@@ -32,7 +32,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("/estimation/v1/{sessionDto}")]
+        [Route("/estimation/v1/session")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
