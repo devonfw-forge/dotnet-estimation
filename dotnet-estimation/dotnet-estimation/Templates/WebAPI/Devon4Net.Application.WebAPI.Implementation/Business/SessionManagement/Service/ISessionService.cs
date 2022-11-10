@@ -15,5 +15,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public Task<bool> InvalidateSession(long sessionId);
         
         public Task<Estimation> AddNewEstimation(long sessionId , string VoteBy, int Conplexity);
+    
+        public Task<bool> RemoveUserFromSession(long id, String userId);
     }
 }

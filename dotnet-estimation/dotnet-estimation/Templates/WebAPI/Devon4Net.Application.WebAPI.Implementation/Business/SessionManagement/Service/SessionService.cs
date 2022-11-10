@@ -121,7 +121,30 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             _sessionRepository.Update(session);
 
             return newEstimation;
+        }
+        
+        /// <summary>
+        /// ARemove a specified user from a given session
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveUserFromSession(long sessionId, string userId)
+        {
+            var expression = LiteDB.Query.EQ("_id", sessionId);
+            var session = _sessionRepository.GetFirstOrDefault(expression);
 
+            if(session != null) {
+                var user = session.Users.SingleOrDefault(i => i.Id == userId);
+
+                if (user != null) {
+                    session.Users.Remove(user);
+                    _sessionRepository.Update(session);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
