@@ -12,7 +12,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 
         public IList<User> Users { get; set; }
 
-        public bool isValid() {
+        public bool IsValid()
+        {
             return ExpiresAt > DateTime.Now;
         }
     }
