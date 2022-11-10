@@ -32,10 +32,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         public async Task<BsonValue> CreateSession(SessionDto sessionDto)
         {
-            Devon4NetLogger.Debug($"CreateSession method from service SessionService with value : {sessionDto.ExpiresAt}");
-
             return _sessionRepository.Create(new Session{
-                InviteToken = generateToken(),
+                InviteToken = generateInviteToken(),
                 ExpiresAt = sessionDto.ExpiresAt
             });
         }
@@ -100,7 +98,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return (sessionIsValid, null);
         }
 
-        private string generateToken()
+        private string generateInviteToken()
         {   //generates 8 random bytes and returns them as a token string 
             byte[] randomNumber = new byte[8];
             RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();

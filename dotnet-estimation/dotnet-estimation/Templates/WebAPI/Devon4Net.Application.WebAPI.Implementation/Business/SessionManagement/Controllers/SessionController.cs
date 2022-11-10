@@ -32,13 +32,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("/session")]
+        [Route("/estimation/v1/{sessionDto}")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreateSession(SessionDto sessionDto)
         {
+            Devon4NetLogger.Debug($"Create session that will expire at {sessionDto.ExpiresAt}");
             var result = await _sessionService.CreateSession(sessionDto);
             return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize(result));
         }

@@ -9,16 +9,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     public class SessionDto
     {
         /// <summary>
-        /// the Id
-        /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
         /// the Expiry Date
         /// </summary>
         [Required]
         public DateTime ExpiresAt  { get; set; }
-
     }
 }
 
