@@ -52,8 +52,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 return exception switch
                 {
-                    NotFoundException _ => NotFound(),
-                    _ => StatusCode(500),
+                    NotFoundException _ => StatusCode(500),
                 };
             }
         }
