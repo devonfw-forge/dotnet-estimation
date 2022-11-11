@@ -604,6 +604,12 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.Example">
+            <summary>
+            Add a Session user
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.RemoveUserFromSession(System.Int64,System.String)">
             <summary>
             Remove a Session user
