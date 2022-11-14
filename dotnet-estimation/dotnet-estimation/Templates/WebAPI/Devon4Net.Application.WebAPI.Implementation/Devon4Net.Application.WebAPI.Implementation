@@ -33,15 +33,16 @@
             Please remember to avoid the use ob logic in a controller !!!
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler,Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler)">
             <summary>
             Constructor with DI
             </summary>
             <param name="jwtHandler"></param>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.JoinSessionAsync(System.String)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.Login(System.String,System.String)">
             <summary>
-            Performs the join proces via the user flow
+            Performs the login proces via the user/password flow
+            This is only a sample. Please avoid any logic on the controller.
             </summary>
             <returns>LoginResponse class will provide the JWT token to securize the server calls</returns>
         </member>
@@ -106,13 +107,6 @@
             <summary>
             Token
             </summary>
-        </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService.getTokenUsername(System.String)">
-            <summary>
-            Generate an AccessToken for a given username
-            </summary>
-            <param name="user"></param>
-            <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.EmployeeManagement.Controllers.EmployeeController">
             <summary>
@@ -604,100 +598,16 @@
             <param name="command"></param>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.RemoveUserFromSession(System.Int64,System.String)">
-            <summary>
-            Remove a Session user
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddUserToSession(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto)">
-            <summary>
-            Add a Session user
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.StatusController.AddNewEstimation(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.EstimationDto)">
             <summary>
             Add a Session Esstimation 
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto">
-            <summary>
-            Session definition
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Id">
-            <summary>
-            the Id
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.InviteToken">
-            <summary>
-            the InviteToken
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.ExpiresAt">
-            <summary>
-            the expiration time
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Tasks">
-            <summary>
-            the Tasks
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Users">
-            <summary>
-            the Users
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.SessionDto.Result">
-            <summary>
-            the Result
-            </summary>
-        </member>
-        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto">
-            <summary>
-            User definition
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto.Id">
-            <summary>
-            the Id
-            </summary>
-        </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto.Role">
-            <summary>
-            the Role
-            </summary>
-        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
             TodoService interface
             </summary>
-        </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
-            <summary>
-            Add an User to a given session
-            </summary>
-        </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.RemoveUserFromSession(System.Int64,System.String)">
-            <summary>
-            ARemove a specified user from a given session
-            </summary>
-            <param name="sessionId"></param>
-            <param name="userId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
-            <summary>
-            Add an user to a given session
-            </summary>
-            <param name="sessionId"></param>
-            <param name="userId"></param>
-            <param name="role"></param>
-            <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">
             <summary>
