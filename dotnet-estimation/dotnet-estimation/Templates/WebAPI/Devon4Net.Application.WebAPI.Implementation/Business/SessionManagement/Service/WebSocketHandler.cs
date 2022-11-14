@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 {
     public class WebSocketHandler : IWebSocketHandler
     {
+        public readonly struct WebSocketConnection
+        {
+            public readonly string Id { get; init;}
+
+            public readonly WebSocket Value { get; init; }
+        }
         private ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
+        private ConcurrentDictionary<string, ConcurrentBag<WebSocketConnection>> _sessions = new ConcurrentDictionary<string, ConcurrentBag<WebSocketConnection>>();
 
         public async Task Handle(Guid id, WebSocket webSocket)
         {
@@ -50,6 +59,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     await socket.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
+        }
+
+        public async Task Send<T>(Message<T> message)
+        {
+            await SendMessageToSockets(JsonConvert.SerializeObject(message, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
         }
     }
 }

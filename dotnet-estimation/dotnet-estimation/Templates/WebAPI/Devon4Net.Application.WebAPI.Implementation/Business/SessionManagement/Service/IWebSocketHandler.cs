@@ -7,5 +7,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         Task Handle(Guid id, WebSocket webSocket);
         Task<string> ReceiveMessage(Guid id, WebSocket webSocket);
         Task SendMessageToSockets(string message);
+        Task Send<T>(Message<T> message);
     }
 }

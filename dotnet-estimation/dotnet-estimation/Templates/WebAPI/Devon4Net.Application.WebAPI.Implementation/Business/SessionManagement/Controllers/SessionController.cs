@@ -127,5 +127,29 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 userDto.Role).ConfigureAwait(false);
             return StatusCode(StatusCodes.Status201Created, result);
         }
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/estimation/v1/session/{sessionId:long}/task")]
+        public async Task<ActionResult> AddTask(long sessionId, [FromBody]TaskDto task)
+        {
+            var finished = await _sessionService.AddTaskToSession(sessionId, task);
+
+            if (finished)
+            {
+                Message<TaskDto> Message = new Message<TaskDto>
+                {
+                    Type = MessageType.TaskCreated,
+                    Payload = task
+                };
+                _webSocketHandler.Send(Message);
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

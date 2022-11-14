@@ -1,6 +1,7 @@
 using Devon4Net.Infrastructure.LiteDb.Repository;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
@@ -169,6 +170,45 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 if (!session.Users.Any(x => x.Equals(newUser)))
                 {
                     session.Users.Add(newUser);
+                    return _sessionRepository.Update(session);
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> AddTaskToSession(long sessionId, TaskDto task)
+        {
+           /* var newSession = new Session
+            {
+                Id = 1,
+                InviteToken = "asdf",
+                ExpiresAt = DateTime.Now.AddMinutes(25),
+                Tasks = new List<Domain.Entities.Task>(),
+                Users = new List<Domain.Entities.User>(),
+            };
+            _sessionRepository.Create(newSession);
+           */
+            var expression = LiteDB.Query.EQ("_id", sessionId);
+            var session = _sessionRepository.GetFirstOrDefault(expression);
+            var (id, title, description, url, status) = task;
+
+            var newTask = new Domain.Entities.Task
+            {
+                Id = id,
+                Title = title,
+                Description = description,
+                Url = url,
+                Status = status
+            };
+
+            if (session != null)
+            {
+                if (!session.Tasks.Any(x => x.Equals(newTask)))
+                {
+                    session.Tasks.Add(newTask);
+
+
+
                     return _sessionRepository.Update(session);
                 }
             }

@@ -22,5 +22,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// Add an User to a given session
         /// </summary>
         public Task<bool> AddUserToSession(long sessionId, string userId, Role role);
+        public Task<bool> AddTaskToSession(long sessionId, TaskDto task);
     }
 }

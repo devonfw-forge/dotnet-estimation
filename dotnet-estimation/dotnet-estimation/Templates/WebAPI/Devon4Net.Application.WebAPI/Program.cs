@@ -9,7 +9,6 @@ using Devon4Net.Infrastructure.Kafka;
 using Devon4Net.Infrastructure.Logger;
 using Devon4Net.Infrastructure.Middleware.Middleware;
 using Devon4Net.Infrastructure.Swagger;
-using WebSocketServer.CustomMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
