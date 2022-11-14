@@ -207,8 +207,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 {
                     session.Tasks.Add(newTask);
 
-
-
                     return _sessionRepository.Update(session);
                 }
             }

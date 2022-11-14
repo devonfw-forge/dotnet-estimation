@@ -22,8 +22,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         }
 
         //TODO: Add Autorization via Token  ( insert Handle(token.id as ConcurrentDictionary ID String))
-        [HttpGet("/ws")]
-        public async Task Connect()
+        [HttpGet("/{sessionId:long}/ws")]
+        public async Task Connect(long sessionId)
         {
             var context = ControllerContext.HttpContext;
             var isSocketRequest = context.WebSockets.IsWebSocketRequest;
@@ -32,7 +32,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 WebSocket websocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                await WebsocketHandler.Handle(Guid.NewGuid(), websocket);
+                await WebsocketHandler.Handle(Guid.NewGuid(), websocket, sessionId );
             }
             else
             {

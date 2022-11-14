@@ -59,22 +59,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         }
 
         /// <summary>
-        /// Add a Session user
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("/estimation/v1/session/Example")]
-        public async Task<IActionResult> Example()
-        {
-            await _webSocketHandler.SendMessageToSockets("Helloooooo");
-            return Ok();
-        }
-
-        /// <summary>
         /// Remove a Session user
         /// </summary>
         /// <returns></returns>
@@ -146,7 +130,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     Type = MessageType.TaskCreated,
                     Payload = task
                 };
-                _webSocketHandler.Send(Message);
+                await _webSocketHandler.Send(Message, sessionId);
                 return Ok();
             }
             return BadRequest();

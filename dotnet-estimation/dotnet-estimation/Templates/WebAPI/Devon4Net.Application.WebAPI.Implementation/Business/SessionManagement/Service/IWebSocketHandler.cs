@@ -4,9 +4,9 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 {
     public interface IWebSocketHandler
     {
-        Task Handle(Guid id, WebSocket webSocket);
+        Task Handle(Guid id, WebSocket webSocket, long sessionId);
         Task<string> ReceiveMessage(Guid id, WebSocket webSocket);
-        Task SendMessageToSockets(string message);
-        Task Send<T>(Message<T> message);
+        Task SendMessageToSockets(string message, long sessionId);
+        Task Send<T>(Message<T> message, long sessionId);
     }
 }

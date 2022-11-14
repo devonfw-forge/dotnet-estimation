@@ -18,19 +18,26 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             public readonly WebSocket Value { get; init; }
         }
-        private ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
-        private ConcurrentDictionary<string, ConcurrentBag<WebSocketConnection>> _sessions = new ConcurrentDictionary<string, ConcurrentBag<WebSocketConnection>>();
+        private ConcurrentDictionary<long, ConcurrentBag<WebSocketConnection>> _sessions = new ConcurrentDictionary<long, ConcurrentBag<WebSocketConnection>>();
 
-        public async Task Handle(Guid id, WebSocket webSocket)
+        public async Task Handle(Guid id, WebSocket webSocket, long sessionId)
         {
-            _sockets.TryAdd(id.ToString(), webSocket);
-            await SendMessageToSockets($"User with id <b>{id}</b> has joined the chat");
+            var socketConnection = new WebSocketConnection { Id = id.ToString(), Value = webSocket };
+            _sessions.AddOrUpdate(sessionId,
+                id => new ConcurrentBag<WebSocketConnection>() { socketConnection },
+                (id, existingBag) =>
+                {
+                    existingBag.Add(socketConnection);
+                    return existingBag;
+                });
+
+            await SendMessageToSockets($"User with id <b>{id}</b> has joined the chat", sessionId);
 
             while (webSocket.State == WebSocketState.Open)
             {
                 var message = await ReceiveMessage(id, webSocket);
                 if (message != null)
-                    await SendMessageToSockets(message);
+                    await SendMessageToSockets(message, sessionId);
             }
         }
 
@@ -47,23 +54,22 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return null;
         }
 
-        //TODO: Add Generic Message Type 
-        public async Task SendMessageToSockets(string message)
+        public async Task SendMessageToSockets(string message, long sessionId)
         {
-            foreach (var (id, socket) in _sockets)
+            foreach (var connection in _sessions[sessionId])
             {
-                if (socket.State == WebSocketState.Open)
+                if (connection.Value.State == WebSocketState.Open)
                 {
                     var bytes = Encoding.Default.GetBytes(message);
                     var arraySegment = new ArraySegment<byte>(bytes);
-                    await socket.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+                    await connection.Value.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
         }
 
-        public async Task Send<T>(Message<T> message)
+        public async Task Send<T>(Message<T> message, long sessionId)
         {
-            await SendMessageToSockets(JsonConvert.SerializeObject(message, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+            await SendMessageToSockets(JsonConvert.SerializeObject(message, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }), sessionId);
         }
     }
 }
