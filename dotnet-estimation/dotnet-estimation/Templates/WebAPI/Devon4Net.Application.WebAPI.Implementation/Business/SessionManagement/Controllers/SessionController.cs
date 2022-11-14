@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using Devon4Net.Infrastructure.JWT.Common.Const;
-using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
 using System.Net;
 using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
@@ -135,6 +134,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 return Ok();
             }
             return BadRequest();
+        }
+        /// <summary>
+        /// Add a Session Esstimation 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(EstimationDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/estimation/v1/session/{sessionId:long}/estimation")]
+
+        public async Task<ActionResult<EstimationDto>> AddNewEstimation(long sessionId, EstimationDto estimationDto)
+        {
+            Devon4NetLogger.Debug("Executing AddNewEstimation from controller SessionController");
+            var result = await _sessionService.AddNewEstimation(sessionId, estimationDto.VoteBy, estimationDto.Complexity).ConfigureAwait(false);
+            return StatusCode(StatusCodes.Status201Created, result);
         }
     }
 }
