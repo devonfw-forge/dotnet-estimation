@@ -1,15 +1,14 @@
 import { FunctionComponent } from "react";
-import { Type } from "../../../../../Types/Type";
+import { EstimationType } from "../../../../../Types/EstimationType";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
 import { useEstimationStore } from "../Stores/EstimationStore";
 import { EstimationBar } from "./EstimationBar";
 
 export const Estimation: FunctionComponent<{}> = () => {
   const { complexity, effort, risk, resetStore } = useEstimationStore();
-  const { unmarkAll } = useTaskStore();
   const columns = new Array<String>();
 
-  for (const type in Type) {
+  for (const type in EstimationType) {
     columns.push(type);
   }
 
@@ -24,7 +23,6 @@ export const Estimation: FunctionComponent<{}> = () => {
     resetStore();
 
     // unmark current task as non-active
-    unmarkAll();
   };
 
   return (
@@ -51,7 +49,7 @@ export const Estimation: FunctionComponent<{}> = () => {
             <EstimationBar
               key={"estimationBar" + type}
               // @ts-ignore
-              type={Type[type] as Type}
+              type={EstimationType[type] as EstimationType}
             />
           </div>
         ))}

@@ -1,6 +1,6 @@
 import produce from "immer";
 import create from "zustand";
-import { IUser } from "../../../../../Interfaces/IUser";
+import { IUser } from "../../../../../../app/Interfaces/IUser";
 
 interface ISessionUserState {
   users: IUser[];

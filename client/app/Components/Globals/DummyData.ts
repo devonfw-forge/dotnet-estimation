@@ -1,4 +1,4 @@
-import { ITask } from "../../Interfaces/ITask";
+import { ITask } from "../../../app/Interfaces/ITask";
 
 export const dummyUsers = [
   { id: "1", imageUrl: "", username: "Timo von Pumba" },

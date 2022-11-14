@@ -1,12 +1,15 @@
 import { FunctionComponent } from "react";
-import { convertTypeToColorIfActive, Type } from "../../../../../Types/Type";
-import { useEstimationStore } from "../../Estimation/Stores/EstimationStore";
+import {
+  convertTypeToColorIfActive,
+  EstimationType,
+} from "../../../../../Types/EstimationType";
+import { useEstimationStore } from "../Stores/EstimationStore";
 
 export const EstimationValue: FunctionComponent<{
   value: number;
   gridColumn: number;
   isActive: boolean;
-  parentType: Type;
+  parentType: EstimationType;
 }> = ({ value, gridColumn, isActive, parentType }) => {
   const { setValue } = useEstimationStore();
 

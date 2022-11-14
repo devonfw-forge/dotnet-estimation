@@ -1,9 +1,11 @@
 import { FunctionComponent, useState } from "react";
 import { EstimationValue } from "./EstimationButton";
-import { useEstimationStore } from "../../Estimation/Stores/EstimationStore";
-import { Type } from "../../../../../Types/Type";
+import { useEstimationStore } from "../Stores/EstimationStore";
+import { EstimationType } from "../../../../../Types/EstimationType";
 
-export const EstimationBar: FunctionComponent<{ type: Type }> = ({ type }) => {
+export const EstimationBar: FunctionComponent<{ type: EstimationType }> = ({
+  type,
+}) => {
   const state = useEstimationStore();
 
   const validValues = [1, 2, 3, 5, 8, 13, 21];

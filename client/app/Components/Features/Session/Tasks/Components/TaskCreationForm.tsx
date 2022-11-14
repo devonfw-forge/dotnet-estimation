@@ -1,15 +1,26 @@
+import axios from "axios";
 import { FunctionComponent, useState } from "react";
+import { baseUrl, serviceUrl } from "../../../../../Constants/url";
+import { Status } from "../../../../../Types/Status";
 
 export const TaskCreationForm: FunctionComponent<{}> = () => {
   const [createNew, setCreateNew] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState<string | undefined>(undefined);
 
-  const handleSubmit = () => {
-    const task = { title, description };
+  const submitToRestApi = async (element: any) => {
+    element.preventDefault();
+
+    const task = { title, description, url: null, status: Status.Open };
+
+    const url = baseUrl + serviceUrl + "1/task";
 
     // submit to api
-    // if status code == 200/ Success => continue
+    await axios({
+      method: "post",
+      url: url,
+      data: task,
+    });
 
     setCreateNew(false);
     setTitle("");
@@ -44,7 +55,7 @@ export const TaskCreationForm: FunctionComponent<{}> = () => {
           className="bg-gray-200 rounded-2"
         >
           <div style={{ padding: "20px" }}>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+            <form onSubmit={submitToRestApi} className="flex flex-col gap-2">
               <label className="text-muted" htmlFor="title">
                 Title:
               </label>

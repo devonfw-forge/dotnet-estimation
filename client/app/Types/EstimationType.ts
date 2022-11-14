@@ -1,23 +1,26 @@
-export enum Type {
+export enum EstimationType {
   Complexity = "complexity",
   Effort = "effort",
   Risk = "risk",
 }
 
-export const convertTypeToColorIfActive = (type: Type, isActive: boolean) => {
+export const convertTypeToColorIfActive = (
+  type: EstimationType,
+  isActive: boolean
+) => {
   if (!isActive) {
     return "#f1f4f6";
   }
 
   // @ts-ignore
   switch (type) {
-    case Type.Complexity: {
+    case EstimationType.Complexity: {
       return "#16aaff";
     }
-    case Type.Effort: {
+    case EstimationType.Effort: {
       return "#0d6efd";
     }
-    case Type.Risk: {
+    case EstimationType.Risk: {
       return "#d92550";
     }
   }
@@ -26,13 +29,13 @@ export const convertTypeToColorIfActive = (type: Type, isActive: boolean) => {
 export const convertIndexToType = (index: number) => {
   switch (index) {
     case 0: {
-      return Type.Complexity;
+      return EstimationType.Complexity;
     }
     case 1: {
-      return Type.Effort;
+      return EstimationType.Effort;
     }
     case 2: {
-      return Type.Risk;
+      return EstimationType.Risk;
     }
   }
 };
