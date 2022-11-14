@@ -1,62 +1,47 @@
-import useWebSocket from "react-use-websocket";
-import { Estimation } from "../app/Components/Features/Session/Estimation/Components/Estimation";
-import { TaskView } from "../app/Components/Features/Session/Tasks/Components/TaskView";
-import { useTaskStore } from "../app/Components/Features/Session/Tasks/Stores/TaskStore";
-import { UserView } from "../app/Components/Features/Session/Users/Components/UserView";
-import { App } from "../app/Components/Globals/App";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { Frame } from "../app/Components/Globals/Frame";
-import { StickyHeader } from "../app/Components/Globals/StickyHeader";
-import { IMessage, ITypedMessage } from "../app/Interfaces/IMessage";
-import { ITask } from "../app/Interfaces/ITask";
-import { IWebSocketMessage } from "../app/Interfaces/IWebSocketMessage";
-import { Type } from "../app/Types/Type";
 
 export default function Home() {
-  const { upsertTask } = useTaskStore();
+  const router = useRouter();
 
-  //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
-  const processMessage = (message: IWebSocketMessage) => {
-    let { data } = message;
+  const [token, setToken] = useState("");
 
-    let parsed = JSON.parse(data);
+  const submitRedirect = (element: any) => {
+    element.preventDefault();
 
-    // cast incoming message and extract type
-    let { type } = parsed as ITypedMessage;
-
-    switch (type) {
-      case Type.TaskCreated: {
-        // cast incoming message and extract payload
-        let { payload } = parsed as IMessage<ITask>;
-
-        upsertTask(payload);
-      }
-      default: {
-        break;
-      }
+    if (token != undefined || token != "") {
+      router.push("/session/" + token);
     }
   };
 
-  const { sendMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8085/1/ws",
-    {
-      onOpen: (event: any) => {
-        console.log(event);
-      },
-      onMessage: (event: WebSocketEventMap["message"]) => processMessage(event),
-      onClose: (event: any) => console.log("Connection closed"),
-      onError: (error: any) => console.log("Error occured"),
-    }
-  );
+  const defaultPadding = "p-4";
 
   return (
     <>
       <Frame>
-        <StickyHeader />
-        <App>
-          <UserView key={"userView"} />
-          <Estimation key={"estimationView"} />
-          <TaskView key={"taskView"} />
-        </App>
+        <div className="flex flex-row content-center items-center">
+          <form onSubmit={submitRedirect} className="flex flex-col gap-2">
+            <label className="text-muted" htmlFor="title">
+              Title:
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              className="rounded"
+            />{" "}
+            <input
+              className={
+                "border-b-blue-700 bg-green-500 hover:bg-green-700 text-white font-bold p-2 rounded "
+              }
+              type="submit"
+              value="Create!"
+            />
+          </form>
+        </div>
       </Frame>
     </>
   );

@@ -1,7 +1,5 @@
 import produce from "immer";
-import { takeCoverage } from "v8";
 import create from "zustand";
-import { IResult } from "../../../../../../app/Interfaces/IResult";
 import { ITask } from "../../../../../../app/Interfaces/ITask";
 
 interface ISessionTaskState {
@@ -35,6 +33,21 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
         if (taskGotUpserted == false) {
           draft.tasks.push(task);
         }
+      })
+    );
+  },
+  sort: () => {
+    set(
+      produce((draft: ISessionTaskState) => {
+        draft.tasks.sort((a, b) => {
+          if (a.status == b.status) return 0;
+
+          if (a.status < b.status) {
+            return -1;
+          }
+
+          return 1;
+        });
       })
     );
   },
