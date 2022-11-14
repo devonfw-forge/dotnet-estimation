@@ -28,6 +28,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using Devon4Net.Infrastructure.LiteDb.Repository;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Configuration
 {
@@ -50,7 +51,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Configuration
             SetupDatabase(services, configuration);
             SetupJwtPolicies(services);
             SetupFluentValidators(services);
-
+            SetupWebSockets(services);
             using var serviceProvider = services.BuildServiceProvider();
 
             var mediatR = serviceProvider.GetService<IOptions<MediatROptions>>();
@@ -67,6 +68,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Configuration
             }
         }
 
+        private static void SetupWebSockets(IServiceCollection services)
+        {
+            services.AddSingleton<IWebSocketHandler, WebSocketHandler>();
+        }
         private static void SetupRabbitHandlers(IServiceCollection services)
         {
             services.AddRabbitMqHandler<UserSampleRabbitMqHandler>(true);

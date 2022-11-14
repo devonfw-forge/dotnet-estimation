@@ -1,5 +1,6 @@
 using Devon4Net.Application.WebAPI.Configuration;
 using Devon4Net.Application.WebAPI.Configuration.Application;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
 using Devon4Net.Application.WebAPI.Implementation.Configuration;
 using Devon4Net.Domain.UnitOfWork;
 using Devon4Net.Infrastructure.CircuitBreaker;
@@ -50,6 +51,35 @@ if (devonfwOptions.ForceUseHttpsRedirection || (!devonfwOptions.UseIIS && devonf
 
 app.UseStaticFiles();
 app.UseAuthorization();
+
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+app.UseWebSockets(webSocketOptions);
+
+/*
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/ws")
+    {
+        if (context.WebSockets.IsWebSocketRequest)
+        {
+            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            Console.WriteLine("Entered Test");
+        }
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+    }
+    else
+    {
+        await next(context);
+    }
+
+});*/
+//app.UseMiddleware<WebSocketMiddleware>();
 app.MapControllers();
 
 app.Run();

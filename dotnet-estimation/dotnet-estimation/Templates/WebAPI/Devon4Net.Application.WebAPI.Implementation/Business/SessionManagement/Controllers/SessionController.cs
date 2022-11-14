@@ -11,6 +11,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
+using Devon4Net.Infrastructure.JWT.Common.Const;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
+using System.Net;
+using Task = System.Threading.Tasks.Task;
+using System.Net.WebSockets;
+
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
     [ApiController]
@@ -19,10 +25,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     public class SessionController : ControllerBase
     {
         private readonly ISessionService _sessionService;
+        private readonly IWebSocketHandler _webSocketHandler;
 
-        public SessionController(ISessionService SessionService)
+        public SessionController(ISessionService SessionService, IWebSocketHandler webSocketHandler)
         {
             _sessionService = SessionService;
+            _webSocketHandler = webSocketHandler;
         }
 
         [HttpPut]
@@ -79,6 +87,54 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     NotFoundException _ => StatusCode(500),
                 };
             }
+        }
+
+        /// <summary>
+        /// Add a Session user
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
+        [Route("/estimation/v1/session/{sessionId:long}/entry")]
+        public async Task<ActionResult<UserDto>> AddUserToSession(long sessionId, UserDto userDto)
+        {
+            //Get claims
+            var token = Request.Headers["Authorization"].ToString().Replace($"{AuthConst.AuthenticationScheme} ", string.Empty);
+
+            if (string.IsNullOrEmpty(token)) return Unauthorized();
+
+            Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
+            var result = await _sessionService.AddUserToSession(sessionId, userDto.Id,
+                userDto.Role).ConfigureAwait(false);
+            return StatusCode(StatusCodes.Status201Created, result);
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/estimation/v1/session/{sessionId:long}/task")]
+        public async Task<ActionResult> AddTask(long sessionId, [FromBody]TaskDto task)
+        {
+            var finished = await _sessionService.AddTaskToSession(sessionId, task);
+
+            if (finished)
+            {
+                Message<TaskDto> Message = new Message<TaskDto>
+                {
+                    Type = MessageType.TaskCreated,
+                    Payload = task
+                };
+                await _webSocketHandler.Send(Message, sessionId);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

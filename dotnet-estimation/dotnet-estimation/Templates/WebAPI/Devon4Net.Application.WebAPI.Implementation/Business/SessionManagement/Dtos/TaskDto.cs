@@ -9,7 +9,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 {
     public class TaskDto
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         public string Title { get; set; }
 
@@ -18,5 +18,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public string? Url { get; set; }
 
         public Status Status { get; set; }
+
+        public void Deconstruct(out string id, out string title, out string? description, out string? url, out Status status)
+        {
+            id = Id;
+            title = Title;
+            description = Description;
+            url = Url;
+            status = Status;
+        }
     }
 }
