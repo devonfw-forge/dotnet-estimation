@@ -32,9 +32,15 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         public async Task<BsonValue> CreateSession(SessionDto sessionDto)
         {
+            if (sessionDto.ExpiresAt <= DateTime.Now || sessionDto.ExpiresAt == null)
+            {
+                throw new InvalidExpiryDateException();
+            }
             return _sessionRepository.Create(new Session{
                 InviteToken = generateInviteToken(),
-                ExpiresAt = sessionDto.ExpiresAt
+                ExpiresAt = sessionDto.ExpiresAt,
+                Tasks = new List<Domain.Entities.Task>(),
+                Users = new List<Domain.Entities.User>()
             });
         }
         
