@@ -1,4 +1,6 @@
+import axios from "axios";
 import { FunctionComponent } from "react";
+import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { EstimationType } from "../../../../../Types/EstimationType";
 import { Center } from "../../../../Globals/Center";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
@@ -17,15 +19,21 @@ export const Estimation: FunctionComponent<{}> = () => {
 
   const defaultPadding = "p-4";
 
-  const submitEstimationToRestApi = () => {
-    console.log(complexity);
-    console.log(effort);
-    console.log(risk);
+  const submitEstimationToRestApi = async () => {
+    const rating = { complexity, effort, risk };
 
-    // finally reset the store
-    resetStore();
+    const url = baseUrl + serviceUrl + "/estimation";
 
-    // unmark current task as non-active
+    const result = await axios({
+      method: "post",
+      url: url,
+      data: rating,
+    });
+
+    if (result.status == 200) {
+      // finally remove task from store
+      resetStore();
+    }
   };
 
   const renderVoting = () => {

@@ -18,6 +18,8 @@ export default function JoinSession() {
 
     const url = baseUrl + serviceUrl + "/session";
 
+    // if able to create a new session
+    //     redirect to the matching websocket
     const result = await axios({
       method: "post",
       url: url,

@@ -15,8 +15,6 @@ export default function Home() {
   const defaultPadding = "p-4";
 
   const setFormToRender = (element: any) => {
-    console.log(element.target.value);
-
     setSelector(element.target.value);
   };
 
