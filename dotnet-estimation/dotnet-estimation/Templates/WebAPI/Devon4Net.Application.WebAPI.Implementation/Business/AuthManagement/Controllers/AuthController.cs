@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Dto;
+using Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service;
 using Devon4Net.Infrastructure.JWT.Common.Const;
 using Devon4Net.Infrastructure.JWT.Handlers;
 using Devon4Net.Infrastructure.Logger.Logging;
@@ -18,14 +19,16 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
     public class AuthController : ControllerBase
     {
         private IJwtHandler JwtHandler { get; }
+        private IAuthService _authService;
 
         /// <summary>
         /// Constructor with DI
         /// </summary>
         /// <param name="jwtHandler"></param>
-        public AuthController(IJwtHandler jwtHandler)
+        public AuthController(IJwtHandler jwtHandler, IAuthService authService)
         {
             JwtHandler = jwtHandler;
+            _authService = authService;
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
         /// <returns></returns>
         [HttpGet]
         [HttpOptions]
-        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = AuthConst.DevonSampleUserRole)]
+        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
         // Or use [Authorize(Policy = AuthConst.DevonSamplePolicy)]
         [Route("/v1/auth/currentuser")]
         [ProducesResponseType(typeof(CurrentUserResponse), StatusCodes.Status200OK)]
@@ -94,6 +97,32 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Co
             };
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Performs join proces via username
+        /// </summary>
+        /// <returns>LoginResponse class will provide the JWT token to securize the server calls</returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("/estimation/v1/auth/tokengeneration")]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GenerateToken(string user)
+        {
+            if (string.IsNullOrEmpty(user))
+            {
+                Devon4NetLogger.Debug("Session Join user did not provide an username from controller AuthController");
+                return BadRequest("The username can not be empty");
+            }
+            else
+            {
+                Devon4NetLogger.Debug("Executing Login from controller AuthController");
+                var result = await _authService.getTokenUsername(user);
+                return Ok(result);
+            }
         }
     }
 }

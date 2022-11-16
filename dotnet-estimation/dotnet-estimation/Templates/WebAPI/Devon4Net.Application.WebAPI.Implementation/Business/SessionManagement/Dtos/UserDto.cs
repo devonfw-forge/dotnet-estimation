@@ -1,7 +1,7 @@
 ﻿using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto
+namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos
 {
     /// <summary>
     /// User definition
