@@ -10,29 +10,50 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-
 using Devon4Net.Infrastructure.JWT.Common.Const;
-
 using System.Net;
 using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
+using LiteDB;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
+    /// <summary>
+    /// Session controller
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     [EnableCors("CorsPolicy")]
-    public class SessionController : ControllerBase
+    
+    public class SessionController: ControllerBase
     {
         private readonly ISessionService _sessionService;
         private readonly IWebSocketHandler _webSocketHandler;
-
+        
         public SessionController(ISessionService SessionService, IWebSocketHandler webSocketHandler)
         {
             _sessionService = SessionService;
             _webSocketHandler = webSocketHandler;
         }
+        
+        
 
+        /// <summary>
+        /// Creates a session
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("/estimation/v1/session/newSession")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CreateSession(SessionDto sessionDto)
+        {
+            Devon4NetLogger.Debug($"Create session that will expire at {sessionDto.ExpiresAt}");
+            var result = await _sessionService.CreateSession(sessionDto);
+            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize(result));
+        }
         [HttpPut]
         [AllowAnonymous]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
@@ -137,4 +158,5 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return BadRequest();
         }
     }
+
 }
