@@ -4,7 +4,7 @@ using Devon4Net.Infrastructure.Logger.Logging;
 using Devon4Net.Infrastructure.LiteDb.Repository;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
-using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
 using System.Security.Cryptography;
 using LiteDB;
 
