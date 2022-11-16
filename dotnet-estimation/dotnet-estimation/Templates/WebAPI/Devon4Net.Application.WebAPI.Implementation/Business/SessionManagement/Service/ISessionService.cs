@@ -1,10 +1,12 @@
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
 
+using LiteDB;
+
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
     /// <summary>
-    /// TodoService interface
+    /// ISessionService
     /// </summary>
     public interface ISessionService
     {
@@ -12,6 +14,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public Task<(bool, Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task?)> GetStatus(long sessionId);
 
+        /// <summary>
+        /// CreateSession
+        /// </summary>
+        /// <param name="sessionDto"></param>
+        /// <returns></returns>
+        public Task<BsonValue> CreateSession(SessionDto sessionDto);
         public Task<bool> InvalidateSession(long sessionId);
         
         public Task<Estimation> AddNewEstimation(long sessionId , string VoteBy, int Conplexity);
