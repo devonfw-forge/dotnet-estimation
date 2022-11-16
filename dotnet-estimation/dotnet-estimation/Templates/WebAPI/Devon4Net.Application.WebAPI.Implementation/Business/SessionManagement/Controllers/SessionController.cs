@@ -52,7 +52,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             Devon4NetLogger.Debug($"Create session that will expire at {sessionDto.ExpiresAt}");
             var result = await _sessionService.CreateSession(sessionDto);
-            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize(result));
+            return StatusCode(StatusCodes.Status200OK, LiteDB.JsonSerializer.Serialize(result));
         }
         [HttpPut]
         [AllowAnonymous]
