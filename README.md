@@ -11,10 +11,6 @@ command in the root folder.
 ## Routes
 The estimation application's backend provides the following services and routes:
 
-| Service      | Description | Route      | Parameters  |
-|--------------|-------------|------------|-------------|
-| Status       | Returns if a session is valid and the task which is currently estimated | /estimation /v1/session /{id}/status | - id: Session ID |
-| Create Session | Creates a new estimation session | 5234       ||
 
 ### Session Status
 Provides the user with information about if a session is valid and the task which is currently estimated.
@@ -62,7 +58,7 @@ Enables a user to join an existing and valid estimation session.
 Enables a user to provide an estimation during an existing and valid estimation session.
 
 - CRUD: **POST**
-- Route: -
+- Route: */estimation/v1/session/{sessionId:long}/estimation*
 - Parameter
     - _sessionId_: Session Id
     - _estimationDto_: Object including ``string VoteBy`` and ``int Complexity``
