@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Authorization;
 
 using Devon4Net.Infrastructure.JWT.Common.Const;
 
+using System.Net;
+using Task = System.Threading.Tasks.Task;
+using System.Net.WebSockets;
+
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
     [ApiController]

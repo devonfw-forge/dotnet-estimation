@@ -1,3 +1,6 @@
+Requirements:
+OpenSSL [https://github.com/openssl/openssl] toolkit
+
 1. Step: Create a Certificate Authority:
 First, we will need to create a Certificate Authority to sign the certificate. 
 For that, we will run the following command which will create the certificate RootCA.pem and the corresponding private key RootCA.key.
