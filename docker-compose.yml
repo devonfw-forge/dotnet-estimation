@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  dotnet-estimation:
+    container_name: devon4net-estimation
+    build: 
+      context: ./dotnet-estimation/Templates/WebAPI
+      dockerfile: ./dotnet-estimation/Devon4Net.Application.WebAPI/Dockerfile
+    ports:
+      - 8085:8085

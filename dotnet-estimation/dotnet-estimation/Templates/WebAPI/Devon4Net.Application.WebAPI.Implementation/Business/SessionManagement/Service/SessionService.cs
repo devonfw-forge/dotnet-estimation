@@ -1,19 +1,49 @@
+using System.Linq.Expressions;
+using System.Collections.Generic;
+using Devon4Net.Infrastructure.Logger.Logging;
 using Devon4Net.Infrastructure.LiteDb.Repository;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
+using System.Security.Cryptography;
+using LiteDB;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
-    public class SessionService : ISessionService
+    /// <summary>
+    /// Session service implementation
+    /// </summary>
+    public class SessionService: ISessionService
     {
         private readonly ILiteDbRepository<Session> _sessionRepository;
 
-        public SessionService(ILiteDbRepository<Session> SessionRepository)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="SessionRepository"></param>
+        public SessionService(ILiteDbRepository<Session> SessionRepository) 
         {
             _sessionRepository = SessionRepository;
         }
-
+        /// <summary>
+        /// Creates the Session
+        /// </summary>
+        /// <param name="sessionDto"></param>
+        /// <returns></returns>
+        public async Task<BsonValue> CreateSession(SessionDto sessionDto)
+        {
+            if (sessionDto.ExpiresAt <= DateTime.Now || sessionDto.ExpiresAt == null)
+            {
+                throw new InvalidExpiryDateException();
+            }
+            return _sessionRepository.Create(new Session{
+                InviteToken = generateInviteToken(),
+                ExpiresAt = sessionDto.ExpiresAt,
+                Tasks = new List<Domain.Entities.Task>(),
+                Users = new List<Domain.Entities.User>()
+            });
+        }
+        
         public async Task<Session> GetSession(long id)
         {
             var expression = LiteDB.Query.EQ("_id", id);
@@ -21,7 +51,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             // FIXME: LiteDb also returs null values, when a matching entity does not exist!
             return _sessionRepository.GetFirstOrDefault(expression);
         }
-
+        
         public async Task<bool> InvalidateSession(long sessionId)
         {
             Session sessionResult = await GetSession(sessionId);
@@ -40,7 +70,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return _sessionRepository.Update(sessionResult);
         }
-
+        
         public async Task<(bool, Domain.Entities.Task?)> GetStatus(long sessionId)
         {
             var sessionResult = await GetSession(sessionId);
@@ -94,7 +124,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return (sessionIsValid, null);
         }
-
         public async Task<Estimation> AddNewEstimation(long sessionId, string VoteBy, int Complexity)
         {
             var (isvalid, currentTask) = await GetStatus(sessionId);
@@ -123,13 +152,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return newEstimation;
         }
-        
-        /// <summary>
-        /// ARemove a specified user from a given session
-        /// </summary>
-        /// <param name="sessionId"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
         public async Task<bool> RemoveUserFromSession(long sessionId, string userId)
         {
             var expression = LiteDB.Query.EQ("_id", sessionId);
@@ -147,7 +169,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return false;
         }
-
         /// <summary>
         /// Add an user to a given session
         /// </summary>
@@ -175,7 +196,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
             return false;
         }
-
         public async Task<bool> AddTaskToSession(long sessionId, TaskDto task)
         {
            /* var newSession = new Session
@@ -211,6 +231,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 }
             }
             return false;
+        }
+
+        private string generateInviteToken()
+        {   //generates 8 random bytes and returns them as a token string 
+            byte[] randomNumber = new byte[8];
+            RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
+            rngCsp.GetNonZeroBytes(randomNumber);
+            return BitConverter.ToString(randomNumber);
         }
     }
 }
