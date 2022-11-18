@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Devon4Net.Infrastructure.Logger.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Concurrent;
@@ -36,6 +37,18 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 var message = await ReceiveMessage(id, webSocket);
                 if (message != null)
                     await SendMessageToSockets(message, sessionId);
+            }
+
+            try
+            {
+                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
+                    "Socket closed",
+                    CancellationToken.None);
+                Devon4NetLogger.Debug($"Closed the  Websocket with the Id {id}");
+            }
+            catch (Exception ex)
+            {
+                Devon4NetLogger.Debug($"Failed to close the Websocket with the Id {id} because error {ex}");
             }
         }
 
