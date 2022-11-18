@@ -41,7 +41,7 @@ export default function Home() {
   const { id } = router.query;
 
   const { sendMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8085/" + id + "/ws",
+    "ws://localhost:8085/" + 1 + "/ws",
     {
       onOpen: (event: any) => {
         console.log(event);

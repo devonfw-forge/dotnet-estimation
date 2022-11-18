@@ -16,7 +16,7 @@ export default function JoinSession() {
   const submitTokenAndRedirect = async (element: any) => {
     element.preventDefault();
 
-    const url = baseUrl + serviceUrl + "/session";
+    const url = baseUrl + serviceUrl + "newSession";
 
     // if able to create a new session
     //     redirect to the matching websocket
