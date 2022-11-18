@@ -1,0 +1,48 @@
+name: publish + artifact download
+ 
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build on ubuntu
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+    - uses: actions/checkout@v3
+    
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    
+    - name: build project
+      run: dotnet publish
+      working-directory: ./dotnet-estimation
+      
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./dotnet-estimation
+      
+      #create temporary folder
+    - run: mkdir ${{ github.workspace }}/package
+      working-directory: ./dotnet-estimation
+      
+      #upload the build-artifact to the previously created folder
+    - uses: actions/upload-artifact@v3.1.1
+      with:
+        name: saved_artifact
+        path: ./dotnet-estimation
+        retention-days: 1
+      name: 'Upload Package'
+      
+      #make it available to downloadoad on GH actions 
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3.0.1
+      with:
+        path: ./dotnet-estimation/artifacts
