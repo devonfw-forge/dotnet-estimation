@@ -124,7 +124,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return (sessionIsValid, null);
         }
-        public async Task<Estimation> AddNewEstimation(long sessionId, string VoteBy, int Complexity)
+        public async Task<Estimation> AddNewEstimation(long sessionId , string voteBy, int complexity)
         {
             var (isvalid, currentTask) = await GetStatus(sessionId);
             if (!isvalid)
@@ -136,7 +136,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 throw new NoOpenOrSuspendedTask();
             }
 
-            var newEstimation = new Estimation { VoteBy = VoteBy, Complexity = Complexity };
+            var newEstimation = new Estimation { VoteBy = voteBy, Complexity = complexity };
 
             var session = await GetSession(sessionId);
 

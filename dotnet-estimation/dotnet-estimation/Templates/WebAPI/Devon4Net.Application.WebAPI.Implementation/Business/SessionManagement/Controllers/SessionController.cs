@@ -175,5 +175,4 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return StatusCode(StatusCodes.Status201Created, result);
         }
     }
-
 }

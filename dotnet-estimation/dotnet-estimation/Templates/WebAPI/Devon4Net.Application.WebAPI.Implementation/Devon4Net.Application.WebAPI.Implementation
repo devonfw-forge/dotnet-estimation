@@ -598,55 +598,93 @@
             <param name="command"></param>
             <returns></returns>
         </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController">
+            <summary>
+            Session controller
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto)">
+            <summary>
+            Creates a session
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.RemoveUserFromSession(System.Int64,System.String)">
             <summary>
             Remove a Session user
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddUserToSession(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddUserToSession(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto)">
             <summary>
             Add a Session user
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.StatusController.AddNewEstimation(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.EstimationDto)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddNewEstimation(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.EstimationDto)">
             <summary>
             Add a Session Esstimation 
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto">
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto">
+            <summary>
+            Session definition
+            </summary>
+        </member>
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto.ExpiresAt">
+            <summary>
+            the Expiry Date
+            </summary>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto">
             <summary>
             User definition
             </summary>
         </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto.Id">
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto.Id">
             <summary>
             the Id
             </summary>
         </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto.UserDto.Role">
+        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto.Role">
             <summary>
             the Role
             </summary>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
-            TodoService interface
+            ISessionService
             </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto)">
+            <summary>
+            CreateSession
+            </summary>
+            <param name="sessionDto"></param>
+            <returns></returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
             <summary>
             Add an User to a given session
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.RemoveUserFromSession(System.Int64,System.String)">
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService">
             <summary>
-            ARemove a specified user from a given session
+            Session service implementation
             </summary>
-            <param name="sessionId"></param>
-            <param name="userId"></param>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="SessionRepository"></param>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto)">
+            <summary>
+            Creates the Session
+            </summary>
+            <param name="sessionDto"></param>
             <returns></returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">

@@ -22,7 +22,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public Task<BsonValue> CreateSession(SessionDto sessionDto);
         public Task<bool> InvalidateSession(long sessionId);
         
-        public Task<Estimation> AddNewEstimation(long sessionId , string VoteBy, int Conplexity);
+        public Task<Estimation> AddNewEstimation(long sessionId , string voteBy, int complexity);
     
         public Task<bool> RemoveUserFromSession(long id, String userId);
 

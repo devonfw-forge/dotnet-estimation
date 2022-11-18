@@ -31,8 +31,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return existingBag;
                 });
 
-            await SendMessageToSockets($"User with id <b>{id}</b> has joined the chat", sessionId);
-
             while (webSocket.State == WebSocketState.Open)
             {
                 var message = await ReceiveMessage(id, webSocket);
