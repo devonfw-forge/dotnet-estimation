@@ -41,9 +41,9 @@ CLI:
 
 Visual Studio:
 I. Right click the Devon4Net.Application.WebApi -> Select "Manage User Secrets"
-II. Inside the opened secrets.json file insert your secret configuration e.g.:
+II. Inside the opened secrets.json file insert your secret configuration(NOTE the COMMENTS!):
+the content of your secrets.json file could look like the following one (only the content between the curley braces):
 
-secrets.json:
 {
   "JWT:Security:SecretKeyEncryptionAlgorithm": "",
   "JWT:Security:SecretKey": "",
