@@ -7,3 +7,8 @@ export interface ITask {
   url?: String;
   status: Status;
 }
+
+export interface ITaskStatusChange {
+  id: String;
+  status: Status;
+}

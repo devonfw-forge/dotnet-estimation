@@ -60,15 +60,18 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 
             var task = Tasks.FirstOrDefault(item => item.Id == taskId);
 
+            // if the status is already the same status
             if (task.Status == status)
             {
-                // if the status is already the same status
                 return (false, modifiedTasks);
             }
 
+            // react upon the change
             switch (status)
             {
                 case Status.Open:
+                case Status.Suspended:
+                case Status.Ended:
                     {
                         modifiedTasks = SuspendPendingTasksOtherThan(taskId);
 
@@ -76,7 +79,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
                     }
                 case Status.Evaluated:
                     {
-                        // task must have been previously voted for
+                        // task must have been previously open for votes
                         if (task.Status == Status.Open)
                         {
                             modifiedTasks = SuspendPendingTasksOtherThan(taskId);
@@ -88,16 +91,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 
                         break;
                     }
-                case Status.Suspended:
-                case Status.Ended:
-                    {
-                        break;
-                    }
                 default: throw new Exception("This should have been unreachable!");
             }
 
             task.Status = status;
 
+            // add the changed task itself to the modified list
             modifiedTasks.Add((task.Id, task.Status));
 
             return (true, modifiedTasks);

@@ -243,6 +243,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var (id, status) = statusChange;
 
+            // if the session could be found
             if (session is not null)
             {
                 var containsTask = session.Tasks.Where(item => item.Id == id).Any();
@@ -252,11 +253,18 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return (false, new List<TaskStatusChangeDto>());
                 }
 
+                // and it contains the task requested to be chnaged
                 var (modified, taskChanges) = session.ChangeStatusOfTask(id, status);
+
+                if (!modified)
+                {
+                    return (false, new List<TaskStatusChangeDto>());
+                }
 
                 var finished = _sessionRepository.Update(session);
 
-                if (modified && finished)
+                // and we could properly update the database
+                if (finished)
                 {
                     var converted = taskChanges.Select<(String id, Status status), TaskStatusChangeDto>(item => new TaskStatusChangeDto { Id = item.id, Status = item.status }).ToList();
 

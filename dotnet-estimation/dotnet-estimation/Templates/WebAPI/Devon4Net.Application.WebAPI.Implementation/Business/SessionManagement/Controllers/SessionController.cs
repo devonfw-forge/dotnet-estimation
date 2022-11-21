@@ -183,18 +183,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [Route("/estimation/v1/session/{sessionId:long}/task/status")]
         public async Task<IActionResult> ChangeTaskStatus(long sessionId, [FromBody] TaskStatusChangeDto statusChange)
         {
+            // Changing the status of a task requires other elements to be modified.
+            // There can always be only one open or evaluated task at the same time.
             var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
 
-            foreach (var element in modifiedTasks)
+            if (finished)
             {
-                Console.WriteLine(element);
-            }
+                await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
 
-            return finished switch
+                return Ok(modifiedTasks);
+            }
+            else
             {
-                true => Ok(modifiedTasks),
-                false => BadRequest(),
-            };
+                return BadRequest("Zero entries got updated due to errors. Please ensure the task exists.");
+            }
         }
     }
 }

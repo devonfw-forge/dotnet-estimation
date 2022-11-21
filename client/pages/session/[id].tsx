@@ -8,7 +8,7 @@ import { App } from "../../app/Components/Globals/App";
 import { Frame } from "../../app/Components/Globals/Frame";
 import { StickyHeader } from "../../app/Components/Globals/StickyHeader";
 import { IMessage, ITypedMessage } from "../../app/Interfaces/IMessage";
-import { ITask } from "../../app/Interfaces/ITask";
+import { ITask, ITaskStatusChange } from "../../app/Interfaces/ITask";
 import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
 
@@ -31,6 +31,11 @@ export default function Home() {
         let { payload } = parsed as IMessage<ITask>;
 
         upsertTask(payload);
+      }
+      case Type.TaskStatusModified: {
+        let { payload } = parsed as IMessage<ITaskStatusChange[]>;
+
+        console.log(payload);
       }
       default: {
         break;
