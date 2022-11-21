@@ -245,13 +245,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             if (session is not null)
             {
+                var containsTask = session.Tasks.Where(item => item.Id == id).Any();
+
+                if (!containsTask)
+                {
+                    return (false, new List<TaskStatusChangeDto>());
+                }
+
                 var (modified, taskChanges) = session.ChangeStatusOfTask(id, status);
 
                 var finished = _sessionRepository.Update(session);
 
                 if (modified && finished)
                 {
-                    var converted = taskChanges.Select(item => new TaskStatusChangeDto { Id = item.Item1, Status = item.Item2 }).ToList();
+                    var converted = taskChanges.Select<(String id, Status status), TaskStatusChangeDto>(item => new TaskStatusChangeDto { Id = item.id, Status = item.status }).ToList();
 
                     return (true, converted);
                 }

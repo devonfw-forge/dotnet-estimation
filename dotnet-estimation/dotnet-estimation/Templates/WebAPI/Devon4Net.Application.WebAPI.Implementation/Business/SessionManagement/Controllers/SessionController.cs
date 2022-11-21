@@ -185,6 +185,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
 
+            foreach (var element in modifiedTasks)
+            {
+                Console.WriteLine(element);
+            }
+
             return finished switch
             {
                 true => Ok(modifiedTasks),
