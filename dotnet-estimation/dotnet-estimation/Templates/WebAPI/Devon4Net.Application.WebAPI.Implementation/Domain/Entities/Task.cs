@@ -17,5 +17,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
         public IList<Estimation> Estimations { get; set; }
 
         public Result? Result { get; set; }
+
+        public void Print()
+        {
+            Console.WriteLine(Id);
+        }
     }
 }

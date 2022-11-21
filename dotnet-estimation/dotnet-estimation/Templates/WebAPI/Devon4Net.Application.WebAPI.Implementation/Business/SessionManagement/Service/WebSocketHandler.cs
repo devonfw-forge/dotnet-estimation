@@ -54,13 +54,16 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public async Task SendMessageToSockets(string message, long sessionId)
         {
-            foreach (var connection in _sessions[sessionId])
+            if (_sessions.ContainsKey(sessionId))
             {
-                if (connection.Value.State == WebSocketState.Open)
+                foreach (var connection in _sessions[sessionId])
                 {
-                    var bytes = Encoding.Default.GetBytes(message);
-                    var arraySegment = new ArraySegment<byte>(bytes);
-                    await connection.Value.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+                    if (connection.Value.State == WebSocketState.Open)
+                    {
+                        var bytes = Encoding.Default.GetBytes(message);
+                        var arraySegment = new ArraySegment<byte>(bytes);
+                        await connection.Value.SendAsync(arraySegment, WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
                 }
             }
         }

@@ -24,19 +24,19 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     [ApiController]
     [Route("[controller]")]
     [EnableCors("CorsPolicy")]
-    
-    public class SessionController: ControllerBase
+
+    public class SessionController : ControllerBase
     {
         private readonly ISessionService _sessionService;
         private readonly IWebSocketHandler _webSocketHandler;
-        
+
         public SessionController(ISessionService SessionService, IWebSocketHandler webSocketHandler)
         {
             _sessionService = SessionService;
             _webSocketHandler = webSocketHandler;
         }
-        
-        
+
+
 
         /// <summary>
         /// Creates a session
@@ -134,14 +134,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return StatusCode(StatusCodes.Status201Created, result);
         }
 
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("/estimation/v1/session/{sessionId:long}/task")]
-        public async Task<ActionResult> AddTask(long sessionId, [FromBody]TaskDto task)
+        public async Task<ActionResult> AddTask(long sessionId, [FromBody] TaskDto task)
         {
             var finished = await _sessionService.AddTaskToSession(sessionId, task);
 
@@ -152,7 +151,9 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     Type = MessageType.TaskCreated,
                     Payload = task
                 };
+
                 await _webSocketHandler.Send(Message, sessionId);
+
                 return Ok();
             }
             return BadRequest();
@@ -167,12 +168,28 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("/estimation/v1/session/{sessionId:long}/estimation")]
-
         public async Task<ActionResult<EstimationDto>> AddNewEstimation(long sessionId, EstimationDto estimationDto)
         {
             Devon4NetLogger.Debug("Executing AddNewEstimation from controller SessionController");
             var result = await _sessionService.AddNewEstimation(sessionId, estimationDto.VoteBy, estimationDto.Complexity).ConfigureAwait(false);
             return StatusCode(StatusCodes.Status201Created, result);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/estimation/v1/session/{sessionId:long}/task/status")]
+        public async Task<IActionResult> ChangeTaskStatus(long sessionId, [FromBody] TaskStatusChangeDto statusChange)
+        {
+            var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
+
+            return finished switch
+            {
+                true => Ok(modifiedTasks),
+                false => BadRequest(),
+            };
         }
     }
 }
