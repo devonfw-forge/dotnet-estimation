@@ -1,9 +1,13 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import { FunctionComponent, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { Status } from "../../../../../Types/Status";
 
 export const TaskCreationForm: FunctionComponent<{}> = () => {
+  // extract id from router
+  const { id } = useRouter().query;
+
   const [createNew, setCreateNew] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState<string | undefined>(undefined);
@@ -13,7 +17,7 @@ export const TaskCreationForm: FunctionComponent<{}> = () => {
 
     const task = { title, description, url: null, status: Status.Open };
 
-    const url = baseUrl + serviceUrl + "1/task";
+    const url = baseUrl + serviceUrl + id + "/task";
 
     // submit to api
     await axios({

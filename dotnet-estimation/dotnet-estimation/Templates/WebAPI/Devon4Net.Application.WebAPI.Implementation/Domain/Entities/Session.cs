@@ -30,7 +30,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
                 {
                     case Status.Open:
                         {
-                            Console.WriteLine("Changed status from open!");
                             task.Status = Status.Suspended;
 
                             modifiedTasks.Add((task.Id, task.Status));
@@ -39,8 +38,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
                         }
                     case Status.Evaluated:
                         {
-                            Console.WriteLine("Changed status from evaluated!");
-
                             task.Status = Status.Ended;
 
                             modifiedTasks.Add((task.Id, task.Status));

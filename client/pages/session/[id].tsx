@@ -14,7 +14,7 @@ import { Type } from "../../app/Types/Type";
 
 export default function Home() {
   const router = useRouter();
-  const { upsertTask } = useTaskStore();
+  const { upsertTask, changeStatusOfTask } = useTaskStore();
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -31,11 +31,16 @@ export default function Home() {
         let { payload } = parsed as IMessage<ITask>;
 
         upsertTask(payload);
+        break;
       }
       case Type.TaskStatusModified: {
         let { payload } = parsed as IMessage<ITaskStatusChange[]>;
 
-        console.log(payload);
+        payload.forEach((statusChanges) => {
+          changeStatusOfTask(statusChanges.id, statusChanges.status);
+        });
+
+        break;
       }
       default: {
         break;

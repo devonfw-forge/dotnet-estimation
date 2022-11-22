@@ -27,5 +27,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             url = Url;
             status = Status;
         }
+
+        public void Deconstruct(out string title, out string? description, out string? url, out Status status)
+        {
+            title = Title;
+            description = Description;
+            url = Url;
+            status = Status;
+        }
     }
 }
