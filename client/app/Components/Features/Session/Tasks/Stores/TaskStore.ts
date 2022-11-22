@@ -1,6 +1,8 @@
+import axios from "axios";
 import produce from "immer";
 import create from "zustand";
 import { ITask } from "../../../../../../app/Interfaces/ITask";
+import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { Status } from "../../../../../Types/Status";
 
 interface ISessionTaskState {
@@ -9,6 +11,7 @@ interface ISessionTaskState {
   clearCurrentTasks: () => void;
   upsertTask: (task: ITask) => void;
   changeStatusOfTask: (id: String, status: Status) => void;
+  fetch: (id: String) => void;
 }
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
@@ -46,6 +49,19 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
+  fetch: (id: String) => {
+    async () => {
+      const response = await axios({
+        method: "get",
+        url: baseUrl + serviceUrl + id + "/status",
+        responseType: "stream",
+      });
+
+      if (response.status == 200) {
+        set({ tasks: response.data.Tasks });
+      }
+    };
+  },
 }));
 
 const sortTasks = (tasks: ITask[]) => {
@@ -68,8 +84,6 @@ const sortTasks = (tasks: ITask[]) => {
 
   sortedTasks.concat(supsendedTasks);
   sortedTasks.concat(endedTasks);
-
-  console.log(sortedTasks);
 
   return sortedTasks;
 };

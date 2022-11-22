@@ -18,8 +18,6 @@ export const TaskCard: FunctionComponent<{
   status: Status;
 }> = ({ id, title, url, description, status }) => {
   const isAdmin = true;
-  console.log(id);
-
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + "1/task/status";
 

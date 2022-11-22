@@ -74,58 +74,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.Update(sessionResult);
         }
 
-        public async Task<(bool, Domain.Entities.Task?)> GetStatus(long sessionId)
+        public async Task<(bool, List<Domain.Entities.Task>)> GetStatus(long sessionId)
         {
-            var sessionResult = await GetSession(sessionId);
+            var entity = await GetSession(sessionId);
 
-            if (sessionResult == null)
+            if (entity == null)
             {
                 throw new NotFoundException(sessionId);
             }
 
-            bool sessionIsValid = sessionResult.IsValid();
+            bool sessionIsValid = entity.IsValid();
 
             if (!sessionIsValid)
             {
                 return (false, null);
             }
 
-            // since there can be only one task which is being evaluated,
-            // we only query the first object
-            var evaluatedTask = sessionResult.Tasks.ToList().Find(item => item.Status == Status.Evaluated);
-
-            if (evaluatedTask is not null)
-            {
-                return (sessionIsValid, evaluatedTask);
-            }
-
-            // else we try to find tasks which are open
-            var openTasks = sessionResult.Tasks.Where(item => item.Status == Status.Open).ToList();
-
-            if (openTasks.Any())
-            {
-                openTasks.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
-
-                var currentTask = openTasks.First();
-
-                return (sessionIsValid, currentTask);
-            }
-            else
-            {
-                // if there are no open tasks left to be estimated we query for postponed tasks
-                var suspendedTasks = sessionResult.Tasks.Where(item => item.Status == Status.Suspended).ToList();
-
-                suspendedTasks.Sort((x, y) => DateTime.Compare(x.CreatedAt, y.CreatedAt));
-
-                if (suspendedTasks.Any())
-                {
-                    var currentTask = suspendedTasks.First();
-
-                    return (sessionIsValid, currentTask);
-                }
-            }
-
-            return (sessionIsValid, null);
+            return (true, entity.Tasks.ToList());
         }
         public async Task<Estimation> AddNewEstimation(long sessionId, string taskId, string voteBy, int complexity)
         {

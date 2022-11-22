@@ -12,7 +12,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public Task<Session> GetSession(long id);
 
-        public Task<(bool, Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task?)> GetStatus(long sessionId);
+        public Task<(bool, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>)> GetStatus(long sessionId);
 
         /// <summary>
         /// CreateSession

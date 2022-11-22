@@ -36,8 +36,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             _webSocketHandler = webSocketHandler;
         }
 
-
-
         /// <summary>
         /// Creates a session
         /// </summary>

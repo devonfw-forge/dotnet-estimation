@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import { Estimation } from "../../app/Components/Features/Session/Estimation/Components/Estimation";
 import { TaskView } from "../../app/Components/Features/Session/Tasks/Components/TaskView";
@@ -12,9 +13,9 @@ import { ITask, ITaskStatusChange } from "../../app/Interfaces/ITask";
 import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
 
-export default function Home() {
+export default function Session() {
   const router = useRouter();
-  const { upsertTask, changeStatusOfTask } = useTaskStore();
+  const id = router.query.id as String;
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -48,9 +49,7 @@ export default function Home() {
     }
   };
 
-  const { id } = router.query;
-
-  console.log(id);
+  const { upsertTask, changeStatusOfTask } = useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8085/" + id + "/ws",
