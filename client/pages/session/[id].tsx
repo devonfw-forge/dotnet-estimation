@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
@@ -8,14 +9,20 @@ import { UserView } from "../../app/Components/Features/Session/Users/Components
 import { App } from "../../app/Components/Globals/App";
 import { Frame } from "../../app/Components/Globals/Frame";
 import { StickyHeader } from "../../app/Components/Globals/StickyHeader";
+import { baseUrl, serviceUrl } from "../../app/Constants/url";
 import { IMessage, ITypedMessage } from "../../app/Interfaces/IMessage";
 import { ITask, ITaskStatusChange } from "../../app/Interfaces/ITask";
 import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
 
-export default function Session() {
-  const router = useRouter();
-  const id = router.query.id as String;
+export default function Session({ id }: any) {
+  const { fetch } = useTaskStore();
+
+  useEffect(() => {
+    (async () => {
+      //await fetch(id);
+    })();
+  }, []);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -70,9 +77,13 @@ export default function Session() {
         <App>
           <UserView key={"userView"} />
           <Estimation key={"estimationView"} />
-          <TaskView key={"taskView"} />
+          <TaskView key={"taskView"} id={id} />
         </App>
       </Frame>
     </>
   );
 }
+
+Session.getInitialProps = async ({ query }: any) => {
+  return { id: query.id };
+};

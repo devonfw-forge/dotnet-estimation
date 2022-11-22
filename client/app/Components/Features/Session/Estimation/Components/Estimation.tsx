@@ -42,6 +42,10 @@ export const Estimation: FunctionComponent<{}> = () => {
     }
   };
 
+  if (tasks == undefined) {
+    return <></>;
+  }
+
   const task = tasks.find((item) => item.status == Status.Open);
 
   const renderVoting = () => {

@@ -5,7 +5,11 @@ import { useTaskStore } from "../Stores/TaskStore";
 import { TaskCard } from "./TaskCard";
 import { TaskCreationForm } from "./TaskCreationForm";
 
-export const TaskView: FunctionComponent<{}> = () => {
+interface TaskViewProps {
+  id: String;
+}
+
+export const TaskView: FunctionComponent<TaskViewProps> = ({ id }) => {
   const { tasks } = useTaskStore();
 
   return (
@@ -32,7 +36,7 @@ export const TaskView: FunctionComponent<{}> = () => {
             />
           ))}
         </div>
-        <TaskCreationForm key={"taskCreateFormSingleton"} />
+        <TaskCreationForm key={"taskCreateFormSingleton"} id={id} />
       </div>
     </>
   );

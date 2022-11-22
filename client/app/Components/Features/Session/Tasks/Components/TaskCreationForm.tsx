@@ -4,10 +4,13 @@ import { FunctionComponent, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { Status } from "../../../../../Types/Status";
 
-export const TaskCreationForm: FunctionComponent<{}> = () => {
-  // extract id from router
-  const { id } = useRouter().query;
+interface TaskCreationProps {
+  id: String;
+}
 
+export const TaskCreationForm: FunctionComponent<TaskCreationProps> = ({
+  id,
+}) => {
   const [createNew, setCreateNew] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState<string | undefined>(undefined);
