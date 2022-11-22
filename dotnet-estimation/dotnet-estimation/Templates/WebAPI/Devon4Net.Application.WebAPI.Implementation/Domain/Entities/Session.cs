@@ -70,11 +70,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
             switch (status)
             {
                 case Status.Open:
-                case Status.Suspended:
+                    {
+                    modifiedTasks = SuspendPendingTasksOtherThan(taskId);
+                    break;
+                    }
+                case Status.Suspended: break;
                 case Status.Ended:
                     {
-                        modifiedTasks = SuspendPendingTasksOtherThan(taskId);
-
+                        if(task.Status != Status.Evaluated)
+                        {
+                            return (false, modifiedTasks);
+                        }
                         break;
                     }
                 case Status.Evaluated:
