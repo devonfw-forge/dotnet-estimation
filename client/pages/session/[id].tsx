@@ -76,7 +76,7 @@ export default function Session({ id }: any) {
         <StickyHeader />
         <App>
           <UserView key={"userView"} />
-          <Estimation key={"estimationView"} />
+          <Estimation key={"estimationView"} id={id} />
           <TaskView key={"taskView"} id={id} />
         </App>
       </Frame>

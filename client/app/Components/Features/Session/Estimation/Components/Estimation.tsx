@@ -9,10 +9,11 @@ import { useTaskStore } from "../../Tasks/Stores/TaskStore";
 import { useEstimationStore } from "../Stores/EstimationStore";
 import { EstimationBar } from "./EstimationBar";
 
-export const Estimation: FunctionComponent<{}> = () => {
-  // extract id from router
-  const { id } = useRouter().query;
+interface EstimationProps {
+  id: String;
+}
 
+export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const { tasks } = useTaskStore();
 
   const { complexity, effort, risk, resetStore } = useEstimationStore();
