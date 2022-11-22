@@ -1,0 +1,11 @@
+{  "JWT": {
+    "Security": {
+      "SecretKeyEncryptionAlgorithm": "", //HmacSha256, HmacSha384, HmacSha512, HmacSha256Signature, HmacSha384Signature, HmacSha512Signature
+      "SecretKey": "",
+      "Certificate": "localhost.pfx", //Adjust to fit your certificate filename inside WebAPI/Certificates
+      "CertificatePassword": "YourCertificatePasswordComesHere", // Password for your certificate
+      "CertificateEncryptionAlgorithm": "", //The encryption algorithm used for your certificate e.g. RsaSha512 (used for my example certificate creation)
+      "RefreshTokenEncryptionAlgorithm": "" //MD5, SHA, HmacSha256, HmacSha384, HmacSha512, HmacSha256Signature, HmacSha384Signature, HmacSha512Signature
+    }
+  }
+}

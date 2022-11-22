@@ -1,0 +1,54 @@
+Requirements:
+Either a symmetric Key or as in this example proposed a self signed certificate(X.509), to encode the JWTs.
+
+Create a certificate and save it inside Devon4Net.Application.WebAPI/Certificates/ //Remember not to stage it in your VCS! (add to .gitignore)
+
+Note:(Checkout HowToSetupJwtViaSelfSignedCa.txt if you need a quick guide or check out the devon documentation for a deeper explanation how to create a certificate)
+
+We are going to utilize the ASP.NET Core Secret Manager Tool, to avoid storing secrets in plaintext 
+inside local configuration files e.g. appsettings.{Environment}.json. 
+In this way no developement secrets are published through our repository and therefore the security risk is minimized.
+
+The Secret Manager creates a local secrets.json File in your personal user account which settings will be loaded through the app builder after the appsettings.json and before environment variable settings.
+
+Using the script jwt_config.sh is the most comfortable way to setup your development environment.
+If you use Visual Studio as your IDE you can skip Steps 1-2 and instead follow steps I-II
+
+Script:
+Via Git Bash run the script jwt_config.sh with following flags: 
+-a Certificate algorithm e.g. RsaSha512 (used in the HowToSetupJwtViaSelfSignedCa.txt)
+-c Certificate filename (the certificate has to be inside WebAPI/Certificates directory)
+-p Certificate password (your setup .pfx certificate password)
+e.g.: ./jwt_config.sh -a RsaSha512 -p SuperSecret -c localhost.pfx
+
+CLI:
+1: Initialize the Secret Manager Tool with the following commands (Adds SecretsUserId Property to .proj file):
+1.1: Cd to project dir (Devon4Net.Application.WebAPI/):
+1.2: dotnet user-secrets init
+	
+2: Add secrets to local user profile and delete the file or make sure to untrack it in your Version Control System:
+2.1: Inside Certificates Adjust the template jwt_config.json file  (note the comments of JWT:Security:{Certificate,CertificatePassword,CertificateEncryptionAlgorithm})
+
+2.2: Run the following command to save the secrets to the secret store of the ASP.NET Core Secret Manager Tool:
+	type .\Certificates\jwt_config.json | dotnet user-secrets set 
+
+2.3: Make sure the jwt_config.json file is not tracked via git or otherwise the password will be EXPOSED!
+
+[2.4(alternatively to 2.2):] Adjust and run the following commands to setup the corresponding environment variables directly inside the Security Manager Tool via CLI, no secrets will be exposed to git with this method:
+	dotnet user-secrets set "JWT:Security:Certificate" "YourCertificateFilename(.pfx)"
+	dotnet user-secrets set "JWT:Security:CertificatePassword" "YourSecretCertificatePassword"
+	dotnet user-secrets set "JWT:Security:CertificateEncryptionAlgorithm" "YourCertificateEncryptionAlgorithm"
+
+Visual Studio:
+I. Right click the Devon4Net.Application.WebApi -> Select "Manage User Secrets"
+II. Inside the opened secrets.json file insert your secret configuration(NOTE the COMMENTS!):
+the content of your secrets.json file could look like the following one (only the content between the curley braces):
+
+{
+  "JWT:Security:SecretKeyEncryptionAlgorithm": "",
+  "JWT:Security:SecretKey": "",
+  "JWT:Security:Certificate": "localhost.pfx", //Adjust to fit your certificate filename inside WebAPI/Certificates
+  "JWT:Security:CertificatePassword": "YourCertificatePasswordComesHere", // Password for your certificate
+  "JWT:Security:CertificateEncryptionAlgorithm": "", // Insert the encryption algorithm name used for your certificate e.g. RsaSha512 (used for my example certificate creation)
+  "JWT:Security:RefreshTokenEncryptionAlgorithm": "" //MD5, SHA, HmacSha256, HmacSha384, HmacSha512, HmacSha256Signature, HmacSha384Signature, HmacSha512Signature
+}

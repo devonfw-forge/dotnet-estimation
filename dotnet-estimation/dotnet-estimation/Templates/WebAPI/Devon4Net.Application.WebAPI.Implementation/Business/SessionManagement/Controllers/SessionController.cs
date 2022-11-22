@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
-using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
-using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Infrastructure.Logger.Logging;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
