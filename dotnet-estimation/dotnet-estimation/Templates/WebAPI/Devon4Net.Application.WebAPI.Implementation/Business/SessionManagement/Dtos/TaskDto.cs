@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos
 {
+    [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class TaskDto
     {
         public string Id { get; set; }

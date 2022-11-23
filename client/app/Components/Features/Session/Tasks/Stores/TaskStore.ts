@@ -11,7 +11,6 @@ interface ISessionTaskState {
   clearCurrentTasks: () => void;
   upsertTask: (task: ITask) => void;
   changeStatusOfTask: (id: String, status: Status) => void;
-  fetch: (id: String) => Promise<void>;
 }
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
@@ -48,15 +47,6 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
         });
       })
     );
-  },
-  fetch: async (id: String) => {
-    const response = await axios.get(baseUrl + serviceUrl + id + "/status");
-
-    const { status, data } = response;
-
-    if (status == 200) {
-      set({ tasks: [...data.Tasks] });
-    }
   },
 }));
 

@@ -29,10 +29,11 @@ export const TaskView: FunctionComponent<TaskViewProps> = ({ id }) => {
             <TaskCard
               key={"taskCard" + item.id}
               id={item.id}
+              parentSession={id}
+              status={item.status}
               title={item.title}
               description={item.description}
               url={item.url}
-              status={item.status}
             />
           ))}
         </div>

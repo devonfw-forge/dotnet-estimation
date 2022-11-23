@@ -12,14 +12,15 @@ import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 
 export const TaskCard: FunctionComponent<{
   id: String;
+  parentSession: String;
   title: String;
   url?: String;
   description?: String;
   status: Status;
-}> = ({ id, title, url, description, status }) => {
+}> = ({ id, parentSession, title, url, description, status }) => {
   const isAdmin = true;
   const requestStatusChange = async (newStatus: Status) => {
-    const url = baseUrl + serviceUrl + "1/task/status";
+    const url = baseUrl + serviceUrl + parentSession + "/task/status";
 
     await axios({
       method: "put",

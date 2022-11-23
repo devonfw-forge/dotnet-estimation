@@ -16,10 +16,12 @@ import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
 
 export default function Session({ id, data }: any) {
-  const { fetch, setCurrentTasks } = useTaskStore();
+  const { setCurrentTasks } = useTaskStore();
+
+  console.log(data);
 
   useEffect(() => {
-    setCurrentTasks(data.Tasks);
+    setCurrentTasks(data.tasks);
   }, [data]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
@@ -92,8 +94,6 @@ export async function getServerSideProps(context: any) {
   );
 
   const data = await res.json();
-
-  console.log(data);
 
   return {
     props: { id, data }, // will be passed to the page component as props
