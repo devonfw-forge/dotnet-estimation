@@ -15,13 +15,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public int Complexity { get; set; }
 
-        public void Print()
-        {
-            Console.WriteLine(TaskId);
-            Console.WriteLine(VoteBy);
-            Console.WriteLine(Complexity);
-        }
-
         public void Deconstruct(out string taskId, out string voteBy, out int complexity)
         {
             taskId = TaskId;

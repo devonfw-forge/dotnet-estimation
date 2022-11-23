@@ -18,8 +18,6 @@ import { Type } from "../../app/Types/Type";
 export default function Session({ id, data }: any) {
   const { setCurrentTasks } = useTaskStore();
 
-  console.log(data);
-
   useEffect(() => {
     setCurrentTasks(data.tasks);
   }, [data]);

@@ -1,9 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Devon4Net.Business.Common;
+﻿using Devon4Net.Business.Common;
 using Devon4Net.Domain.Entities;
-using Devon4Net.Infrastructure.Test;
 using System;
 using System.IO;
 
@@ -35,7 +31,7 @@ namespace Devon4Net.Test.xUnit.Test.Integration
             {
                 cfg.AddProfile(new AutomapperProfile());
             });
-           Mapper = mockMapper.CreateMapper();
+            Mapper = mockMapper.CreateMapper();
         }
     }
 }

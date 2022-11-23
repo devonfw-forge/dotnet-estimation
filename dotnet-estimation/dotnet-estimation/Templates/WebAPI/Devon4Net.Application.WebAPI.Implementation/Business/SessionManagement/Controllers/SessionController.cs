@@ -168,8 +168,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [Route("/estimation/v1/session/{sessionId:long}/estimation")]
         public async Task<ActionResult<EstimationDto>> AddNewEstimation(long sessionId, [FromBody] EstimationDto estimationDto)
         {
-            estimationDto.Print();
-
             Devon4NetLogger.Debug("Executing AddNewEstimation from controller SessionController");
 
             var (taskId, voteBy, complexity) = estimationDto;
@@ -189,9 +187,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             // Changing the status of a task requires other elements to be modified.
             // There can always be only one open or evaluated task at the same time.
-            Console.WriteLine(statusChange.Id);
-            Console.WriteLine(statusChange.Status);
-
             var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
 
             if (finished)

@@ -179,7 +179,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 Description = description,
                 Estimations = new List<Estimation>(),
                 Url = url,
-                Status = status
+                Status = Status.Suspended
             };
 
             if (session != null)
