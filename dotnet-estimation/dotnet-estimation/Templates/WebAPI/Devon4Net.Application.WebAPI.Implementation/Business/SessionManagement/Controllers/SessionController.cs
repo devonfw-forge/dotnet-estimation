@@ -21,19 +21,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     [ApiController]
     [Route("[controller]")]
     [EnableCors("CorsPolicy")]
-    
-    public class SessionController: ControllerBase
+
+    public class SessionController : ControllerBase
     {
         private readonly ISessionService _sessionService;
         private readonly IWebSocketHandler _webSocketHandler;
-        
+
         public SessionController(ISessionService SessionService, IWebSocketHandler webSocketHandler)
         {
             _sessionService = SessionService;
             _webSocketHandler = webSocketHandler;
         }
-        
-        
 
         /// <summary>
         /// Creates a session
@@ -131,25 +129,26 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return StatusCode(StatusCodes.Status201Created, result);
         }
 
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("/estimation/v1/session/{sessionId:long}/task")]
-        public async Task<ActionResult> AddTask(long sessionId, [FromBody]TaskDto task)
+        public async Task<ActionResult> AddTask(long sessionId, [FromBody] TaskDto task)
         {
-            var finished = await _sessionService.AddTaskToSession(sessionId, task);
+            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, task);
 
             if (finished)
             {
                 Message<TaskDto> Message = new Message<TaskDto>
                 {
                     Type = MessageType.TaskCreated,
-                    Payload = task
+                    Payload = taskDto
                 };
+
                 await _webSocketHandler.Send(Message, sessionId);
+
                 return Ok();
             }
             return BadRequest();
@@ -164,12 +163,39 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("/estimation/v1/session/{sessionId:long}/estimation")]
-
-        public async Task<ActionResult<EstimationDto>> AddNewEstimation(long sessionId, EstimationDto estimationDto)
+        public async Task<ActionResult<EstimationDto>> AddNewEstimation(long sessionId, [FromBody] EstimationDto estimationDto)
         {
             Devon4NetLogger.Debug("Executing AddNewEstimation from controller SessionController");
-            var result = await _sessionService.AddNewEstimation(sessionId, estimationDto.VoteBy, estimationDto.Complexity).ConfigureAwait(false);
+
+            var (taskId, voteBy, complexity) = estimationDto;
+
+            var result = await _sessionService.AddNewEstimation(sessionId, taskId, voteBy, complexity);
+
             return StatusCode(StatusCodes.Status201Created, result);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/estimation/v1/session/{sessionId:long}/task/status")]
+        public async Task<IActionResult> ChangeTaskStatus(long sessionId, [FromBody] TaskStatusChangeDto statusChange)
+        {
+            // Changing the status of a task requires other elements to be modified.
+            // There can always be only one open or evaluated task at the same time.
+            var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
+
+            if (finished)
+            {
+                await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
+
+                return Ok(modifiedTasks);
+            }
+            else
+            {
+                return BadRequest("Zero entries got updated due to errors. Please ensure the task exists.");
+            }
         }
     }
 }

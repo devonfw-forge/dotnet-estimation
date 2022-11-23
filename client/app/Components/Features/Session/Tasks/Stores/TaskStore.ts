@@ -1,12 +1,16 @@
+import axios from "axios";
 import produce from "immer";
 import create from "zustand";
 import { ITask } from "../../../../../../app/Interfaces/ITask";
+import { baseUrl, serviceUrl } from "../../../../../Constants/url";
+import { Status } from "../../../../../Types/Status";
 
 interface ISessionTaskState {
   tasks: ITask[];
   setCurrentTasks(payload: ITask[]): void;
   clearCurrentTasks: () => void;
   upsertTask: (task: ITask) => void;
+  changeStatusOfTask: (id: String, status: Status) => void;
 }
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
@@ -17,9 +21,6 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   upsertTask: (task: ITask) => {
     set(
       produce((draft: ISessionTaskState) => {
-        console.log("Updating State");
-        console.log(task);
-
         let taskGotUpserted = false;
 
         draft.tasks.forEach((item, index) => {
@@ -36,19 +37,39 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
-  sort: () => {
+  changeStatusOfTask: (id: String, status: Status) => {
     set(
       produce((draft: ISessionTaskState) => {
-        draft.tasks.sort((a, b) => {
-          if (a.status == b.status) return 0;
-
-          if (a.status < b.status) {
-            return -1;
+        draft.tasks.forEach((item) => {
+          if (item.id == id) {
+            item.status = status;
           }
-
-          return 1;
         });
       })
     );
   },
 }));
+
+const sortTasks = (tasks: ITask[]) => {
+  const current = tasks.find(
+    (item) => item.status == Status.Open || item.status == Status.Evaluated
+  );
+
+  const sortedTasks = [];
+
+  if (current) {
+    sortedTasks.push(current);
+  }
+
+  const supsendedTasks = tasks.filter(
+    (item) => item.status == Status.Suspended
+  );
+  const endedTasks = tasks.filter((item) => item.status == Status.Ended);
+
+  // TODO: sort using creation date
+
+  sortedTasks.concat(supsendedTasks);
+  sortedTasks.concat(endedTasks);
+
+  return sortedTasks;
+};

@@ -39,12 +39,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             try
             {
-                var (isValid, task) = await _sessionService.GetStatus(id);
+                var (isValid, tasks) = await _sessionService.GetStatus(id);
 
                 var statusResult = new StatusDto
                 {
                     IsValid = isValid,
-                    CurrentTask = task is null ? null : TaskConverter.ModelToDto(task)
+                    Tasks = tasks.Select(item => TaskConverter.ModelToDto(item)).ToList()
                 };
 
                 return new ObjectResult(JsonConvert.SerializeObject(statusResult));
