@@ -7,7 +7,7 @@ import {
   convertStatusToBorderColor,
   convertStatusToTextColor,
 } from "../../../../../Types/Status";
-
+import { useTaskStore } from "../Stores/TaskStore";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 
 export const TaskCard: FunctionComponent<{
@@ -28,6 +28,17 @@ export const TaskCard: FunctionComponent<{
       data: { id: id, status: convertStatusToNumber(newStatus) },
     });
   };
+
+  const { deleteTask } = useTaskStore();
+  const submitDeleteTaskToRestApi = async () => {
+    const url = baseUrl + serviceUrl + parentSession + "/task/" + id;
+    const result = await axios.delete(url);
+    console.log(`Status: ${result.status}`);
+
+    if (result.status == 200) {
+      deleteTask(id);
+    }
+  }
 
   const renderAdministrativeView = () => {
     return (
@@ -72,6 +83,12 @@ export const TaskCard: FunctionComponent<{
               return <></>;
           }
         })()}
+        <button
+          onClick={submitDeleteTaskToRestApi}
+          className={"bg-red-500 hover:bg-red-700 text-white font-bold p-1 mt-2 rounded"}
+        >
+          Delete
+        </button>
       </>
     );
   };
