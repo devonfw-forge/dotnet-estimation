@@ -4,7 +4,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
-﻿using AutoMapper;
+using AutoMapper;
+
 namespace Devon4Net.Test.xUnit.Test.Integration
 {
     public class IntegrationTest : Infrastructure.Test.DatabaseManagementTest<ModelContext>
