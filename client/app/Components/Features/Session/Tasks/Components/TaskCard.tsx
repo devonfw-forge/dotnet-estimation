@@ -30,10 +30,9 @@ export const TaskCard: FunctionComponent<{
   };
 
   const { deleteTask } = useTaskStore();
-  const submitDeleteTaskToRestApi = async () => {
+  const requestDeleteTask = async () => {
     const url = baseUrl + serviceUrl + parentSession + "/task/" + id;
     const result = await axios.delete(url);
-    console.log(`Status: ${result.status}`);
 
     if (result.status == 200) {
       deleteTask(id);
@@ -84,7 +83,7 @@ export const TaskCard: FunctionComponent<{
           }
         })()}
         <button
-          onClick={submitDeleteTaskToRestApi}
+          onClick={requestDeleteTask}
           className={"bg-red-500 hover:bg-red-700 text-white font-bold p-1 mt-2 rounded"}
         >
           Delete

@@ -41,8 +41,13 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   deleteTask: (id: String) => {
     set(
       produce((draft: ISessionTaskState) => {
+        // returns -1 if task isn't in list
         const index = draft.tasks.findIndex(task => task.id == id);
-        draft.tasks.splice(index, 1);
+
+        // prevents accidentally deleting the last task in the list
+        if (index != -1) {
+          draft.tasks.splice(index, 1);
+        }
       })
     );
   },
