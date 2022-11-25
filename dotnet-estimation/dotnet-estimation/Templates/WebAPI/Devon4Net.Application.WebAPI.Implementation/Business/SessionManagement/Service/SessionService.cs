@@ -51,7 +51,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             
             var resultCreateSessionDto = System.Text.Json.JsonSerializer.Deserialize<ResultCreateSessionDto>(result);
 
-            Console.WriteLine("#################################################");
+            Console.WriteLine("################################################");
             Console.WriteLine(resultCreateSessionDto._id);
 
             return new ResultCreateSessionDto{
