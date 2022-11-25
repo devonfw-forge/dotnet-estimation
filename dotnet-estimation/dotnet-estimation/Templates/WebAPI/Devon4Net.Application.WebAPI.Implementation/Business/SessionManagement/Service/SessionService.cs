@@ -31,20 +31,32 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// </summary>
         /// <param name="sessionDto"></param>
         /// <returns></returns>
-        public async Task<BsonValue> CreateSession(SessionDto sessionDto)
+        public async Task<ResultCreateSessionDto> CreateSession(SessionDto sessionDto)
         {
             if (sessionDto.ExpiresAt <= DateTime.Now || sessionDto.ExpiresAt == null)
             {
                 throw new InvalidExpiryDateException();
             }
 
-            return _sessionRepository.Create(new Session
+            var result = _sessionRepository.Create(new Session
             {
                 InviteToken = generateInviteToken(),
                 ExpiresAt = sessionDto.ExpiresAt,
                 Tasks = new List<Domain.Entities.Task>(),
                 Users = new List<Domain.Entities.User>()
             });
+
+            //Converting Bson to Dto
+            result = LiteDB.JsonSerializer.Serialize(result);
+            
+            var resultCreateSessionDto = System.Text.Json.JsonSerializer.Deserialize<ResultCreateSessionDto>(result);
+
+            Console.WriteLine("#################################################");
+            Console.WriteLine(resultCreateSessionDto._id);
+
+            return new ResultCreateSessionDto{
+                _id = resultCreateSessionDto._id
+            };
         }
 
         public async Task<Session> GetSession(long id)

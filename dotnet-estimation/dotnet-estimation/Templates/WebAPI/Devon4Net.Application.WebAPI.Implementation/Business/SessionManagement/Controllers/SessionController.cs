@@ -39,15 +39,25 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         [HttpPost]
         [Route("/estimation/v1/session/newSession")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultCreateSessionDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreateSession(SessionDto sessionDto)
         {
             Devon4NetLogger.Debug($"Create session that will expire at {sessionDto.ExpiresAt}");
-            var result = await _sessionService.CreateSession(sessionDto);
-            return StatusCode(StatusCodes.Status200OK, LiteDB.JsonSerializer.Serialize(result));
+            try
+            {
+                return Ok(await _sessionService.CreateSession(sessionDto));
+            }
+            catch (Exception exception)
+            {
+                return exception switch
+                {
+                    InvalidExpiryDateException _ => BadRequest(),
+                    _ => StatusCode(500)
+                };
+            }
         }
         [HttpPut]
         [AllowAnonymous]
