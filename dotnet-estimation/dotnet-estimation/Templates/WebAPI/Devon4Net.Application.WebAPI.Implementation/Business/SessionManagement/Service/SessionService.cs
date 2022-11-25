@@ -197,6 +197,33 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return (false, null);
         }
 
+        /// <summary>
+        /// Delete a Task
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteTask(long sessionId, string taskId)
+        {
+            var session = await GetSession(sessionId);
+
+            if (session == null)
+            {
+                throw new NotFoundException(sessionId);
+            }
+
+            var task = session.Tasks.ToList().Find(item => item.Id == taskId);
+
+            if (task == null)
+            {
+                throw new TaskNotFoundException(taskId);
+            }
+
+            session.Tasks.Remove(task);
+
+            return _sessionRepository.Update(session);
+        }
+
         private string generateInviteToken()
         {   //generates 8 random bytes and returns them as a token string 
             byte[] randomNumber = new byte[8];
