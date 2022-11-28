@@ -118,14 +118,19 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             var task = session.Tasks.First(item => item.Id == taskId);
+            
             var estimations = task.Estimations;
-
+            
             var newEstimation = new Estimation { VoteBy = voteBy, Complexity = complexity };
 
             // if estimation by user already exists, delete previous estimation before adding new
             if (estimations != null && estimations.Any()) {
-                var oldEstimation = estimations.First(est => est.VoteBy == voteBy);
-                if(oldEstimation != null) {
+                var alreadyContainsEstimation = estimations.Where(item => item.VoteBy == voteBy).Any();
+
+                if (alreadyContainsEstimation)
+                {
+                    var oldEstimation = estimations.First(est => est.VoteBy == voteBy);
+                       
                     estimations.Remove(oldEstimation);
                 }
             }
