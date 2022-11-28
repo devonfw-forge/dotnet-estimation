@@ -15,7 +15,7 @@ export const UserCard: FunctionComponent<{
             {alreadyVotedForCurrentTask ? (
               <div className="rounded-full bg-blue-600 w-4 h-4"></div>
             ) : (
-              <>b</>
+              <></>
             )}
           </>
         ) : (
@@ -25,7 +25,7 @@ export const UserCard: FunctionComponent<{
             {alreadyVotedForCurrentTask ? (
               <div className="rounded-full bg-blue-600 w-4 h-4"></div>
             ) : (
-              <>b</>
+              <></>
             )}
           </>
         )}
