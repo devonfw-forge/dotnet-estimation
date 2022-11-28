@@ -153,6 +153,44 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
             return BadRequest();
         }
+
+        [HttpDelete]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/estimation/v1/session/{sessionId:long}/task/{taskId}")]
+        public async Task<ActionResult> DeleteTask(long sessionId, string taskId)
+        {
+            Devon4NetLogger.Debug($"Delete-Request to delete task with id: {taskId} from session with id: {sessionId}");
+
+            try
+            {
+                var finished = await _sessionService.DeleteTask(sessionId, taskId);
+
+                if (finished)
+                {
+                    Message<string> message = new Message<string>
+                    {
+                        Type = MessageType.TaskDeleted,
+                        Payload = taskId
+                    };
+                    await _webSocketHandler.Send(message, sessionId);
+                    return Ok();
+                }
+
+                return BadRequest();
+            }
+            catch (Exception exception)
+            {
+                return exception switch
+                {
+                    NotFoundException or TaskNotFoundException => NotFound(),
+                    _ => StatusCode(500)
+                };
+            }
+        }
+
         /// <summary>
         /// Add a Session Esstimation 
         /// </summary>

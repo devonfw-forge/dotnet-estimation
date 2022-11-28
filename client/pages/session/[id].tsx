@@ -48,13 +48,19 @@ export default function Session({ id, data }: any) {
 
         break;
       }
+      case Type.TaskDeleted: {
+        let { payload } = parsed as IMessage<String>;
+
+        deleteTask(payload);
+        break;
+      }
       default: {
         break;
       }
     }
   };
 
-  const { upsertTask, changeStatusOfTask } = useTaskStore();
+  const { upsertTask, changeStatusOfTask, deleteTask } = useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8085/" + id + "/ws",

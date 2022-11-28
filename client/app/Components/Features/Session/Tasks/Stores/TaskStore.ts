@@ -10,6 +10,7 @@ interface ISessionTaskState {
   setCurrentTasks(payload: ITask[]): void;
   clearCurrentTasks: () => void;
   upsertTask: (task: ITask) => void;
+  deleteTask: (id: String) => void;
   changeStatusOfTask: (id: String, status: Status) => void;
 }
 
@@ -33,6 +34,19 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
 
         if (taskGotUpserted == false) {
           draft.tasks.push(task);
+        }
+      })
+    );
+  },
+  deleteTask: (id: String) => {
+    set(
+      produce((draft: ISessionTaskState) => {
+        // returns -1 if task isn't in list
+        const index = draft.tasks.findIndex(task => task.id == id);
+
+        // prevents accidentally deleting the last task in the list
+        if (index != -1) {
+          draft.tasks.splice(index, 1);
         }
       })
     );
