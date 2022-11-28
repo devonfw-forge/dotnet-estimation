@@ -92,6 +92,15 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return (true, entity.Tasks.ToList());
         }
+
+        /// <summary>
+        /// Adds or updates a user's estimation to the active session's task
+        /// </summary>
+        /// <param name="sessionId">The current session's ID</param>
+        /// <param name="taskId">The active task's ID</param>
+        /// <param name="voteBy">The originating user's ID</param>
+        /// <param name="complexity">Complexity estimation</param>
+        /// <returns></returns>
         public async Task<Estimation> AddNewEstimation(long sessionId, string taskId, string voteBy, int complexity)
         {
             var session = await GetSession(sessionId);
@@ -109,15 +118,25 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             var task = session.Tasks.First(item => item.Id == taskId);
+            var estimations = task.Estimations;
 
-            var estimation = new Estimation { VoteBy = voteBy, Complexity = complexity };
+            var newEstimation = new Estimation { VoteBy = voteBy, Complexity = complexity };
 
-            task.Estimations.Add(estimation);
+            // if estimation by user already exists, delete previous estimation before adding new
+            if (estimations != null && estimations.Any()) {
+                var oldEstimation = estimations.First(est => est.VoteBy == voteBy);
+                if(oldEstimation != null) {
+                    estimations.Remove(oldEstimation);
+                }
+            }
+
+            estimations.Add(newEstimation);
 
             _sessionRepository.Update(session);
 
-            return estimation;
+            return newEstimation;
         }
+
         public async Task<bool> RemoveUserFromSession(long sessionId, string userId)
         {
             var expression = LiteDB.Query.EQ("_id", sessionId);
@@ -137,6 +156,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             return false;
         }
+
         /// <summary>
         /// Add an user to a given session
         /// </summary>
@@ -166,6 +186,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
             return false;
         }
+
         public async Task<(bool, TaskDto)> AddTaskToSession(long sessionId, TaskDto task)
         {
             var session = await GetSession(sessionId);
