@@ -33,7 +33,7 @@
             Please remember to avoid the use ob logic in a controller !!!
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler,Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService)">
             <summary>
             Constructor with DI
             </summary>
@@ -52,6 +52,12 @@
             This is only a sample. Please never put any logic on a controller
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.GenerateToken(System.String)">
+            <summary>
+            Performs join proces via username
+            </summary>
+            <returns>LoginResponse class will provide the JWT token to securize the server calls</returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Dto.CorporateBasicInfo">
             <summary>
@@ -107,6 +113,13 @@
             <summary>
             Token
             </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService.getTokenUsername(System.String)">
+            <summary>
+            Generate an AccessToken for a given username
+            </summary>
+            <param name="username">Session username</param>
+            <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.EmployeeManagement.Controllers.EmployeeController">
             <summary>
@@ -669,6 +682,11 @@
             Add an User to a given session
             </summary>
         </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.DeleteTask(System.Int64,System.String)">
+            <summary>
+            Delete a Task
+            </summary>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService">
             <summary>
             Session service implementation
@@ -687,6 +705,16 @@
             <param name="sessionDto"></param>
             <returns></returns>
         </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddNewEstimation(System.Int64,System.String,System.String,System.Int32)">
+            <summary>
+            Adds or updates a user's estimation to the active session's task
+            </summary>
+            <param name="sessionId">The current session's ID</param>
+            <param name="taskId">The active task's ID</param>
+            <param name="voteBy">The originating user's ID</param>
+            <param name="complexity">Complexity estimation</param>
+            <returns></returns>
+        </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
             <summary>
             Add an user to a given session
@@ -694,6 +722,14 @@
             <param name="sessionId"></param>
             <param name="userId"></param>
             <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.DeleteTask(System.Int64,System.String)">
+            <summary>
+            Delete a Task
+            </summary>
+            <param name="sessionId"></param>
+            <param name="taskId"></param>
             <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">

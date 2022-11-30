@@ -209,6 +209,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var result = await _sessionService.AddNewEstimation(sessionId, taskId, voteBy, complexity);
 
+            await _webSocketHandler.Send(new Message<EstimationDto> { Type = MessageType.EstimationAdded, Payload = estimationDto }, sessionId);
+
             return StatusCode(StatusCodes.Status201Created, result);
         }
 

@@ -3,9 +3,14 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import { Estimation } from "../../app/Components/Features/Session/Estimation/Components/Estimation";
+import {
+  ITaskWithEstimation,
+  useEstimationStore,
+} from "../../app/Components/Features/Session/Estimation/Stores/EstimationStore";
 import { TaskView } from "../../app/Components/Features/Session/Tasks/Components/TaskView";
 import { useTaskStore } from "../../app/Components/Features/Session/Tasks/Stores/TaskStore";
 import { UserView } from "../../app/Components/Features/Session/Users/Components/UserView";
+import { useSessionUserStore } from "../../app/Components/Features/Session/Users/Stores/UserStore";
 import { App } from "../../app/Components/Globals/App";
 import { Frame } from "../../app/Components/Globals/Frame";
 import { StickyHeader } from "../../app/Components/Globals/StickyHeader";
@@ -14,13 +19,19 @@ import { IMessage, ITypedMessage } from "../../app/Interfaces/IMessage";
 import { ITask, ITaskStatusChange } from "../../app/Interfaces/ITask";
 import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
+import { dummyUsers } from "../../app/Components/Globals/DummyData";
+import { IEstimationDto } from "../../app/Interfaces/IEstimationDto";
 
 export default function Session({ id, data }: any) {
   const { setCurrentTasks } = useTaskStore();
+  const { setCurrentUsers } = useSessionUserStore();
 
   useEffect(() => {
-    setCurrentTasks(data.tasks);
-  }, [data]);
+    const { tasks } = data;
+
+    setCurrentTasks(tasks);
+    setCurrentUsers(dummyUsers);
+  }, [data, dummyUsers]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -54,13 +65,23 @@ export default function Session({ id, data }: any) {
         deleteTask(payload);
         break;
       }
+      case Type.EstimationAdded: {
+        let { payload } = parsed as IMessage<IEstimationDto>;
+
+        // add estimation
+        console.log(payload);
+        upsertEstimationToTask(payload);
+
+        break;
+      }
       default: {
         break;
       }
     }
   };
 
-  const { upsertTask, changeStatusOfTask, deleteTask } = useTaskStore();
+  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask } =
+    useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
     "ws://localhost:8085/" + id + "/ws",
