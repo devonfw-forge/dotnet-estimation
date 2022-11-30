@@ -47,8 +47,6 @@ export default function Session({ id, data }: any) {
         // cast incoming message and extract payload
         let { payload } = parsed as IMessage<ITask>;
 
-        console.log(payload);
-
         upsertTask(payload);
         break;
       }

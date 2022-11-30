@@ -26,10 +26,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   let alreadyVoted = false;
 
   if (task) {
-    console.log("found matching task");
     alreadyVoted = userAlreadyVoted("me", task.id);
-
-    console.log("alreadyVoted:", alreadyVoted);
   }
 
   useEffect(() => {
