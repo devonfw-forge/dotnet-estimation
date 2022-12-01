@@ -1,9 +1,27 @@
 version: "3.8"
+
 services:
-  dotnet-estimation:
-    container_name: devon4net-estimation
+  backend:
+    container_name: estimation-backend
     build: 
-      context: ./dotnet-estimation/Templates/WebAPI
-      dockerfile: ./dotnet-estimation/Devon4Net.Application.WebAPI/Dockerfile
+      context: ./dotnet-estimation/dotnet-estimation/Templates/WebAPI
+      dockerfile: ./Devon4Net.Application.WebAPI/Dockerfile
+    networks:
+      backend-net:
+        aliases: [backend]
     ports:
       - 8085:8085
+    
+  frontend:
+    container_name: estimation-frontend
+    build:
+      context: ./client
+    networks:
+      backend-net:
+        aliases: [backend]
+    ports:
+      - 3000:3000
+
+networks:
+  backend-net:
+    driver: bridge
