@@ -8,6 +8,7 @@ using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto
 using System.Security.Cryptography;
 using LiteDB;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
+using System;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
@@ -46,16 +47,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 Users = new List<Domain.Entities.User>()
             });
 
-            //Converting Bson to Dto
-            result = LiteDB.JsonSerializer.Serialize(result);
-            
-            var resultCreateSessionDto = System.Text.Json.JsonSerializer.Deserialize<ResultCreateSessionDto>(result);
-
-            Console.WriteLine("################################################");
-            Console.WriteLine(resultCreateSessionDto._id);
-
             return new ResultCreateSessionDto{
-                _id = resultCreateSessionDto._id
+                Id = (long)result.RawValue
             };
         }
 
