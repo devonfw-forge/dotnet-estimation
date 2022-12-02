@@ -68,13 +68,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
             {
                 case Status.Open:
                     {
-                    modifiedTasks = SuspendPendingTasksOtherThan(taskId);
-                    break;
+                        modifiedTasks = SuspendPendingTasksOtherThan(taskId);
+                        break;
                     }
                 case Status.Suspended: break;
                 case Status.Ended:
                     {
-                        if(task.Status != Status.Evaluated)
+                        if (task.Status != Status.Evaluated)
                         {
                             return (false, modifiedTasks);
                         }

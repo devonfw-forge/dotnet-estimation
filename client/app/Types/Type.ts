@@ -3,4 +3,5 @@ export enum Type {
   TaskStatusModified = 1,
   TaskDeleted = 2,
   EstimationAdded = 3,
+  TaskResultAdded = 4
 }

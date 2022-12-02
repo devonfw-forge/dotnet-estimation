@@ -12,6 +12,7 @@ using System.Net;
 using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
 using LiteDB;
+using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -229,6 +230,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             if (finished)
             {
                 await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
+
+                // If the status changed to evaluated, another message is sent that contains the voting result
+                if (statusChange.Status == Status.Evaluated)
+                {
+                    var evaluatedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
+
+                    var taskResult = new TaskResultDto()
+                    {
+                        Id = statusChange.Id,
+                        Result = evaluatedTask.Result
+                    };
+
+                    await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskResultAdded, Payload = taskResult }, sessionId);
+                }
 
                 return Ok(modifiedTasks);
             }

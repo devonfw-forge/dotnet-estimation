@@ -74,6 +74,12 @@ export default function Session({ id, data }: any) {
 
         break;
       }
+      case Type.TaskResultAdded: {
+        // let { payload } = parsed as IMessage<ITaskResultDto>;
+
+        console.log("TaskResultAdded received.");
+        // console.log(payload);
+      }
       default: {
         break;
       }

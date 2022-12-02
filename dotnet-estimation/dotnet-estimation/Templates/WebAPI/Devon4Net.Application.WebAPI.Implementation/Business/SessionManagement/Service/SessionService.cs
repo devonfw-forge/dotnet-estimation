@@ -118,19 +118,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             var task = session.Tasks.First(item => item.Id == taskId);
-            
+
             var estimations = task.Estimations;
-            
+
             var newEstimation = new Estimation { VoteBy = voteBy, Complexity = complexity };
 
             // if estimation by user already exists, delete previous estimation before adding new
-            if (estimations != null && estimations.Any()) {
+            if (estimations != null && estimations.Any())
+            {
                 var alreadyContainsEstimation = estimations.Where(item => item.VoteBy == voteBy).Any();
 
                 if (alreadyContainsEstimation)
                 {
                     var oldEstimation = estimations.First(est => est.VoteBy == voteBy);
-                       
+
                     estimations.Remove(oldEstimation);
                 }
             }
@@ -274,12 +275,19 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return (false, new List<TaskStatusChangeDto>());
                 }
 
-                // and it contains the task requested to be chnaged
+                // and it contains the task requested to be changed
                 var (modified, taskChanges) = session.ChangeStatusOfTask(id, status);
 
                 if (!modified)
                 {
                     return (false, new List<TaskStatusChangeDto>());
+                }
+
+                // calculate the result if the task is evaluated
+                Result result = new Result();
+                if (status == Status.Evaluated)
+                {
+                    result = session.Tasks.ToList().Find(item => item.Id == id).calculateResult();
                 }
 
                 var finished = _sessionRepository.Update(session);
@@ -288,6 +296,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 if (finished)
                 {
                     var converted = taskChanges.Select<(String id, Status status), TaskStatusChangeDto>(item => new TaskStatusChangeDto { Id = item.id, Status = item.status }).ToList();
+
+                    // add the result to the DTO if task is evaluated
+                    if (status == Status.Evaluated)
+                    {
+                        converted.Find(item => item.Id == id).Result = result;
+                    }
 
                     return (true, converted);
                 }
