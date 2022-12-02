@@ -4,17 +4,30 @@ export const UserCard: FunctionComponent<{
   showImagesOnly: boolean;
   username: String;
   imageUrl?: String;
-}> = ({ showImagesOnly, username, imageUrl }) => {
+  alreadyVotedForCurrentTask: boolean;
+}> = ({ showImagesOnly, username, imageUrl, alreadyVotedForCurrentTask }) => {
   return (
     <>
-      <div className="border-l-4 border-l-blue-400 m-2 p-2">
+      <div className="border-l-4 border-l-blue-400 m-2 p-2 flex justify-between items-center w-36">
         {showImagesOnly == true ? (
-          <p>Icon</p>
+          <>
+            <p>Icon</p>
+            {alreadyVotedForCurrentTask ? (
+              <div className="rounded-full bg-blue-600 w-4 h-4"></div>
+            ) : (
+              <></>
+            )}
+          </>
         ) : (
-          <div className="flex justify-between">
+          <>
             <p className="truncate">{username}</p>
             <p>Icon</p>
-          </div>
+            {alreadyVotedForCurrentTask ? (
+              <div className="rounded-full bg-blue-600 w-4 h-4"></div>
+            ) : (
+              <></>
+            )}
+          </>
         )}
       </div>
     </>

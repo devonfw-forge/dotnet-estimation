@@ -1,8 +1,8 @@
 import { ITask } from "../../../app/Interfaces/ITask";
 
 export const dummyUsers = [
-  { id: "1", imageUrl: "", username: "Timo von Pumba" },
-  { id: "2", imageUrl: "", username: "y" },
+  { id: "me", imageUrl: "", username: "Timo von Pumba" },
+  { id: "you", imageUrl: "", username: "y" },
   { id: "3", imageUrl: "", username: "z" },
 ];
 

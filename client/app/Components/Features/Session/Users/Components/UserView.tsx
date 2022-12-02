@@ -1,11 +1,16 @@
 import { FunctionComponent, useState } from "react";
 import { UserCard } from "./UserCard";
 import { useSessionUserStore } from "../Stores/UserStore";
+import { useTaskStore } from "../../Tasks/Stores/TaskStore";
+import { Status } from "../../../../../Types/Status";
 
 export const UserView: FunctionComponent<{}> = () => {
   const [showImagesOnly, setShowImagesOnly] = useState<boolean>(true);
 
   const { users } = useSessionUserStore();
+
+  const { tasks, userAlreadyVoted } = useTaskStore();
+  const task = tasks.find((item) => item.status == Status.Open);
 
   return (
     <>
@@ -34,12 +39,25 @@ export const UserView: FunctionComponent<{}> = () => {
           </div>
         )}
         {users.map((item, index) => (
-          <UserCard
-            showImagesOnly={showImagesOnly}
-            username={item.username}
-            imageUrl={item.imageUrl}
-            key={"usercard" + item.id}
-          />
+          <>
+            {task ? (
+              <UserCard
+                showImagesOnly={showImagesOnly}
+                username={item.username}
+                imageUrl={item.imageUrl}
+                alreadyVotedForCurrentTask={userAlreadyVoted(item.id, task.id)}
+                key={"usercard" + item.id}
+              />
+            ) : (
+              <UserCard
+                showImagesOnly={showImagesOnly}
+                username={item.username}
+                imageUrl={item.imageUrl}
+                alreadyVotedForCurrentTask={false}
+                key={"usercard" + item.id}
+              />
+            )}
+          </>
         ))}
       </div>
     </>

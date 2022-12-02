@@ -10,5 +10,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         TaskCreated,
         TaskStatusModified,
+        TaskDeleted,
+        EstimationAdded,
     }
 }

@@ -22,6 +22,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public Status Status { get; set; }
 
+        public List<EstimationDto> Estimations { get; set; }
+
         public void Deconstruct(out string id, out string title, out string? description, out string? url, out Status status)
         {
             id = Id;

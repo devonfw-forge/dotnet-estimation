@@ -32,6 +32,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public Task<bool> AddUserToSession(long sessionId, string userId, Role role);
         public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, TaskDto task);
 
+        /// <summary>
+        /// Delete a Task
+        /// </summary>
+        public Task<bool> DeleteTask(long sessionId, string taskId);
+
         public Task<(bool, List<TaskStatusChangeDto>)> ChangeTaskStatus(long sessionId, TaskStatusChangeDto statusChange);
     }
 }

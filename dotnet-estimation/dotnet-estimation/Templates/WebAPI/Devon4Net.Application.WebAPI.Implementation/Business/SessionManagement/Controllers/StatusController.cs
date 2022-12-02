@@ -41,6 +41,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 var (isValid, tasks) = await _sessionService.GetStatus(id);
 
+                Devon4NetLogger.Debug($"Session is valid: {isValid}");
+
                 var statusResult = new StatusDto
                 {
                     IsValid = isValid,
@@ -51,6 +53,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
             catch (Exception exception)
             {
+                Devon4NetLogger.Debug($"Exception thrown: {exception.Message}");
+
                 return exception switch
                 {
                     NotFoundException _ => NotFound(),
