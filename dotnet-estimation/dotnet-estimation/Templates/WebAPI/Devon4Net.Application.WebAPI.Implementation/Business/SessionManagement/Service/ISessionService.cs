@@ -19,7 +19,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// </summary>
         /// <param name="sessionDto"></param>
         /// <returns></returns>
-        public Task<BsonValue> CreateSession(SessionDto sessionDto);
+        public Task<ResultCreateSessionDto> CreateSession(SessionDto sessionDto);
         public Task<bool> InvalidateSession(long sessionId);
 
         public Task<Estimation> AddNewEstimation(long sessionId, string taskId, string voteBy, int complexity);
