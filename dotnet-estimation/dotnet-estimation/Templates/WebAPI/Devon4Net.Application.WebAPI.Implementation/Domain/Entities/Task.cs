@@ -23,7 +23,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
             var taskResult = new Result()
             {
                 AmountOfVotes = Estimations.Count,
-                ComplexityAverage = Estimations.Select(est => est.Complexity).Average()
+                ComplexityAverage = (float)Estimations.Select(est => est.Complexity).Average()
             };
 
             Result = taskResult;

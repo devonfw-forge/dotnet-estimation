@@ -47,7 +47,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 Users = new List<Domain.Entities.User>()
             });
 
-            return new ResultCreateSessionDto{
+            return new ResultCreateSessionDto
+            {
                 Id = (long)result.RawValue
             };
         }
@@ -288,7 +289,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return (false, new List<TaskStatusChangeDto>());
                 }
 
-                // calculate the result if the task is evaluated
+                // calculate the voting result if the task is evaluated
                 Result result = new Result();
                 if (status == Status.Evaluated)
                 {

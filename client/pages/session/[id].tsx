@@ -21,6 +21,7 @@ import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
 import { dummyUsers } from "../../app/Components/Globals/DummyData";
 import { IEstimationDto } from "../../app/Interfaces/IEstimationDto";
+import { ITaskResultDto } from "../../app/Interfaces/ITaskResultDto";
 
 export default function Session({ id, data }: any) {
   const { setCurrentTasks } = useTaskStore();
@@ -74,11 +75,10 @@ export default function Session({ id, data }: any) {
 
         break;
       }
-      case Type.TaskResultAdded: {
-        // let { payload } = parsed as IMessage<ITaskResultDto>;
-
+      case Type.TaskAverageAdded: {
+        let { payload } = parsed as IMessage<ITaskResultDto>;
         console.log("TaskResultAdded received.");
-        // console.log(payload);
+        console.log(payload);
       }
       default: {
         break;

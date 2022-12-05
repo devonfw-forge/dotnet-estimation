@@ -6,6 +6,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public string Id { get; set; }
 
-        public Result Result { get; set; }
+        public int AmountOfVotes { get; set; }
+
+        public float ComplexityAverage { get; set; }
+
+        public int? FinalValue { get; set; }
     }
 }

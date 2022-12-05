@@ -12,6 +12,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         TaskStatusModified,
         TaskDeleted,
         EstimationAdded,
-        TaskResultAdded
+        TaskAverageAdded
     }
 }

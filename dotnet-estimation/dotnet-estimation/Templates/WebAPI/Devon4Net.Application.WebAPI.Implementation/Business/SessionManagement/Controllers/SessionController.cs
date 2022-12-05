@@ -249,10 +249,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     var taskResult = new TaskResultDto()
                     {
                         Id = statusChange.Id,
-                        Result = evaluatedTask.Result
+                        AmountOfVotes = evaluatedTask.Result.AmountOfVotes,
+                        ComplexityAverage = evaluatedTask.Result.ComplexityAverage,
                     };
 
-                    await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskResultAdded, Payload = taskResult }, sessionId);
+                    await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskAverageAdded, Payload = taskResult }, sessionId);
                 }
 
                 return Ok(modifiedTasks);
