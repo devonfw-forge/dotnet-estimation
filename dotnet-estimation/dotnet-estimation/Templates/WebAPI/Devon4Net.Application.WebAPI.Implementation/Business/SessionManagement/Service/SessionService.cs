@@ -8,6 +8,7 @@ using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto
 using System.Security.Cryptography;
 using LiteDB;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
+using System;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
@@ -31,20 +32,24 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// </summary>
         /// <param name="sessionDto"></param>
         /// <returns></returns>
-        public async Task<BsonValue> CreateSession(SessionDto sessionDto)
+        public async Task<ResultCreateSessionDto> CreateSession(SessionDto sessionDto)
         {
             if (sessionDto.ExpiresAt <= DateTime.Now || sessionDto.ExpiresAt == null)
             {
                 throw new InvalidExpiryDateException();
             }
 
-            return _sessionRepository.Create(new Session
+            var result = _sessionRepository.Create(new Session
             {
                 InviteToken = generateInviteToken(),
                 ExpiresAt = sessionDto.ExpiresAt,
                 Tasks = new List<Domain.Entities.Task>(),
                 Users = new List<Domain.Entities.User>()
             });
+
+            return new ResultCreateSessionDto{
+                Id = (long)result.RawValue
+            };
         }
 
         public async Task<Session> GetSession(long id)
