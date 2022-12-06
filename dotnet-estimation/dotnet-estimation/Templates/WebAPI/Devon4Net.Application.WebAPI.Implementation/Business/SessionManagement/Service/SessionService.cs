@@ -113,7 +113,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.Update(sessionResult);
         }
 
-        public async Task<(bool, List<Domain.Entities.Task>)> GetStatus(long sessionId)
+        public async Task<(bool, List<Domain.Entities.Task>, List<User>)> GetStatus(long sessionId)
         {
             var entity = await GetSession(sessionId);
 
@@ -126,10 +126,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             if (!sessionIsValid)
             {
-                return (false, null);
+                return (false, null, null);
             }
 
-            return (true, entity.Tasks.ToList());
+            return (true, entity.Tasks.ToList(), entity.Users.ToList());
         }
 
         /// <summary>
@@ -209,11 +209,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <param name="userId"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public async Task<(bool, string?)> AddUserToSession(long sessionId, string username)
+        public async Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username)
         {
             var expression = LiteDB.Query.EQ("_id", sessionId);
             // This is unwanted behaviour.
             var session = _sessionRepository.GetFirstOrDefault(expression);
+
+            Devon4NetLogger.Debug("Adding to session!");
 
             var newUser = new User
             {
@@ -228,6 +230,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 session.Users.Add(newUser);
 
                 finished = _sessionRepository.Update(session);
+
+                Devon4NetLogger.Debug("Added user to session!");
             };
 
             if (finished)
@@ -244,7 +248,16 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     userIdClaim
                 });
 
-                return (true, token);
+                Devon4NetLogger.Debug("Returned token: " + token);
+
+                var resultingUser = new UserDto
+                {
+                    Id = userUuid,
+                    Username = username,
+                    Token = token
+                };
+
+                return (true, resultingUser);
             }
 
             return (false, null);

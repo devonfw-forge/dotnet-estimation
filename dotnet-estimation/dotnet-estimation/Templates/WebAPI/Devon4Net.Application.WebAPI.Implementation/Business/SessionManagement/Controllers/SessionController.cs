@@ -128,8 +128,24 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public async Task<ActionResult<UserDto>> AddUserToSession(long sessionId, UserDto userDto)
         {
             Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
-            var result = await _sessionService.AddUserToSession(sessionId, userDto.Username);
-            return StatusCode(StatusCodes.Status201Created, result);
+            var (completed, result) = await _sessionService.AddUserToSession(sessionId, userDto.Username);
+
+            if (completed)
+            {
+                Message<UserDto> Message = new Message<UserDto>
+                {
+                    Type = MessageType.UserJoined,
+                    Payload = result,
+                };
+
+                await _webSocketHandler.Send(Message, sessionId);
+
+                return new ObjectResult(JsonConvert.SerializeObject(result));
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]

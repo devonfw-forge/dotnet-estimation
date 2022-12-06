@@ -39,14 +39,15 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             try
             {
-                var (isValid, tasks) = await _sessionService.GetStatus(id);
+                var (isValid, tasks, users) = await _sessionService.GetStatus(id);
 
                 Devon4NetLogger.Debug($"Session is valid: {isValid}");
 
                 var statusResult = new StatusDto
                 {
                     IsValid = isValid,
-                    Tasks = tasks.Select(item => TaskConverter.ModelToDto(item)).ToList()
+                    Tasks = tasks.Select(item => TaskConverter.ModelToDto(item)).ToList(),
+                    Users = users.Select(item => UserConverter.ModelToDto(item)).ToList(),
                 };
 
                 return new ObjectResult(JsonConvert.SerializeObject(statusResult));

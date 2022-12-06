@@ -22,17 +22,20 @@ import { useAuthStore } from "../../app/Components/Features/Authentication/Store
 
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Role, toRole } from "../../app/Types/Role";
+import { UserDto } from "../../app/Types/UserDto";
+import { IUser } from "../../app/Interfaces/IUser";
 
 export default function Session({ id, data, auth }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
   const { login, username } = useAuthStore();
+  const { addUser } = useSessionUserStore();
 
   useEffect(() => {
-    const { tasks } = data;
+    const { tasks, users } = data;
 
     setCurrentTasks(tasks);
-    setCurrentUsers(dummyUsers);
+    setCurrentUsers(users);
 
     // login
 
@@ -40,7 +43,7 @@ export default function Session({ id, data, auth }: any) {
 
     login(username, token, userId, role);
     console.log(username);
-  }, [auth, data, dummyUsers]);
+  }, [auth, data]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -82,6 +85,13 @@ export default function Session({ id, data, auth }: any) {
         upsertEstimationToTask(payload);
 
         break;
+      }
+      case Type.UserJoined: {
+        let { payload } = parsed as IMessage<IUser>;
+
+        console.log(payload);
+
+        addUser(payload);
       }
       default: {
         break;

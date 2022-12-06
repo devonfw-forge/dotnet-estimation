@@ -12,7 +12,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public Task<Session> GetSession(long id);
 
-        public Task<(bool, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>)> GetStatus(long sessionId);
+        public Task<(bool, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>, List<User>)> GetStatus(long sessionId);
 
         /// <summary>
         /// CreateSession
@@ -29,7 +29,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <summary>
         /// Add an User to a given session
         /// </summary>
-        public Task<(bool, string?)> AddUserToSession(long sessionId, string username);
+        public Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username);
         public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, TaskDto task);
 
         /// <summary>
