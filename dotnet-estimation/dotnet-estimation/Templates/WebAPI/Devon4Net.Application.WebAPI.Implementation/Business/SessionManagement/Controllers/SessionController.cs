@@ -47,7 +47,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             Devon4NetLogger.Debug($"Create session that will expire at {sessionDto.ExpiresAt}");
             var result = await _sessionService.CreateSession(sessionDto);
-            return StatusCode(StatusCodes.Status200OK, LiteDB.JsonSerializer.Serialize(result));
+            return StatusCode(StatusCodes.Status200OK, LiteDB.JsonSerializer.Serialize(result.Value));
         }
         [HttpPut]
         [AllowAnonymous]
@@ -94,7 +94,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 var leaveResult = await _sessionService.RemoveUserFromSession(sessionId, userId);
 
-                return new ObjectResult(JsonConvert.SerializeObject(leaveResult));
+                return new ObjectResult(JsonConvert.SerializeObject(leaveResult.Value));
             }
             catch (Exception exception)
             {
@@ -126,7 +126,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
             var result = await _sessionService.AddUserToSession(sessionId, userDto.Id,
                 userDto.Role).ConfigureAwait(false);
-            return StatusCode(StatusCodes.Status201Created, result);
+            return StatusCode(StatusCodes.Status201Created, result.Value);
         }
 
         [HttpPost]
@@ -137,14 +137,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [Route("/estimation/v1/session/{sessionId:long}/task")]
         public async Task<ActionResult> AddTask(long sessionId, [FromBody] TaskDto task)
         {
-            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, task);
+            var errorOrResult = await _sessionService.AddTaskToSession(sessionId, task);
 
-            if (finished)
+            if (errorOrResult.Value.Item1)
             {
                 Message<TaskDto> Message = new Message<TaskDto>
                 {
                     Type = MessageType.TaskCreated,
-                    Payload = taskDto
+                    Payload = errorOrResult.Value.Item2
                 };
 
                 await _webSocketHandler.Send(Message, sessionId);
@@ -168,7 +168,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 var finished = await _sessionService.DeleteTask(sessionId, taskId);
 
-                if (finished)
+                if (finished.Value)
                 {
                     Message<string> message = new Message<string>
                     {
@@ -209,7 +209,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var result = await _sessionService.AddNewEstimation(sessionId, taskId, voteBy, complexity);
 
-            return StatusCode(StatusCodes.Status201Created, result);
+            return StatusCode(StatusCodes.Status201Created, result.Value);
         }
 
         [HttpPut]
@@ -222,13 +222,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             // Changing the status of a task requires other elements to be modified.
             // There can always be only one open or evaluated task at the same time.
-            var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
+            var errorOrResult = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
 
-            if (finished)
+            if (errorOrResult.Value.Item1)
             {
-                await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
+                await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = errorOrResult.Value.Item2 }, sessionId);
 
-                return Ok(modifiedTasks);
+                return Ok(errorOrResult.Value.Item2);
             }
             else
             {
