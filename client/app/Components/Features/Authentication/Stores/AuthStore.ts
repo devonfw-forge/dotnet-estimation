@@ -21,4 +21,7 @@ export const useAuthStore = create<IAuthState>()((set, get) => ({
   isAdmin: () => {
     return get().role === Role.Admin;
   },
+  isLoggedIn: () => {
+    return get().userId && get().username && get().token && get().role;
+  },
 }));
