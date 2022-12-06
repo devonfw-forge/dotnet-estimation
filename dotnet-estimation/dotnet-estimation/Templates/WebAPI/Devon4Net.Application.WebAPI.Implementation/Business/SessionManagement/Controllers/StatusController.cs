@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
-
+using ErrorOr;
 using Devon4Net.Infrastructure.Logger.Logging;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Exceptions;
 
@@ -39,12 +39,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             try
             {
-                var (isValid, tasks) = await _sessionService.GetStatus(id);
+                var ErrorOrStatus = await _sessionService.GetStatus(id);
 
                 var statusResult = new StatusDto
                 {
-                    IsValid = isValid,
-                    Tasks = tasks.Select(item => TaskConverter.ModelToDto(item)).ToList()
+                    IsValid = ErrorOrStatus.Value.Item1,
+                    Tasks = ErrorOrStatus.Value.Item2.Select(item => TaskConverter.ModelToDto(item)).ToList()
                 };
 
                 return new ObjectResult(JsonConvert.SerializeObject(statusResult));
