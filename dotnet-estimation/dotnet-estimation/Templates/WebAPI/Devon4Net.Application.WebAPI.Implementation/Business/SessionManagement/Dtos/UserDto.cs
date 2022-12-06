@@ -12,11 +12,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// the Id
         /// </summary>
         public string Id { get; set; }
-
-        /// <summary>
-        /// the Role
-        /// </summary>
-        public Role Role { get; set; }
-
+        public string Username { get; set; }
     }
 }

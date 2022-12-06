@@ -124,18 +124,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
         [Route("/estimation/v1/session/{sessionId:long}/entry")]
         public async Task<ActionResult<UserDto>> AddUserToSession(long sessionId, UserDto userDto)
         {
-            //Get claims
-            var token = Request.Headers["Authorization"].ToString().Replace($"{AuthConst.AuthenticationScheme} ", string.Empty);
-
-            if (string.IsNullOrEmpty(token)) return Unauthorized();
-
             Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
-            var result = await _sessionService.AddUserToSession(sessionId, userDto.Id,
-                userDto.Role).ConfigureAwait(false);
+            var result = await _sessionService.AddUserToSession(sessionId, userDto.Username);
             return StatusCode(StatusCodes.Status201Created, result);
         }
 

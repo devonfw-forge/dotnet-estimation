@@ -1,3 +1,5 @@
+using LiteDB;
+
 namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 {
     public partial class Session
@@ -10,6 +12,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 
         public IList<Task> Tasks { get; set; }
 
+        [BsonRef("User")]
         public IList<User> Users { get; set; }
 
         public bool IsValid()
@@ -68,13 +71,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
             {
                 case Status.Open:
                     {
-                    modifiedTasks = SuspendPendingTasksOtherThan(taskId);
-                    break;
+                        modifiedTasks = SuspendPendingTasksOtherThan(taskId);
+                        break;
                     }
                 case Status.Suspended: break;
                 case Status.Ended:
                     {
-                        if(task.Status != Status.Evaluated)
+                        if (task.Status != Status.Evaluated)
                         {
                             return (false, modifiedTasks);
                         }

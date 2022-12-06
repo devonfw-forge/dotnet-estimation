@@ -1,14 +1,24 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
+import { Role } from "../../../../Types/Role";
 
 interface IAuthState {
-  user: String | undefined;
-  login: (username: String) => void;
+  username: String | undefined;
+  token: String | undefined;
+  userId: String | undefined;
+  role: Role | undefined;
+  login: (username: String, token: String, userId: String, role: Role) => void;
+  isAdmin: () => boolean;
 }
 
-export const useAuthStore = create<IAuthState>()(
-  persist((set, get) => ({
-    user: undefined,
-    login: (username: String) => set((state) => ({ ...state, user: username })),
-  }))
-);
+export const useAuthStore = create<IAuthState>()((set, get) => ({
+  username: undefined,
+  token: undefined,
+  userId: undefined,
+  role: undefined,
+  login: (username: String, token: String, userId: String, role: Role) =>
+    set((state) => ({ ...state, username, token, userId, role })),
+  isAdmin: () => {
+    return get().role === Role.Admin;
+  },
+}));
