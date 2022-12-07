@@ -244,7 +244,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 var (userUuid, _) = newUser;
 
                 var userIdClaim = new Claim(ClaimTypes.NameIdentifier, userUuid);
-                var userRoleClaim = new Claim(ClaimTypes.Role, "Admin");
+                var userRoleClaim = new Claim(ClaimTypes.Role, "Voter");
                 var userNameClaim = new Claim(ClaimTypes.Name, username);
 
                 var token = _jwtHandler.CreateJwtToken(new List<Claim> {

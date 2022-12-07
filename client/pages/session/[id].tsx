@@ -148,7 +148,7 @@ export async function getServerSideProps(context: any) {
 
   const { tasks, users } = JSON.parse(data);
 
-  const auth = { userId, token, role, username };
+  const auth = { userId, token, role: toRole(role), username };
 
   return {
     props: { id, tasks, users, auth }, // will be passed to the page component as props
