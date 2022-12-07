@@ -263,9 +263,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return (false, null);
         }
 
-        public async Task<(bool, TaskDto)> AddTaskToSession(long sessionId, TaskDto task)
+        public async Task<(bool, TaskDto)> AddTaskToSession(long sessionId, string userId, TaskDto task)
         {
             var session = await GetSession(sessionId);
+
+            if (!session.isPrivilegedUser(userId))
+            {
+                return (false, null);
+            }
 
             var (title, description, url, status) = task;
 
@@ -365,6 +370,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             return (false, new List<TaskStatusChangeDto>());
+        }
+
+        public async Task<bool> isPrivilegedUser(long sessionId, string userId)
+        {
+            var session = await GetSession(sessionId);
+
+            if (session is null || !session.IsValid())
+            {
+                return false;
+            }
+
+            if (session.Users.First().Id.Equals(userId))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

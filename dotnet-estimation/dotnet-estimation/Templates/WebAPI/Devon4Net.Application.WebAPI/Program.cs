@@ -1,7 +1,7 @@
 using Devon4Net.Application.WebAPI.Configuration;
 using Devon4Net.Application.WebAPI.Configuration.Application;
-using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
 using Devon4Net.Application.WebAPI.Implementation.Configuration;
+using Devon4Net.Authorization;
 using Devon4Net.Domain.UnitOfWork;
 using Devon4Net.Infrastructure.CircuitBreaker;
 using Devon4Net.Infrastructure.Grpc;
@@ -21,7 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 #region devon services
-var devonfwOptions =  builder.Services.SetupDevonfw(builder.Configuration);
+var devonfwOptions = builder.Services.SetupDevonfw(builder.Configuration);
 builder.Services.SetupMiddleware(builder.Configuration);
 builder.Services.SetupLog(builder.Configuration);
 builder.Services.SetupSwagger(builder.Configuration);
@@ -42,6 +42,7 @@ var app = builder.Build();
 #region devon app
 app.ConfigureSwaggerEndPoint();
 app.SetupMiddleware(builder.Services);
+
 app.SetupCors();
 if (devonfwOptions.ForceUseHttpsRedirection || (!devonfwOptions.UseIIS && devonfwOptions.Kestrel.UseHttps))
 {
@@ -50,7 +51,6 @@ if (devonfwOptions.ForceUseHttpsRedirection || (!devonfwOptions.UseIIS && devonf
 #endregion
 
 app.UseStaticFiles();
-app.UseAuthorization();
 
 var webSocketOptions = new WebSocketOptions
 {
@@ -58,28 +58,15 @@ var webSocketOptions = new WebSocketOptions
 };
 app.UseWebSockets(webSocketOptions);
 
-/*
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/ws")
-    {
-        if (context.WebSockets.IsWebSocketRequest)
-        {
-            using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            Console.WriteLine("Entered Test");
-        }
-        else
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        }
-    }
-    else
-    {
-        await next(context);
-    }
-
-});*/
-//app.UseMiddleware<WebSocketMiddleware>();
 app.MapControllers();
+
+app.UseWhen(context =>
+    context.Request.Path.StartsWithSegments("/estimation/v1/session/")
+    // && !context.Request.Path.StartsWithSegments("/estimation/v1/session/newSession") // &&
+    //context.Request.Path.StartsWithSegments("/estimation/v1/session/{sessionId:long}/entry")
+    , appBuilder =>
+{
+    appBuilder.UseMiddleware<JwtMiddleware>();
+});
 
 app.Run();

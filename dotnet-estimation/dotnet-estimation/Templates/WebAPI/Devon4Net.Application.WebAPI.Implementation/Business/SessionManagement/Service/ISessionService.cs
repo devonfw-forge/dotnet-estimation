@@ -30,7 +30,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// Add an User to a given session
         /// </summary>
         public Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username);
-        public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, TaskDto task);
+        public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, string userId, TaskDto task);
 
         /// <summary>
         /// Delete a Task
@@ -38,5 +38,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public Task<bool> DeleteTask(long sessionId, string taskId);
 
         public Task<(bool, List<TaskStatusChangeDto>)> ChangeTaskStatus(long sessionId, TaskStatusChangeDto statusChange);
+
+        public Task<bool> isPrivilegedUser(long sessionId, string userId);
     }
 }

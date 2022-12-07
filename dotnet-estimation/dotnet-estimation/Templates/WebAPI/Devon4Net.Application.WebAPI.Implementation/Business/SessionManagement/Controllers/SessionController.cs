@@ -12,6 +12,7 @@ using System.Net;
 using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
 using LiteDB;
+using Devon4Net.Authorization;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -149,6 +150,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         }
 
         [HttpPost]
+        [TransientAuthorizationAttribute]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -156,7 +158,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [Route("/estimation/v1/session/{sessionId:long}/task")]
         public async Task<ActionResult> AddTask(long sessionId, [FromBody] TaskDto task)
         {
-            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, task);
+            Devon4NetLogger.Debug($"{sessionId}");
+
+            var (userId, _) = Request.HttpContext.Items["user"] as AuthenticatedUserDto;
+
+            Devon4NetLogger.Debug($"{userId}");
+
+            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, userId, task);
 
             if (finished)
             {
@@ -170,6 +178,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
                 return Ok();
             }
+
             return BadRequest();
         }
 

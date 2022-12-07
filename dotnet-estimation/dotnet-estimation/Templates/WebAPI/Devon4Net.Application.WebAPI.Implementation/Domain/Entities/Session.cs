@@ -107,5 +107,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 
             return (true, modifiedTasks);
         }
+
+        public bool isPrivilegedUser(string userId)
+        {
+            if (!this.Users.Where(item => item.Id.Equals(userId)).Any())
+            {
+                return false;
+            }
+
+            if (this.Users.First().Id.Equals(userId))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
