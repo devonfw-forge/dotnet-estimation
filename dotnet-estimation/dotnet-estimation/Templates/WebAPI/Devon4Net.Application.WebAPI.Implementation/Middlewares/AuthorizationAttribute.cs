@@ -14,6 +14,8 @@ namespace Devon4Net.Authorization
 
             var token = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
+            Devon4Net.Infrastructure.Logger.Logging.Devon4NetLogger.Debug($"{token}");
+
             if (token == null)
             {
                 // not logged in

@@ -25,25 +25,20 @@ import { Role, toRole } from "../../app/Types/Role";
 import { UserDto } from "../../app/Types/UserDto";
 import { IUser } from "../../app/Interfaces/IUser";
 
-export default function Session({ id, data, auth }: any) {
+export default function Session({ id, tasks, users, auth }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
   const { login, username } = useAuthStore();
   const { addUser } = useSessionUserStore();
 
   useEffect(() => {
-    const { tasks, users } = data;
-
     setCurrentTasks(tasks);
     setCurrentUsers(users);
-
-    // login
 
     const { role, username, userId, token } = auth;
 
     login(username, token, userId, role);
-    console.log(username);
-  }, [auth, data]);
+  }, [auth, tasks, users]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -141,21 +136,21 @@ export async function getServerSideProps(context: any) {
     nameid: userId,
   } = jwt.decode(token) as JwtPayload;
 
-  // use token
+  const { data, status } = await axios({
+    method: "get",
+    url: "http://127.0.0.1:8085/estimation/v1/session/" + id + "/status",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": " application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-  const res = await fetch(
-    "http://127.0.0.1:8085/estimation/v1/session/" + id + "/status"
-  );
+  const { tasks, users } = JSON.parse(data);
 
-  const data = await res.json();
-
-  const parsedRole = toRole(role);
-
-  const auth = { role: parsedRole, username, userId, token };
-
-  // ob User ein Admin, Voter oder Spectator ist -> im Auth Store speichern
+  const auth = { userId, token, role, username };
 
   return {
-    props: { id, data, auth }, // will be passed to the page component as props
+    props: { id, tasks, users, auth }, // will be passed to the page component as props
   };
 }

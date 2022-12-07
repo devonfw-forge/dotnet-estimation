@@ -19,7 +19,7 @@ export const TaskCard: FunctionComponent<{
   description?: String;
   status: Status;
 }> = ({ id, parentSession, title, url, description, status }) => {
-  const { isAdmin } = useAuthStore();
+  const { isAdmin, userId, token } = useAuthStore();
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + parentSession + "/task/status";
 
@@ -27,6 +27,11 @@ export const TaskCard: FunctionComponent<{
       method: "put",
       url: url,
       data: { id: id, status: convertStatusToNumber(newStatus) },
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
   };
 

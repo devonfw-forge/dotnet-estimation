@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Devon4Net.Application.WebAPI.Configuration;
 using Devon4Net.Application.WebAPI.Configuration.Application;
 using Devon4Net.Application.WebAPI.Implementation.Configuration;
@@ -41,6 +42,7 @@ var app = builder.Build();
 
 #region devon app
 app.ConfigureSwaggerEndPoint();
+
 app.SetupMiddleware(builder.Services);
 
 app.SetupCors();
@@ -48,6 +50,16 @@ if (devonfwOptions.ForceUseHttpsRedirection || (!devonfwOptions.UseIIS && devonf
 {
     app.UseHttpsRedirection();
 }
+
+app.UseWhen(context =>
+    !Regex.IsMatch(context.Request.Path.ToString(), @"/estimation/v1/session/\d*/entry") &&
+    !context.Request.Path.Equals("/estimation/v1/session/newSession") &&
+    !Regex.IsMatch(context.Request.Path.ToString(), @"/\d*/ws")
+    , appBuilder =>
+{
+    appBuilder.UseMiddleware<JwtMiddleware>();
+});
+
 #endregion
 
 app.UseStaticFiles();
@@ -59,14 +71,5 @@ var webSocketOptions = new WebSocketOptions
 app.UseWebSockets(webSocketOptions);
 
 app.MapControllers();
-
-app.UseWhen(context =>
-    context.Request.Path.StartsWithSegments("/estimation/v1/session/")
-    // && !context.Request.Path.StartsWithSegments("/estimation/v1/session/newSession") // &&
-    //context.Request.Path.StartsWithSegments("/estimation/v1/session/{sessionId:long}/entry")
-    , appBuilder =>
-{
-    appBuilder.UseMiddleware<JwtMiddleware>();
-});
 
 app.Run();

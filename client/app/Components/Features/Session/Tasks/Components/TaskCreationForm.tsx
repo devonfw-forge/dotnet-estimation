@@ -12,7 +12,7 @@ interface TaskCreationProps {
 export const TaskCreationForm: FunctionComponent<TaskCreationProps> = ({
   id,
 }) => {
-  const { userId } = useAuthStore();
+  const { userId, token } = useAuthStore();
 
   const [createNew, setCreateNew] = useState(false);
   const [title, setTitle] = useState("");
@@ -30,6 +30,11 @@ export const TaskCreationForm: FunctionComponent<TaskCreationProps> = ({
       method: "post",
       url: url,
       data: task,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     setCreateNew(false);

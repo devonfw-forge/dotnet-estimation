@@ -6,6 +6,7 @@ using Devon4Net.Infrastructure.JWT.Handlers;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service;
 using System.Security.Claims;
+using Devon4Net.Infrastructure.LiteDb.Repository;
 
 namespace Devon4Net.Authorization
 {
@@ -13,11 +14,13 @@ namespace Devon4Net.Authorization
     {
         private readonly RequestDelegate _next;
         private readonly IJwtHandler _jwtHandler;
+        private readonly ILiteDbRepository<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User> _userRepository;
 
-        public JwtMiddleware(RequestDelegate next, IJwtHandler jwtHandler)
+        public JwtMiddleware(RequestDelegate next, IJwtHandler jwtHandler, ILiteDbRepository<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User> userRepository)
         {
             _next = next;
             _jwtHandler = jwtHandler;
+            _userRepository = userRepository;
         }
 
         public async Task Invoke(HttpContext context)
@@ -28,21 +31,25 @@ namespace Devon4Net.Authorization
 
             Devon4Net.Infrastructure.Logger.Logging.Devon4NetLogger.Debug(token);
 
-            var userClaims = _jwtHandler.GetUserClaims(token).ToList();
+            if (token is null)
+            {
+                Devon4Net.Infrastructure.Logger.Logging.Devon4NetLogger.Debug("Token is null!");
+            }
 
+            var userClaims = _jwtHandler.GetUserClaims(token).ToList();
             // Enum.TryParse(_jwtHandler.GetClaimValue(userClaims, ClaimTypes.Role), out Application.WebAPI.Implementation.Domain.Entities.Role role);
 
-            // Return result with claims values
-            var result = new AuthenticatedUserDto
+            var userId = _jwtHandler.GetClaimValue(userClaims, ClaimTypes.NameIdentifier);
+
+            var userEntity = _userRepository.Get(LiteDB.Query.EQ("_id", userId)).First();
+
+            if (userEntity is null)
             {
-                Id = _jwtHandler.GetClaimValue(userClaims, ClaimTypes.NameIdentifier),
-                Username = _jwtHandler.GetClaimValue(userClaims, ClaimTypes.Name),
-                //Role = role
-            };
+                Devon4Net.Infrastructure.Logger.Logging.Devon4NetLogger.Debug("UserEntity is null!");
+            }
 
             // attach user to context on successful jwt validation
-            context.Items["user"] = result;
-            // context.Request. = new AuthenticatedUserDto { Id = "jaksdjkal", Username = "Helga" };
+            context.Items["user"] = new AuthenticatedUserDto { Id = userEntity.Id, Username = userEntity.Username };
 
             await _next(context);
         }

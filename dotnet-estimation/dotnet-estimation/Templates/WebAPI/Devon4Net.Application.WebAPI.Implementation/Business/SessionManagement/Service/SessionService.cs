@@ -211,9 +211,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         public async Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username)
         {
-            var expression = LiteDB.Query.EQ("_id", sessionId);
-            // This is unwanted behaviour.
-            var session = _sessionRepository.GetFirstOrDefault(expression);
+            var session = await GetSession(sessionId);
+
+            if (!session.IsValid())
+            {
+                Devon4NetLogger.Debug("Session is not valid!");
+            }
 
             Devon4NetLogger.Debug("Adding to session!");
 
@@ -223,9 +226,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 Username = username,
             };
 
+            var userEntity = _userRepository.Create(newUser);
+
             bool finished = false;
 
-            if (session != null)
+            if (session is not null)
             {
                 session.Users.Add(newUser);
 

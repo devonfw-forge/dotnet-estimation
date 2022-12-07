@@ -19,7 +19,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const { findOpenTask, tasks, userAlreadyVoted } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
 
-  const { userId } = useAuthStore();
+  const { userId, token } = useAuthStore();
 
   const columns = new Array<String>();
 
@@ -57,6 +57,11 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
       method: "post",
       url: url,
       data: rating,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (result.status == 200) {
