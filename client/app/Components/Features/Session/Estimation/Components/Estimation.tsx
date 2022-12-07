@@ -64,7 +64,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
       },
     });
 
-    if (result.status == 200) {
+    if (result.status == 201) {
       // finally remove task from store
       resetStore();
     }
