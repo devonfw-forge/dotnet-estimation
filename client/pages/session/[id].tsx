@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useImperativeHandle } from "react";
+import { useEffect, useImperativeHandle, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { Estimation } from "../../app/Components/Features/Session/Estimation/Components/Estimation";
 import { useEstimationStore } from "../../app/Components/Features/Session/Estimation/Stores/EstimationStore";
@@ -30,6 +30,7 @@ export default function Session({ id, tasks, users, auth }: any) {
   const { setCurrentUsers } = useSessionUserStore();
   const { login, username } = useAuthStore();
   const { addUser } = useSessionUserStore();
+  var [ reconnectCounter, setReconnectCounter] = useState(0);
 
   useEffect(() => {
     setCurrentTasks(tasks);
@@ -94,18 +95,33 @@ export default function Session({ id, tasks, users, auth }: any) {
     }
   };
 
+  const onError = () => {
+    console.log("Connection Error.\nTrying to reconnect.");
+    setReconnectCounter(reconnectCounter + 1);
+    if(reconnectCounter < 6)
+    {
+      setInterval(getWebSocket, (2**reconnectCounter) * 1000 * 60);
+    }
+  } 
+
+  const onClose = () => {
+    console.log("Connection closed:");
+    console.log("Trying to reconnect");
+    setInterval(getWebSocket, 1000 * 60);
+  }
+
   const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask } =
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8085/" + id + "/ws",
+    "ws://localhost:8085/" + id + "/ws" + "/" + auth.token,
     {
       onOpen: (event: any) => {
         console.log(event);
       },
       onMessage: (event: WebSocketEventMap["message"]) => processMessage(event),
-      onClose: (event: any) => console.log("Connection closed"),
-      onError: (error: any) => console.log("Error occured"),
+      onClose: (event: any) => onClose(),
+      onError: (error: any) => onError(),
     }
   );
 
