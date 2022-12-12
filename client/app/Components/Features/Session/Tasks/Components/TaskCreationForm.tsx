@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FunctionComponent, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { Status } from "../../../../../Types/Status";
+import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
 
 interface TaskCreationProps {
   id: String;
@@ -11,6 +12,8 @@ interface TaskCreationProps {
 export const TaskCreationForm: FunctionComponent<TaskCreationProps> = ({
   id,
 }) => {
+  const { userId, token } = useAuthStore();
+
   const [createNew, setCreateNew] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState<string | undefined>(undefined);
@@ -18,7 +21,7 @@ export const TaskCreationForm: FunctionComponent<TaskCreationProps> = ({
   const submitToRestApi = async (element: any) => {
     element.preventDefault();
 
-    const task = { title, description, url: null, status: Status.Open };
+    const task = { title, description, url: null };
 
     const url = baseUrl + serviceUrl + id + "/task";
 
@@ -27,6 +30,11 @@ export const TaskCreationForm: FunctionComponent<TaskCreationProps> = ({
       method: "post",
       url: url,
       data: task,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     setCreateNew(false);

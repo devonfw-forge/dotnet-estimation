@@ -8,6 +8,9 @@ using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dto
 using System.Security.Cryptography;
 using LiteDB;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
+using System;
+using Devon4Net.Infrastructure.JWT.Handlers;
+using System.Security.Claims;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
@@ -17,34 +20,70 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     public class SessionService : ISessionService
     {
         private readonly ILiteDbRepository<Session> _sessionRepository;
+        private readonly ILiteDbRepository<User> _userRepository;
+        private readonly IJwtHandler _jwtHandler;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="SessionRepository"></param>
-        public SessionService(ILiteDbRepository<Session> SessionRepository)
+        public SessionService(ILiteDbRepository<Session> SessionRepository, ILiteDbRepository<User> UserRepository, IJwtHandler JwtHandler)
         {
             _sessionRepository = SessionRepository;
+            _userRepository = UserRepository;
+            _jwtHandler = JwtHandler;
         }
         /// <summary>
         /// Creates the Session
         /// </summary>
         /// <param name="sessionDto"></param>
         /// <returns></returns>
-        public async Task<BsonValue> CreateSession(SessionDto sessionDto)
+        public async Task<ResultCreateSessionDto> CreateSession(SessionDto sessionDto)
         {
             if (sessionDto.ExpiresAt <= DateTime.Now || sessionDto.ExpiresAt == null)
             {
                 throw new InvalidExpiryDateException();
             }
 
-            return _sessionRepository.Create(new Session
+            var (expiresAt, username) = sessionDto;
+
+            var user = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                Username = username,
+            };
+
+            var userInsertResult = _userRepository.Create(user);
+
+            var session = new Session
             {
                 InviteToken = generateInviteToken(),
                 ExpiresAt = sessionDto.ExpiresAt,
                 Tasks = new List<Domain.Entities.Task>(),
                 Users = new List<Domain.Entities.User>()
+            };
+
+            session.Users.Add(user);
+
+            var result = _sessionRepository.Create(session);
+
+            var (userUuid, _) = user;
+
+            var userIdClaim = new Claim(ClaimTypes.NameIdentifier, userUuid);
+            var userRoleClaim = new Claim(ClaimTypes.Role, "Admin");
+            var userNameClaim = new Claim(ClaimTypes.Name, username);
+
+            var token = _jwtHandler.CreateJwtToken(new List<Claim> {
+                userRoleClaim,
+                userNameClaim,
+                userIdClaim,
             });
+
+            return new ResultCreateSessionDto
+            {
+                Id = (long)result.RawValue,
+                Token = token,
+            };
         }
 
         public async Task<Session> GetSession(long id)
@@ -74,7 +113,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.Update(sessionResult);
         }
 
-        public async Task<(bool, List<Domain.Entities.Task>)> GetStatus(long sessionId)
+        public async Task<(bool, List<Domain.Entities.Task>, List<User>)> GetStatus(long sessionId)
         {
             var entity = await GetSession(sessionId);
 
@@ -87,10 +126,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             if (!sessionIsValid)
             {
-                return (false, null);
+                return (false, null, null);
             }
 
-            return (true, entity.Tasks.ToList());
+            return (true, entity.Tasks.ToList(), entity.Users.ToList());
         }
 
         /// <summary>
@@ -118,19 +157,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             var task = session.Tasks.First(item => item.Id == taskId);
-            
+
             var estimations = task.Estimations;
-            
+
             var newEstimation = new Estimation { VoteBy = voteBy, Complexity = complexity };
 
             // if estimation by user already exists, delete previous estimation before adding new
-            if (estimations != null && estimations.Any()) {
+            if (estimations != null && estimations.Any())
+            {
                 var alreadyContainsEstimation = estimations.Where(item => item.VoteBy == voteBy).Any();
 
                 if (alreadyContainsEstimation)
                 {
                     var oldEstimation = estimations.First(est => est.VoteBy == voteBy);
-                       
+
                     estimations.Remove(oldEstimation);
                 }
             }
@@ -169,32 +209,73 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <param name="userId"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public async Task<bool> AddUserToSession(long sessionId, string userId, Role role)
+        public async Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username)
         {
-            var expression = LiteDB.Query.EQ("_id", sessionId);
-            // This is unwanted behaviour.
-            var session = _sessionRepository.GetFirstOrDefault(expression);
+            var session = await GetSession(sessionId);
+
+            if (!session.IsValid())
+            {
+                Devon4NetLogger.Debug("Session is not valid!");
+            }
+
+            Devon4NetLogger.Debug("Adding to session!");
 
             var newUser = new User
             {
-                Id = userId,
-                Role = role,
+                Id = Guid.NewGuid().ToString(),
+                Username = username,
             };
 
-            if (session != null)
+            var userEntity = _userRepository.Create(newUser);
+
+            bool finished = false;
+
+            if (session is not null)
             {
-                if (!session.Users.Any(x => x.Equals(newUser)))
+                session.Users.Add(newUser);
+
+                finished = _sessionRepository.Update(session);
+
+                Devon4NetLogger.Debug("Added user to session!");
+            };
+
+            if (finished)
+            {
+                var (userUuid, _) = newUser;
+
+                var userIdClaim = new Claim(ClaimTypes.NameIdentifier, userUuid);
+                var userRoleClaim = new Claim(ClaimTypes.Role, "Voter");
+                var userNameClaim = new Claim(ClaimTypes.Name, username);
+
+                var token = _jwtHandler.CreateJwtToken(new List<Claim> {
+                    userRoleClaim,
+                    userNameClaim,
+                    userIdClaim
+                });
+
+                Devon4NetLogger.Debug("Returned token: " + token);
+
+                var resultingUser = new UserDto
                 {
-                    session.Users.Add(newUser);
-                    return _sessionRepository.Update(session);
-                }
+                    Id = userUuid,
+                    Username = username,
+                    Token = token
+                };
+
+                return (true, resultingUser);
             }
-            return false;
+
+            return (false, null);
         }
 
-        public async Task<(bool, TaskDto)> AddTaskToSession(long sessionId, TaskDto task)
+        public async Task<(bool, TaskDto)> AddTaskToSession(long sessionId, string userId, TaskDto task)
         {
             var session = await GetSession(sessionId);
+
+            if (!session.isPrivilegedUser(userId))
+            {
+                return (false, null);
+            }
 
             var (title, description, url, status) = task;
 
@@ -294,6 +375,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             }
 
             return (false, new List<TaskStatusChangeDto>());
+        }
+
+        public async Task<bool> isPrivilegedUser(long sessionId, string userId)
+        {
+            var session = await GetSession(sessionId);
+
+            if (session is null || !session.IsValid())
+            {
+                return false;
+            }
+
+            if (session.Users.First().Id.Equals(userId))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
