@@ -9,6 +9,9 @@ using System.Security.Cryptography;
 using LiteDB;
 using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
 using ErrorOr;
+using System;
+using Devon4Net.Infrastructure.JWT.Handlers;
+using System.Security.Claims;
 
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
@@ -19,14 +22,18 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     public class SessionService : ISessionService
     {
         private readonly ILiteDbRepository<Session> _sessionRepository;
+        private readonly ILiteDbRepository<User> _userRepository;
+        private readonly IJwtHandler _jwtHandler;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="SessionRepository"></param>
-        public SessionService(ILiteDbRepository<Session> SessionRepository)
+        public SessionService(ILiteDbRepository<Session> SessionRepository, ILiteDbRepository<User> UserRepository, IJwtHandler JwtHandler)
         {
             _sessionRepository = SessionRepository;
+            _userRepository = UserRepository;
+            _jwtHandler = JwtHandler;
         }
 
         public ErrorOr<bool> validateSession(Session session, long sessionId)
@@ -49,20 +56,53 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// </summary>
         /// <param name="sessionDto"></param>
         /// <returns></returns>
-        public async Task<ErrorOr<BsonValue>> CreateSession(SessionDto sessionDto)
+        public async Task<ErrorOr<ResultCreateSessionDto>> CreateSession(SessionDto sessionDto)
+
         {
             if (sessionDto.ExpiresAt <= DateTime.Now || sessionDto.ExpiresAt == null)
             {
                 return Error.Failure(description: "Session is no longer valid or never existed");
             }
 
-            return _sessionRepository.Create(new Session
+            var (expiresAt, username) = sessionDto;
+
+            var user = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                Username = username,
+            };
+
+            var userInsertResult = _userRepository.Create(user);
+
+            var session = new Session
             {
                 InviteToken = generateInviteToken(),
                 ExpiresAt = sessionDto.ExpiresAt,
                 Tasks = new List<Domain.Entities.Task>(),
                 Users = new List<Domain.Entities.User>()
+            };
+
+            session.Users.Add(user);
+
+            var result = _sessionRepository.Create(session);
+
+            var (userUuid, _) = user;
+
+            var userIdClaim = new Claim(ClaimTypes.NameIdentifier, userUuid);
+            var userRoleClaim = new Claim(ClaimTypes.Role, "Admin");
+            var userNameClaim = new Claim(ClaimTypes.Name, username);
+
+            var token = _jwtHandler.CreateJwtToken(new List<Claim> {
+                userRoleClaim,
+                userNameClaim,
+                userIdClaim,
             });
+
+            return new ResultCreateSessionDto
+            {
+                Id = (long)result.RawValue,
+                Token = token,
+            };
         }
 
         public async Task<Session> GetSession(long id)
@@ -90,7 +130,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.Update(session);
         }
 
-        public async Task<ErrorOr<(bool, List<Domain.Entities.Task>)>> GetStatus(long sessionId)
+        public async Task<ErrorOr<(bool, List<Domain.Entities.Task>, List<User>)>> GetStatus(long sessionId)
         {
             var session = await GetSession(sessionId);
 
@@ -102,7 +142,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 return ErrorOrTrue.FirstError;
             }
 
-            return (true, session.Tasks.ToList());
+            return (true, session.Tasks.ToList(), entity.Users.ToList()));
         }
 
         /// <summary>
@@ -145,6 +185,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 if (alreadyContainsEstimation)
                 {
                     var oldEstimation = estimations.FirstOrDefault(est => est.VoteBy == voteBy);
+
 
                     estimations.Remove(oldEstimation);
                 }
@@ -189,36 +230,74 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <param name="userId"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public async Task<ErrorOr<bool>> AddUserToSession(long sessionId, string userId, Role role)
+
+        public async Task<ErrorOr<(bool, UserDto?)>> AddUserToSession(long sessionId, string username)
         {
             var session = await GetSession(sessionId);
 
+
             var newUser = new User
             {
-                Id = userId,
-                Role = role,
+                Id = Guid.NewGuid().ToString(),
+                Username = username,
             };
 
-            var ErrorOrTrue = validateSession(session, sessionId);
+            var userEntity = _userRepository.Create(newUser);
 
+            bool finished = false;
+            
+            var ErrorOrTrue = validateSession(session, sessionId);
+            
             if (ErrorOrTrue.IsError)
             {
                 Devon4NetLogger.Debug(ErrorOrTrue.FirstError.Description);
                 return ErrorOrTrue.FirstError;
             }
-
-            if (!session.Users.Any(x => x.Id.Equals(newUser.Id)))
-                {
-                    session.Users.Add(newUser);
-                    return _sessionRepository.Update(session);
-                }
             
-            return false;
-        }
+            session.Users.Add(newUser);
 
-        public async Task<ErrorOr<(bool, TaskDto)>> AddTaskToSession(long sessionId, TaskDto task)
+            finished = _sessionRepository.Update(session);
+
+            Devon4NetLogger.Debug("Added user to session!");
+            
+
+            if (finished)
+            {
+                var (userUuid, _) = newUser;
+
+                var userIdClaim = new Claim(ClaimTypes.NameIdentifier, userUuid);
+                var userRoleClaim = new Claim(ClaimTypes.Role, "Voter");
+                var userNameClaim = new Claim(ClaimTypes.Name, username);
+
+                var token = _jwtHandler.CreateJwtToken(new List<Claim> {
+                    userRoleClaim,
+                    userNameClaim,
+                    userIdClaim
+                });
+
+                Devon4NetLogger.Debug("Returned token: " + token);
+
+                var resultingUser = new UserDto
+                {
+                    Id = userUuid,
+                    Username = username,
+                    Token = token
+                };
+
+                return (true, resultingUser);
+            }
+        }
+        
+        
+        public async Task<ErrorOr<(bool, TaskDto)>> AddTaskToSession(long sessionId, string userId, TaskDto task)
+
         {
             var session = await GetSession(sessionId);
+
+            if (!session.isPrivilegedUser(userId))
+            {
+                return (false, null);
+            }
 
             var (title, description, url, status) = task;
 
@@ -331,6 +410,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             
 
             return (false, new List<TaskStatusChangeDto>());
+        }
+
+        public async Task<bool> isPrivilegedUser(long sessionId, string userId)
+        {
+            var session = await GetSession(sessionId);
+
+            if (session is null || !session.IsValid())
+            {
+                return false;
+            }
+
+            if (session.Users.First().Id.Equals(userId))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

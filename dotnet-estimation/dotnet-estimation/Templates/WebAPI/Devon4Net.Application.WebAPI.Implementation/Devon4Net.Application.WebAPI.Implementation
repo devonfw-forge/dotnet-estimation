@@ -33,7 +33,7 @@
             Please remember to avoid the use ob logic in a controller !!!
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.#ctor(Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler,Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService)">
             <summary>
             Constructor with DI
             </summary>
@@ -52,6 +52,12 @@
             This is only a sample. Please never put any logic on a controller
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Controllers.AuthController.GenerateToken(System.String)">
+            <summary>
+            Performs join proces via username
+            </summary>
+            <returns>LoginResponse class will provide the JWT token to securize the server calls</returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Dto.CorporateBasicInfo">
             <summary>
@@ -107,6 +113,13 @@
             <summary>
             Token
             </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.AuthManagement.Service.IAuthService.getTokenUsername(System.String)">
+            <summary>
+            Generate an AccessToken for a given username
+            </summary>
+            <param name="username">Session username</param>
+            <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.EmployeeManagement.Controllers.EmployeeController">
             <summary>
@@ -647,10 +660,66 @@
             the Id
             </summary>
         </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto.Role">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetSocketById(System.String)">
             <summary>
-            the Role
+            Get the corresponding websocket to the given client id
             </summary>
+            <param name="id">Client UUID</param>
+            <returns>Websocket of the corresponding id</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAll">
+            <summary>
+            Returns all Websockets for the current ConnectionManager.
+            </summary>
+            <returns>All websocket connections</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAllOpen">
+            <summary>
+            Returns all Websockets residing in Open state for the current ConnectionManager.
+            </summary>
+            <returns>All websocket connections in open state</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAllClosed">
+            <summary>
+            Returns all Websockets residing in Closed or CloseReceived state for the current ConnectionManager.
+            </summary>
+            <returns>All websocket connections in Closed or CloseReceived state</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAvailableSocketIds">
+            <summary>
+            Get a list of all current open Websocket id's.
+            </summary>
+            <returns>A List of available sockets ready to send via websockets.</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetId(System.Net.WebSockets.WebSocket)">
+            <summary>
+            Get the corresponding client id to the given websocket
+            </summary>
+            <param name="socket">Websocket to search for the id</param>
+            <returns>Client UUID of the corresponding websocket</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.AddSocket(System.String,System.Net.WebSockets.WebSocket)">
+            <summary>
+            Attempts to add a socket to the ConnectionManager
+            </summary>
+            <param name="id">Client UUID</param>
+            <param name="socket">Websocket to add</param>
+            <returns>True, if the Websocket was successfully saved under given id. False if the Client UUID already exists.</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.ReconnectClient(System.String,System.Net.WebSockets.WebSocket)">
+            <summary>
+            Update a closed socket connection for a known user.
+            </summary>
+            <param name="id">Client UUID</param>
+            <param name="socket">New Websocket</param>
+            <returns>True if the websocket for given id was updated. Otherwise False</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.RemoveSocket(System.String)">
+            <summary>
+            Abort and dispose the websocket for the given Client UUID to clear unused resources and update the current ConnectionManager.
+            </summary>
+            <param name="id">Client UUID</param>
+            <returns>True if the websocket for given id was deleted succesfully from the current ConnectionManager. Else false.</returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
@@ -664,9 +733,14 @@
             <param name="sessionDto"></param>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.Int64,System.String)">
             <summary>
             Add an User to a given session
+            </summary>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.DeleteTask(System.Int64,System.String)">
+            <summary>
+            Delete a Task
             </summary>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService">
@@ -674,7 +748,7 @@
             Session service implementation
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session})">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session},Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User},Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler)">
             <summary>
             Constructor
             </summary>
@@ -687,13 +761,31 @@
             <param name="sessionDto"></param>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddNewEstimation(System.Int64,System.String,System.String,System.Int32)">
+            <summary>
+            Adds or updates a user's estimation to the active session's task
+            </summary>
+            <param name="sessionId">The current session's ID</param>
+            <param name="taskId">The active task's ID</param>
+            <param name="voteBy">The originating user's ID</param>
+            <param name="complexity">Complexity estimation</param>
+            <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String)">
             <summary>
             Add an user to a given session
             </summary>
             <param name="sessionId"></param>
             <param name="userId"></param>
             <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.DeleteTask(System.Int64,System.String)">
+            <summary>
+            Delete a Task
+            </summary>
+            <param name="sessionId"></param>
+            <param name="taskId"></param>
             <returns></returns>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.TodoManagement.Controllers.TodoController">

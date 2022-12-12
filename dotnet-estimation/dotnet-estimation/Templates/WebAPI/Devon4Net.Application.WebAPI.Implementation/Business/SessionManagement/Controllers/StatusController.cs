@@ -37,26 +37,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             Devon4NetLogger.Debug($"Get-Request for session status with id: {id}");
 
-            try
-            {
                 var ErrorOrStatus = await _sessionService.GetStatus(id);
 
+                Devon4NetLogger.Debug($"Session is valid: {ErrorOrStatus.Value.Item1}");
+                Devon4NetLogger.Debug($"{ErrorOrStatus.FirstError.Description}");
                 var statusResult = new StatusDto
                 {
                     IsValid = ErrorOrStatus.Value.Item1,
-                    Tasks = ErrorOrStatus.Value.Item2.Select(item => TaskConverter.ModelToDto(item)).ToList()
+                    Tasks = ErrorOrStatus.Value.Item2.Select(item => TaskConverter.ModelToDto(item)).ToList(),
+                    Users = ErrorOrStatus.Value.Item3.Select(item => TaskConverter.ModelToDto(item)).ToList(),
                 };
 
                 return new ObjectResult(JsonConvert.SerializeObject(statusResult));
             }
-            catch (Exception exception)
-            {
-                return exception switch
-                {
-                    NotFoundException _ => NotFound(),
-                    _ => StatusCode(500),
-                };
-            }
+
         }
     }
 }

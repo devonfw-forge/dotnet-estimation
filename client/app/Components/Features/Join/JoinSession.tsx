@@ -1,16 +1,31 @@
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { baseUrl, serviceUrl } from "../../../Constants/url";
 import { Frame } from "../../Globals/Frame";
 
 export default function JoinSession() {
   const router = useRouter();
-  const [token, setToken] = useState("");
+  const [sessionId, setSessionId] = useState("");
+  const [username, setUsername] = useState("");
 
-  const submitTokenAndRedirect = (element: any) => {
+  const submitTokenAndRedirect = async (element: any) => {
     element.preventDefault();
 
-    if (token != undefined || token != "") {
-      router.push("/session/" + token);
+    const url = `${baseUrl}${serviceUrl}${sessionId}/entry`;
+
+    const { data, status } = await axios({
+      method: "post",
+      url: url,
+      data: { username },
+    });
+
+    const { token } = data;
+
+    if (status === 200) {
+      if (token != undefined || token != "") {
+        router.push(`/session/${sessionId}?token=${token}`);
+      }
     }
   };
 
@@ -22,6 +37,13 @@ export default function JoinSession() {
             onSubmit={submitTokenAndRedirect}
             className="flex flex-col gap-2"
           >
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <label className="text-muted" htmlFor="title">
               Title:
             </label>
@@ -29,8 +51,8 @@ export default function JoinSession() {
               type="text"
               id="title"
               name="title"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
+              value={sessionId}
+              onChange={(e) => setSessionId(e.target.value)}
               className="rounded"
             />{" "}
             <input

@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import { ITask } from "../../../../../Interfaces/ITask";
 import { Status } from "../../../../../Types/Status";
+import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
 import { useTaskStore } from "../Stores/TaskStore";
 import { TaskCard } from "./TaskCard";
 import { TaskCreationForm } from "./TaskCreationForm";
@@ -11,6 +12,7 @@ interface TaskViewProps {
 
 export const TaskView: FunctionComponent<TaskViewProps> = ({ id }) => {
   const { tasks } = useTaskStore();
+  const { isAdmin } = useAuthStore();
 
   return (
     <>
@@ -37,7 +39,11 @@ export const TaskView: FunctionComponent<TaskViewProps> = ({ id }) => {
             />
           ))}
         </div>
-        <TaskCreationForm key={"taskCreateFormSingleton"} id={id} />
+        {isAdmin() ? (
+          <TaskCreationForm key={"taskCreateFormSingleton"} id={id} />
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

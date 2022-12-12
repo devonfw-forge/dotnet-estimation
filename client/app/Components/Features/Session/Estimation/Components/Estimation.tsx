@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
+import { ITask } from "../../../../../Interfaces/ITask";
 import { EstimationType } from "../../../../../Types/EstimationType";
 import { Status } from "../../../../../Types/Status";
 import { Center } from "../../../../Globals/Center";
+import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
 import { useEstimationStore } from "../Stores/EstimationStore";
 import { EstimationBar } from "./EstimationBar";
@@ -14,10 +16,30 @@ interface EstimationProps {
 }
 
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
-  const { tasks } = useTaskStore();
-
+  const { findOpenTask, tasks, userAlreadyVoted } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
+
+  const { userId, token } = useAuthStore();
+
   const columns = new Array<String>();
+
+  const [doVote, setDoVote] = useState<boolean>(true);
+
+  const task = findOpenTask();
+
+  let alreadyVoted = false;
+
+  if (task) {
+    alreadyVoted = userAlreadyVoted(userId as string, task.id);
+  }
+
+  useEffect(() => {
+    if (alreadyVoted === true) {
+      setDoVote(false);
+    } else {
+      setDoVote(true);
+    }
+  }, [task, alreadyVoted]);
 
   for (const type in EstimationType) {
     columns.push(type);
@@ -27,7 +49,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
 
   // TODO: replace voteby with user
   const submitEstimationToRestApi = async (taskId: String) => {
-    const rating = { taskId: taskId, voteBy: "me", complexity };
+    const rating = { taskId: taskId, voteBy: userId, complexity };
 
     const url = baseUrl + serviceUrl + id + "/estimation";
 
@@ -35,62 +57,91 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
       method: "post",
       url: url,
       data: rating,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (result.status == 200) {
+    if (result.status == 201) {
       // finally remove task from store
       resetStore();
     }
   };
 
+  if (!userId) {
+    return <>You are currently not logged in!</>;
+  }
+
   if (tasks == undefined) {
     return <></>;
   }
 
-  const task = tasks.find((item) => item.status == Status.Open);
+  const user = "me";
+
+  const renderEstimationForTask = (task: ITask) => {
+    return (
+      <>
+        <strong className={defaultPadding}>
+          How would you rate this task?
+        </strong>
+        <>
+          {columns.map((type, index) => (
+            <div
+              key={"estimationColumn" + type}
+              className={
+                "flex flex-row justify-between items-center " + defaultPadding
+              }
+              style={{
+                background: index % 2 == 0 ? "#f1f4f6" : "#fff",
+              }}
+            >
+              <p style={{ color: "#404b56" }}>
+                {type[0].toUpperCase() + type.slice(1) + ":"}
+              </p>
+              <EstimationBar
+                key={"estimationBar" + type}
+                // @ts-ignore
+                type={EstimationType[type] as EstimationType}
+              />
+            </div>
+          ))}
+          <div className="flex justify-center">
+            <button
+              onClick={() => submitEstimationToRestApi(task.id)}
+              className={
+                "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
+              }
+            >
+              Submit
+            </button>
+          </div>
+        </>
+      </>
+    );
+  };
 
   const renderVoting = () => {
     return (
       <Center>
         {task ? (
-          <>
-            <strong className={defaultPadding}>
-              How would you rate this task?
-            </strong>
-            <>
-              {columns.map((type, index) => (
-                <div
-                  key={"estimationColumn" + type}
-                  className={
-                    "flex flex-row justify-between items-center " +
-                    defaultPadding
-                  }
-                  style={{
-                    background: index % 2 == 0 ? "#f1f4f6" : "#fff",
-                  }}
-                >
-                  <p style={{ color: "#404b56" }}>
-                    {type[0].toUpperCase() + type.slice(1) + ":"}
-                  </p>
-                  <EstimationBar
-                    key={"estimationBar" + type}
-                    // @ts-ignore
-                    type={EstimationType[type] as EstimationType}
-                  />
-                </div>
-              ))}
-              <div className="flex justify-center">
-                <button
-                  onClick={() => submitEstimationToRestApi(task.id)}
-                  className={
-                    "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
-                  }
-                >
-                  Submit
-                </button>
-              </div>
-            </>
-          </>
+          doVote ? (
+            renderEstimationForTask(task)
+          ) : (
+            <div className="flex justify-center">
+              <button
+                onClick={() => {
+                  setDoVote(true);
+                }}
+                className={
+                  "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
+                }
+              >
+                I want to vote again!
+              </button>
+            </div>
+          )
         ) : (
           <strong className={defaultPadding}>
             Please wait for your lobby host to create a task!
@@ -101,4 +152,11 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   };
 
   return renderVoting();
+
+  /*
+  return userHasAlreadyVoted
+    ? renderViewWhenUserHasAlreadyVoted()
+    : renderVoting();
+
+    */
 };

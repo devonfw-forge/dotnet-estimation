@@ -14,6 +14,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 Description = task.Description,
                 Url = task.Url,
                 Status = task.Status,
+                Estimations = task.Estimations.Select(item => EstimationConverter.ModelToDto(item)).ToList()
             };
         }
     }

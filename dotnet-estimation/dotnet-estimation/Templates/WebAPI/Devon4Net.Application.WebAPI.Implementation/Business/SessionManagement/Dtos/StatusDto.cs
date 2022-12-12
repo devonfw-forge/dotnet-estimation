@@ -9,5 +9,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public bool IsValid { get; set; }
 
         public List<TaskDto> Tasks { get; set; }
+
+        public List<UserDto> Users { get; set; }
     }
 }
