@@ -241,7 +241,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
 
-                // If the status changed to evaluated, another message is sent that contains the voting result
+                // If the status changed to evaluated, another message is sent that contains the average voting result
                 if (statusChange.Status == Status.Evaluated)
                 {
                     var evaluatedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
@@ -254,6 +254,22 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     };
 
                     await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskAverageAdded, Payload = taskResult }, sessionId);
+                }
+
+                // If the status changed to ended, another message is sent that contains the final voting result
+                if (statusChange.Status == Status.Ended)
+                {
+                    var endedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
+
+                    var taskResult = new TaskResultDto()
+                    {
+                        Id = statusChange.Id,
+                        AmountOfVotes = endedTask.Result.AmountOfVotes,
+                        ComplexityAverage = endedTask.Result.ComplexityAverage,
+                        FinalValue = endedTask.Result.FinalValue
+                    };
+
+                    await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskFinalValueAdded, Payload = taskResult }, sessionId);
                 }
 
                 return Ok(modifiedTasks);
