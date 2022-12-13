@@ -17,15 +17,21 @@ export const TaskCard: FunctionComponent<{
   url?: String;
   description?: String;
   status: Status;
-}> = ({ id, parentSession, title, url, description, status }) => {
+  complexityAverage?: Number;
+  finalValue?: Number;
+}> = ({ id, parentSession, title, url, description, status, complexityAverage, finalValue }) => {
   const isAdmin = true;
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + parentSession + "/task/status";
 
+    // const result = newStatus === Status.Ended ? finalResult : null;
+    const result = newStatus === Status.Ended ? { amoutOfVotes: 0, complexityAverage: 0, finalValue: 5 } : null;
+    console.log("Final Result: " + result);
+
     await axios({
       method: "put",
       url: url,
-      data: { id: id, status: convertStatusToNumber(newStatus) },
+      data: { id: id, status: convertStatusToNumber(newStatus), result: result },
     });
   };
 

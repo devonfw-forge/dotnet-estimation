@@ -12,6 +12,8 @@ export interface ITask {
   url?: String;
   status: Status;
   estimations: IEstimation[];
+  complexityAverage?: Number;
+  finalResult?: Number;
 }
 
 export interface ITaskStatusChange {

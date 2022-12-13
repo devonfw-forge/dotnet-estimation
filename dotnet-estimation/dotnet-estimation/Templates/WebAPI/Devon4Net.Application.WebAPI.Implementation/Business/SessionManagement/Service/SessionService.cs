@@ -271,6 +271,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var (id, status) = statusChange;
 
+            // debug print
+            if (statusChange.Result is not null)
+            {
+                if (statusChange.Result.FinalValue is not null) Console.WriteLine("Received Final Value: " + statusChange.Result.FinalValue);
+            }
+
             // if the session could be found and is valid
             if (session is not null && session.IsValid())
             {
@@ -290,10 +296,22 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 }
 
                 // calculate the voting result if the task is evaluated
-                Result result = new Result();
                 if (status == Status.Evaluated)
                 {
-                    result = session.Tasks.ToList().Find(item => item.Id == id).calculateResult();
+                    session.Tasks.ToList().Find(item => item.Id == id).calculateResult();
+                }
+
+                // store the final estimation value if the task is ended
+                if (status == Status.Ended)
+                {
+                    if (statusChange.Result.FinalValue is null)
+                    {
+                        Console.WriteLine("StatusChange FinalValue is null.");
+                        return (false, new List<TaskStatusChangeDto>());
+                    }
+
+                    session.Tasks.ToList().Find(item => item.Id == id).Result.FinalValue = statusChange.Result.FinalValue;
+                    Console.WriteLine("StatusChange Final Value is: " + session.Tasks.ToList().Find(item => item.Id == id).Result.FinalValue);
                 }
 
                 var finished = _sessionRepository.Update(session);
@@ -306,7 +324,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     // add the result to the DTO if task is evaluated
                     if (status == Status.Evaluated)
                     {
-                        converted.Find(item => item.Id == id).Result = result;
+                        converted.Find(item => item.Id == id).Result = session.Tasks.ToList().Find(item => item.Id == id).Result;
+                    }
+
+                    // add the final value to the DTO if task is ended
+                    if (status == Status.Ended)
+                    {
+                        converted.Find(item => item.Id == id).Result = session.Tasks.ToList().Find(item => item.Id == id).Result;
+                        Console.WriteLine("DTO Final Value is: " + converted.Find(item => item.Id == id).Result.FinalValue);
                     }
 
                     return (true, converted);
