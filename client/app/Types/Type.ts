@@ -3,5 +3,6 @@ export enum Type {
   TaskStatusModified = 1,
   TaskDeleted = 2,
   EstimationAdded = 3,
-  TaskAverageAdded = 4
+  TaskAverageAdded = 4,
+  TaskFinalValueAdded = 5
 }

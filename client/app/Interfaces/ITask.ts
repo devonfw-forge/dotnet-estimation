@@ -13,6 +13,7 @@ export interface ITask {
   status: Status;
   estimations: IEstimation[];
   complexityAverage?: Number;
+  finalValue?: Number;
 }
 
 export interface ITaskStatusChange {

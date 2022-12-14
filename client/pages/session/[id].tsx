@@ -82,6 +82,11 @@ export default function Session({ id, data }: any) {
       
         setAverageComplexity(payload); //implement setAverageComplexity
       }
+      case Type.TaskFinalValueAdded: {
+        let { payload } = parsed as IMessage<ITaskResultDto>;
+        console.log("TaskFinalValueAdded received.");
+        console.log(payload);
+      }
       default: {
         break;
       }
