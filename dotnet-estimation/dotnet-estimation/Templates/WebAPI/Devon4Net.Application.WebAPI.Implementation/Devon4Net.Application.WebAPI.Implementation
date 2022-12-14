@@ -628,7 +628,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddUserToSession(System.Int64,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers.SessionController.AddUserToSession(System.String,Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.JoinSessionDto)">
             <summary>
             Add a Session user
             </summary>
@@ -639,6 +639,16 @@
             Add a Session Esstimation 
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.JoinSessionDto">
+            <summary>
+            User definition
+            </summary>
+        </member>
+        <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.JoinSessionResultDto">
+            <summary>
+            User definition
+            </summary>
         </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto">
             <summary>
@@ -660,11 +670,6 @@
             the Id
             </summary>
         </member>
-        <member name="P:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.UserDto.Role">
-            <summary>
-            the Role
-            </summary>
-        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
             ISessionService
@@ -677,7 +682,7 @@
             <param name="sessionDto"></param>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService.AddUserToSession(System.String,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
             <summary>
             Add an User to a given session
             </summary>
@@ -692,7 +697,7 @@
             Session service implementation
             </summary>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session})">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.#ctor(Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session},Devon4Net.Infrastructure.LiteDb.Repository.ILiteDbRepository{Devon4Net.Application.WebAPI.Implementation.Domain.Entities.User},Devon4Net.Infrastructure.JWT.Handlers.IJwtHandler)">
             <summary>
             Constructor
             </summary>
@@ -715,7 +720,7 @@
             <param name="complexity">Complexity estimation</param>
             <returns></returns>
         </member>
-        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.Int64,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.AddUserToSession(System.String,System.String,Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Role)">
             <summary>
             Add an user to a given session
             </summary>

@@ -6,6 +6,7 @@ import { ITask } from "../../../../../Interfaces/ITask";
 import { EstimationType } from "../../../../../Types/EstimationType";
 import { Status } from "../../../../../Types/Status";
 import { Center } from "../../../../Globals/Center";
+import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
 import { useEstimationStore } from "../Stores/EstimationStore";
 import { EstimationBar } from "./EstimationBar";
@@ -17,6 +18,9 @@ interface EstimationProps {
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const { findOpenTask, tasks, userAlreadyVoted } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
+
+  const { userId, token } = useAuthStore();
+
   const columns = new Array<String>();
 
   const [doVote, setDoVote] = useState<boolean>(true);
@@ -26,7 +30,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   let alreadyVoted = false;
 
   if (task) {
-    alreadyVoted = userAlreadyVoted("me", task.id);
+    alreadyVoted = userAlreadyVoted(userId as string, task.id);
   }
 
   useEffect(() => {
@@ -45,7 +49,9 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
 
   // TODO: replace voteby with user
   const submitEstimationToRestApi = async (taskId: String) => {
-    const rating = { taskId: taskId, voteBy: "me", complexity };
+    console.log(userId);
+
+    const rating = { taskId: taskId, voteBy: userId, complexity };
 
     const url = baseUrl + serviceUrl + id + "/estimation";
 
@@ -53,13 +59,22 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
       method: "post",
       url: url,
       data: rating,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (result.status == 200) {
+    if (result.status == 201) {
       // finally remove task from store
       resetStore();
     }
   };
+
+  if (!userId) {
+    return <>You are currently not logged in!</>;
+  }
 
   if (tasks == undefined) {
     return <></>;

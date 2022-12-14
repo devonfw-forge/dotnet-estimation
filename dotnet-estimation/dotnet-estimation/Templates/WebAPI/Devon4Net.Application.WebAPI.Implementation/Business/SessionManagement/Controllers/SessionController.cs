@@ -12,6 +12,7 @@ using System.Net;
 using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
 using LiteDB;
+using Devon4Net.Authorization;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -124,22 +125,37 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(AuthenticationSchemes = AuthConst.AuthenticationScheme, Roles = $"Author,Moderator,Voter")]
-        [Route("/estimation/v1/session/{sessionId:long}/entry")]
-        public async Task<ActionResult<UserDto>> AddUserToSession(long sessionId, UserDto userDto)
+        [Route("/estimation/v1/session/{inviteToken}/entry")]
+        public async Task<ActionResult<UserDto>> AddUserToSession(string inviteToken, [FromBody] JoinSessionDto joinDto)
         {
-            //Get claims
-            var token = Request.Headers["Authorization"].ToString().Replace($"{AuthConst.AuthenticationScheme} ", string.Empty);
-
-            if (string.IsNullOrEmpty(token)) return Unauthorized();
-
             Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
-            var result = await _sessionService.AddUserToSession(sessionId, userDto.Id,
-                userDto.Role).ConfigureAwait(false);
-            return StatusCode(StatusCodes.Status201Created, result);
+
+            var (username, desiredRole) = joinDto;
+
+            var (completed, result) = await _sessionService.AddUserToSession(inviteToken, username, desiredRole);
+
+            if (completed)
+            {
+                var (sessionId, userId, _, role, token) = result;
+
+                Message<UserDto> Message = new Message<UserDto>
+                {
+                    Type = MessageType.UserJoined,
+                    Payload = new UserDto { Id = userId, Role = role, Token = token, Username = username },
+                };
+
+                await _webSocketHandler.Send(Message, sessionId);
+
+                return new ObjectResult(JsonConvert.SerializeObject(result));
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
+        [TransientAuthorizationAttribute]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -147,7 +163,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [Route("/estimation/v1/session/{sessionId:long}/task")]
         public async Task<ActionResult> AddTask(long sessionId, [FromBody] TaskDto task)
         {
-            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, task);
+            Devon4NetLogger.Debug($"{sessionId}");
+
+            var (userId, _) = Request.HttpContext.Items["user"] as AuthenticatedUserDto;
+
+            Devon4NetLogger.Debug($"{userId}");
+
+            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, userId, task);
 
             if (finished)
             {
@@ -161,6 +183,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
                 return Ok();
             }
+
             return BadRequest();
         }
 

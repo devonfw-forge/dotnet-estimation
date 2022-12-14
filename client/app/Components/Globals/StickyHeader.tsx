@@ -1,6 +1,8 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 
-export const StickyHeader: FunctionComponent<{}> = () => {
+export const StickyHeader: FunctionComponent<{ inviteToken: string }> = ({
+  inviteToken,
+}) => {
   return (
     <>
       <header
@@ -11,6 +13,14 @@ export const StickyHeader: FunctionComponent<{}> = () => {
         <div className="d-flex flex-row">
           <a className="nav-link px-2 link-secondary">Estimation</a>
           <a className="nav-link px-2 link-secondary">User-Image</a>
+          <input
+            className="nav-link px-2 link-secondary"
+            onClick={() => {
+              navigator.clipboard.writeText(inviteToken);
+            }}
+            value="Copy invite-token!"
+            type="button"
+          />
         </div>
       </header>
     </>

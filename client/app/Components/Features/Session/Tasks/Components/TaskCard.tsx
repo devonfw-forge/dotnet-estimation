@@ -9,6 +9,7 @@ import {
 } from "../../../../../Types/Status";
 import { useTaskStore } from "../Stores/TaskStore";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
+import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
 
 export const TaskCard: FunctionComponent<{
   id: String;
@@ -18,7 +19,7 @@ export const TaskCard: FunctionComponent<{
   description?: String;
   status: Status;
 }> = ({ id, parentSession, title, url, description, status }) => {
-  const isAdmin = true;
+  const { isAdmin, userId, token } = useAuthStore();
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + parentSession + "/task/status";
 
@@ -26,6 +27,11 @@ export const TaskCard: FunctionComponent<{
       method: "put",
       url: url,
       data: { id: id, status: convertStatusToNumber(newStatus) },
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
   };
 
@@ -37,7 +43,7 @@ export const TaskCard: FunctionComponent<{
     if (result.status == 200) {
       deleteTask(id);
     }
-  }
+  };
 
   const renderAdministrativeView = () => {
     return (
@@ -84,7 +90,9 @@ export const TaskCard: FunctionComponent<{
         })()}
         <button
           onClick={requestDeleteTask}
-          className={"bg-red-500 hover:bg-red-700 text-white font-bold p-1 mt-2 rounded"}
+          className={
+            "bg-red-500 hover:bg-red-700 text-white font-bold p-1 mt-2 rounded"
+          }
         >
           Delete
         </button>
@@ -100,7 +108,7 @@ export const TaskCard: FunctionComponent<{
           convertStatusToBorderColor(status)
         }
       >
-        {renderAdministrativeView()}
+        {isAdmin() ? renderAdministrativeView() : <></>}
         <div className="flex flex-row justify-between py-2">
           <strong className={convertStatusToTextColor(status)}>{title}</strong>
           <p className={convertStatusToTextColor(status)}>{url}</p>
