@@ -27,6 +27,7 @@ export default function Session({ id, data }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
 
+
   useEffect(() => {
     const { tasks } = data;
 
@@ -78,7 +79,8 @@ export default function Session({ id, data }: any) {
       case Type.TaskAverageAdded: {
         let { payload } = parsed as IMessage<ITaskResultDto>;
         console.log("TaskResultAdded received.");
-        console.log(payload);
+      
+        setAverageComplexity(payload); //implement setAverageComplexity
       }
       default: {
         break;
@@ -86,7 +88,7 @@ export default function Session({ id, data }: any) {
     }
   };
 
-  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask } =
+    const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask, setAverageComplexity } =
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(

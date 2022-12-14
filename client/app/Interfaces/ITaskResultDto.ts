@@ -1,6 +1,6 @@
 export interface ITaskResultDto {
-  taskId: String;
+  id: String;
   amountOfVotes: Number;
-  complexityAverage: Number;
+  complexityAverage: Number; 
   finalValue?: Number;
 }

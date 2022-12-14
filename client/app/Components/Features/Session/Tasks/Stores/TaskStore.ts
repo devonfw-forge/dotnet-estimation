@@ -5,6 +5,7 @@ import { IEstimation, ITask } from "../../../../../../app/Interfaces/ITask";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { IEstimationDto } from "../../../../../Interfaces/IEstimationDto";
 import { Status } from "../../../../../Types/Status";
+import { ITaskResultDto } from "../../../../../Interfaces/ITaskResultDto";
 
 interface ISessionTaskState {
   tasks: ITask[];
@@ -16,6 +17,8 @@ interface ISessionTaskState {
   userAlreadyVoted: (userId: String, taskId: String) => boolean;
   findOpenTask: () => ITask | undefined;
   upsertEstimationToTask: (estimation: IEstimationDto) => void;
+  setAverageComplexity: (taskResultDto: ITaskResultDto) => void;
+  findEvaluatedTask: () => ITask|undefined;
 }
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
@@ -108,6 +111,29 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
+  //sets the averageComplexity value for each task
+  setAverageComplexity: (taskResultDto: ITaskResultDto) => {
+      set(
+          produce((draft: ISessionTaskState) =>
+          {
+              draft.tasks.forEach((task) =>
+              {
+                   //taskId ging nicht
+                  if (task.id == taskResultDto.id) { //Task mit complexityAv. erweitern und darin speichern?
+                      task.complexityAverage = taskResultDto.complexityAverage;
+                      task.status=Status.Evaluated;
+                      console.log(task.complexityAverage);
+                      
+                  }
+              });
+          })
+      );
+  },
+  //returns the task thats currently in evaluation
+  findEvaluatedTask: () => {
+      return get().tasks.find((task) => task.status == Status.Evaluated);
+  },
+
 }));
 
 const sortTasks = (tasks: ITask[]) => {

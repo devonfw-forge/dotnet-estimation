@@ -8,22 +8,31 @@ import { Status } from "../../../../../Types/Status";
 import { Center } from "../../../../Globals/Center";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
 import { useEstimationStore } from "../Stores/EstimationStore";
-import { EstimationBar } from "./EstimationBar";
+import {EstimationBar} from "./EstimationBar";
 
 interface EstimationProps {
   id: String;
 }
 
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
-  const { findOpenTask, tasks, userAlreadyVoted } = useTaskStore();
+  const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
   const columns = new Array<String>();
 
   const [doVote, setDoVote] = useState<boolean>(true);
+  const [averageExists, setAverageExists] = useState<boolean>(false);
 
   const task = findOpenTask();
 
+  //check if an evaluated task existst
+  const evaluatedTaskExists = findEvaluatedTask();
+
   let alreadyVoted = false;
+
+  //averageComplexity value of the current evaluated task
+  let averageComplexity = findEvaluatedTask()?.complexityAverage;
+
+
 
   if (task) {
     alreadyVoted = userAlreadyVoted("me", task.id);
@@ -32,10 +41,24 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   useEffect(() => {
     if (alreadyVoted === true) {
       setDoVote(false);
+      console.log("doVote bei setfalse: " +doVote)
     } else {
       setDoVote(true);
+      console.log("doVote bei settrue:   " +doVote)  
     }
-  }, [task, alreadyVoted]);
+    console.log("doVote draußen :   " +doVote)  
+        
+    if(averageComplexity===undefined||averageComplexity===null) {
+        setAverageExists(false);
+    }
+    else {
+        setAverageExists(true);
+    }
+
+
+  }, [alreadyVoted, averageComplexity]);
+  
+
 
   for (const type in EstimationType) {
     columns.push(type);
@@ -54,21 +77,42 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
       url: url,
       data: rating,
     });
-
-    if (result.status == 200) {
+    
+    if (result.status == 201 ) {
       // finally remove task from store
+      // setDoVote to render the correct button after giving an estimation
+      setDoVote(false);
       resetStore();
     }
+
   };
 
   if (tasks == undefined) {
     return <></>;
   }
 
-  const user = "me";
+  const user = "me";    
 
-  const renderEstimationForTask = (task: ITask) => {
-    return (
+
+  const renderComplexityAverage = () => (
+      
+      <div>
+        <> 
+        Average Complexity for the task  &nbsp;
+        '{findEvaluatedTask()?.title}': &nbsp;
+        </>
+        
+          <strong>
+          {averageComplexity}
+          </strong>
+          
+      </div>
+      
+  );
+
+  const renderEstimationForTask = (task: ITask) => (
+    
+    <Center>
       <>
         <strong className={defaultPadding}>
           How would you rate this task?
@@ -106,39 +150,74 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
           </div>
         </>
       </>
-    );
-  };
+    </Center>
+    
+  );
+
+
+
+
 
   const renderVoting = () => {
-    return (
-      <Center>
-        {task ? (
-          doVote ? (
-            renderEstimationForTask(task)
-          ) : (
-            <div className="flex justify-center">
-              <button
-                onClick={() => {
-                  setDoVote(true);
-                }}
-                className={
-                  "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
-                }
-              >
-                I want to vote again!
-              </button>
-            </div>
+  
+    if (task) { 
+      if (doVote) { 
+        return(
+        renderEstimationForTask(task) 
+        )
+      }
+      else { 
+        return ( 
+          renderVoteAgainButton()
+        )
+      }
+    }
+    else if ( evaluatedTaskExists ) {
+      return (
+        renderComplexityAverage()
+      )  
+    }
+      else {
+          return (
+            renderWaitForLobbyhostMessage()
           )
-        ) : (
-          <strong className={defaultPadding}>
-            Please wait for your lobby host to create a task!
-          </strong>
-        )}
-      </Center>
-    );
+      }
   };
 
+
+  const renderVoteAgainButton = () => (
+  
+    <div className="flex justify-center">
+      <button
+        onClick={() => {
+          setDoVote(true);
+        }}
+        className={
+          "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
+        }
+      >
+  
+         I want to vote again
+      </button>
+    </div> 
+  
+);
+
+const renderWaitForLobbyhostMessage = ()  => (
+    
+  <strong className={defaultPadding}>
+    
+    Please wait for your lobby host to create a task!
+  </strong>
+    
+);
+
+
+
+
   return renderVoting();
+ 
+  
 
   /*
   return userHasAlreadyVoted
