@@ -41,12 +41,12 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   useEffect(() => {
     if (alreadyVoted === true) {
       setDoVote(false);
-      console.log("doVote bei setfalse: " +doVote)
+      
     } else {
       setDoVote(true);
-      console.log("doVote bei settrue:   " +doVote)  
+        
     }
-    console.log("doVote draußen :   " +doVote)  
+    
         
     if(averageComplexity===undefined||averageComplexity===null) {
         setAverageExists(false);
