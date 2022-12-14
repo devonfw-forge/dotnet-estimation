@@ -25,7 +25,7 @@ import { Role, toRole } from "../../app/Types/Role";
 import { UserDto } from "../../app/Types/UserDto";
 import { IUser } from "../../app/Interfaces/IUser";
 
-export default function Session({ id, tasks, users, auth }: any) {
+export default function Session({ id, tasks, users, auth, inviteToken }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
   const { login, username } = useAuthStore();
@@ -112,7 +112,7 @@ export default function Session({ id, tasks, users, auth }: any) {
   return (
     <>
       <Frame>
-        <StickyHeader />
+        <StickyHeader inviteToken={inviteToken} />
         <App>
           <UserView key={"userView"} />
           <Estimation key={"estimationView"} id={id} />
@@ -146,11 +146,11 @@ export async function getServerSideProps(context: any) {
     },
   });
 
-  const { tasks, users } = JSON.parse(data);
+  const { inviteToken, tasks, users } = JSON.parse(data);
 
   const auth = { userId, token, role: toRole(role), username };
 
   return {
-    props: { id, tasks, users, auth }, // will be passed to the page component as props
+    props: { id, tasks, users, auth, inviteToken }, // will be passed to the page component as props
   };
 }

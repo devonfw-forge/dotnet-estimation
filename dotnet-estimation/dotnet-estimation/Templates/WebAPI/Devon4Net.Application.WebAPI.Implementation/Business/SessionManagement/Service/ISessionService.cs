@@ -14,7 +14,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public Task<Session> FindSessionWithInviteToken(string token);
 
-        public Task<(bool, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>, List<User>)> GetStatus(long sessionId);
+        public Task<(bool, string?, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>, List<User>)> GetStatus(long sessionId);
 
         /// <summary>
         /// CreateSession

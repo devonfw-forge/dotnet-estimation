@@ -120,7 +120,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.Update(sessionResult);
         }
 
-        public async Task<(bool, List<Domain.Entities.Task>, List<User>)> GetStatus(long sessionId)
+        public async Task<(bool, string?, List<Domain.Entities.Task>, List<User>)> GetStatus(long sessionId)
         {
             var entity = await GetSession(sessionId);
 
@@ -133,10 +133,10 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             if (!sessionIsValid)
             {
-                return (false, null, null);
+                return (false, null, null, null);
             }
 
-            return (true, entity.Tasks.ToList(), entity.Users.ToList());
+            return (true, entity.InviteToken, entity.Tasks.ToList(), entity.Users.ToList());
         }
 
         /// <summary>
@@ -350,7 +350,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             byte[] randomNumber = new byte[8];
             RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
             rngCsp.GetNonZeroBytes(randomNumber);
-            return BitConverter.ToString(randomNumber);
+            return BitConverter.ToString(randomNumber).Replace("-", String.Empty);
         }
 
         public async Task<(bool, List<TaskStatusChangeDto>)> ChangeTaskStatus(long sessionId, TaskStatusChangeDto statusChange)
