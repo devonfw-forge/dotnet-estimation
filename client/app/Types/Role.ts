@@ -16,3 +16,16 @@ export const toRole = (role: String) => {
       return Role.Spectator;
   }
 };
+
+export const toNumber = (role: Role) => {
+  switch (role) {
+    case Role.Admin:
+      return 0;
+    case Role.Voter:
+      return 1;
+    case Role.Spectator:
+      return 2;
+    default:
+      return -1;
+  }
+};

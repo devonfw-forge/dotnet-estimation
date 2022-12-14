@@ -86,6 +86,13 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             };
         }
 
+        public async Task<Session> FindSessionWithInviteToken(string token)
+        {
+            var expression = LiteDB.Query.EQ("InviteToken", token);
+
+            return _sessionRepository.GetFirstOrDefault(expression);
+        }
+
         public async Task<Session> GetSession(long id)
         {
             var expression = LiteDB.Query.EQ("_id", id);
@@ -209,9 +216,14 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <param name="userId"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public async Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username)
+        public async Task<(bool, JoinSessionResultDto?)> AddUserToSession(string inviteToken, string username, Role desiredRole)
         {
-            var session = await GetSession(sessionId);
+            if (desiredRole == Role.Author)
+            {
+                return (false, null);
+            }
+
+            var session = await FindSessionWithInviteToken(inviteToken);
 
             if (!session.IsValid())
             {
@@ -244,7 +256,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 var (userUuid, _) = newUser;
 
                 var userIdClaim = new Claim(ClaimTypes.NameIdentifier, userUuid);
-                var userRoleClaim = new Claim(ClaimTypes.Role, "Voter");
+                var userRoleClaim = new Claim(ClaimTypes.Role, desiredRole.ToString());
                 var userNameClaim = new Claim(ClaimTypes.Name, username);
 
                 var token = _jwtHandler.CreateJwtToken(new List<Claim> {
@@ -255,14 +267,16 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
                 Devon4NetLogger.Debug("Returned token: " + token);
 
-                var resultingUser = new UserDto
+                var joinResult = new JoinSessionResultDto
                 {
+                    SessionId = session.Id,
                     Id = userUuid,
                     Username = username,
-                    Token = token
+                    Token = token,
+                    Role = desiredRole
                 };
 
-                return (true, resultingUser);
+                return (true, joinResult);
             }
 
             return (false, null);

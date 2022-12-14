@@ -40,6 +40,9 @@ export default function CreateSession() {
       <Frame>
         <div className="flex flex-row content-center items-center">
           <form onSubmit={submitAndRedirect} className="flex flex-col gap-2">
+            <label className="text-muted" htmlFor="username">
+              Your name:
+            </label>
             <input
               type="text"
               id="username"
@@ -47,8 +50,8 @@ export default function CreateSession() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <label className="text-muted" htmlFor="title">
-              Title:
+            <label className="text-muted" htmlFor="expiresAt">
+              Expire at:
             </label>
             <input
               type="datetime-local"

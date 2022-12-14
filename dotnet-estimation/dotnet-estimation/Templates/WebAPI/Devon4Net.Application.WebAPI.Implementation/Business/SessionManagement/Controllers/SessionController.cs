@@ -125,18 +125,23 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Route("/estimation/v1/session/{sessionId:long}/entry")]
-        public async Task<ActionResult<UserDto>> AddUserToSession(long sessionId, UserDto userDto)
+        [Route("/estimation/v1/session/{inviteToken}/entry")]
+        public async Task<ActionResult<UserDto>> AddUserToSession(string inviteToken, [FromBody] JoinSessionDto joinDto)
         {
             Devon4NetLogger.Debug("Executing AddUserToSession from controller SessionController");
-            var (completed, result) = await _sessionService.AddUserToSession(sessionId, userDto.Username);
+
+            var (username, desiredRole) = joinDto;
+
+            var (completed, result) = await _sessionService.AddUserToSession(inviteToken, username, desiredRole);
 
             if (completed)
             {
+                var (sessionId, userId, _, role, token) = result;
+
                 Message<UserDto> Message = new Message<UserDto>
                 {
                     Type = MessageType.UserJoined,
-                    Payload = result,
+                    Payload = new UserDto { Id = userId, Role = role, Token = token, Username = username },
                 };
 
                 await _webSocketHandler.Send(Message, sessionId);

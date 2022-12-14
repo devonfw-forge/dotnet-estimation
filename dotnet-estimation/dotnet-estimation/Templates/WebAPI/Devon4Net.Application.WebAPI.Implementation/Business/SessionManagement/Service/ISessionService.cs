@@ -12,6 +12,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public Task<Session> GetSession(long id);
 
+        public Task<Session> FindSessionWithInviteToken(string token);
+
         public Task<(bool, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>, List<User>)> GetStatus(long sessionId);
 
         /// <summary>
@@ -29,7 +31,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <summary>
         /// Add an User to a given session
         /// </summary>
-        public Task<(bool, UserDto?)> AddUserToSession(long sessionId, string username);
+        public Task<(bool, JoinSessionResultDto?)> AddUserToSession(string inviteToken, string username, Role desiredRole);
+
         public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, string userId, TaskDto task);
 
         /// <summary>

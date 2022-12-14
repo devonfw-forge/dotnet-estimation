@@ -49,6 +49,8 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
 
   // TODO: replace voteby with user
   const submitEstimationToRestApi = async (taskId: String) => {
+    console.log(userId);
+
     const rating = { taskId: taskId, voteBy: userId, complexity };
 
     const url = baseUrl + serviceUrl + id + "/estimation";
