@@ -703,6 +703,13 @@
             </summary>
             <param name="SessionRepository"></param>
         </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.validateSession(Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Session,System.Nullable{System.Int64})">
+            <summary>
+            validates a Session
+            </summary>
+            <param name="session, sessionid,sessionid"></param>
+            <returns>Error Or Bool</returns>
+        </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.SessionService.CreateSession(Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos.SessionDto)">
             <summary>
             Creates the Session
