@@ -54,7 +54,8 @@ if (devonfwOptions.ForceUseHttpsRedirection || (!devonfwOptions.UseIIS && devonf
 app.UseWhen(context =>
     !Regex.IsMatch(context.Request.Path.ToString(), @"/estimation/v1/session/\w*/entry") &&
     !context.Request.Path.Equals("/estimation/v1/session/newSession") &&
-    !Regex.IsMatch(context.Request.Path.ToString(), @"/\d*/ws")
+    !Regex.IsMatch(context.Request.Path.ToString(), @"/\d*/ws") &&
+    !Regex.IsMatch(context.Request.Path.ToString(), @"/estimation/v1/session/\d*/task/")
     , appBuilder =>
 {
     appBuilder.UseMiddleware<JwtMiddleware>();

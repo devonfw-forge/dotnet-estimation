@@ -101,6 +101,21 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.GetFirstOrDefault(expression);
         }
 
+        public async Task<Session> GetSessionAndUsers(long id)
+        {
+            var session = await GetSession(id);
+            var usersResult = new List<Domain.Entities.User>();
+
+            foreach (var user in session.Users)
+            {
+                var expression = LiteDB.Query.EQ("_id", user.Id);
+                var dbUser = _userRepository.GetFirstOrDefault(expression);
+                usersResult.Add(dbUser);
+            }
+            session.Users = usersResult;
+            return session;
+        }
+
         public async Task<bool> InvalidateSession(long sessionId)
         {
             Session sessionResult = await GetSession(sessionId);
@@ -122,8 +137,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public async Task<(bool, string?, List<Domain.Entities.Task>, List<User>)> GetStatus(long sessionId)
         {
-            var entity = await GetSession(sessionId);
-
+            var entity = await GetSessionAndUsers(sessionId);
             if (entity == null)
             {
                 throw new NotFoundException(sessionId);
