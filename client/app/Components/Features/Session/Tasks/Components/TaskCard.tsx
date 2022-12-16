@@ -80,10 +80,21 @@ export const TaskCard: FunctionComponent<{
                   }
                   onClick={() => requestStatusChange(Status.Open)}
                 >
-                  Poll again!
+                  Vote now
                 </button>
               );
             case Status.Ended:
+              return (
+                <button
+                  className={
+                    "bg-orange-500 p-2 mb-2 bg-warning font-bold p-1 mt-2 rounded"
+                    }
+                    onClick={() => requestStatusChange(Status.Open)}
+                >
+
+                  Vote again
+                </button>
+              );
             default:
               return <></>;
           }

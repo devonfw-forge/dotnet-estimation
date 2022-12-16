@@ -681,25 +681,25 @@
             <summary>
             Returns all Websockets for the current ConnectionManager.
             </summary>
-            <returns>All websocket connections</returns>
+            <returns>ConcurrentDictionary of the current connections. Where the key string, is the id of the user and the Websocket value is the corresponding websocket.</returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAllOpen">
             <summary>
             Returns all Websockets residing in Open state for the current ConnectionManager.
             </summary>
-            <returns>All websocket connections in open state</returns>
+            <returns>ConcurrentDictionary of all websocket connections in open state</returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAllClosed">
             <summary>
             Returns all Websockets residing in Closed or CloseReceived state for the current ConnectionManager.
             </summary>
-            <returns>All websocket connections in Closed or CloseReceived state</returns>
+            <returns>ConcurrentDictionary of all websocket connections in Closed or CloseReceived state</returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAvailableSocketIds">
             <summary>
             Get a list of all current open Websocket id's.
             </summary>
-            <returns>A List of available sockets ready to send via websockets.</returns>
+            <returns>A Message-type List of available sockets ready to send via websockets.</returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetId(System.Net.WebSockets.WebSocket)">
             <summary>
