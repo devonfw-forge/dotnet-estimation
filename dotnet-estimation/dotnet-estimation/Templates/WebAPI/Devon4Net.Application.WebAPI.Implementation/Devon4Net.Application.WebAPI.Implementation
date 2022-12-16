@@ -670,6 +670,67 @@
             the Id
             </summary>
         </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetSocketById(System.String)">
+            <summary>
+            Get the corresponding websocket to the given client id
+            </summary>
+            <param name="id">Client UUID</param>
+            <returns>Websocket of the corresponding id</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAll">
+            <summary>
+            Returns all Websockets for the current ConnectionManager.
+            </summary>
+            <returns>All websocket connections</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAllOpen">
+            <summary>
+            Returns all Websockets residing in Open state for the current ConnectionManager.
+            </summary>
+            <returns>All websocket connections in open state</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAllClosed">
+            <summary>
+            Returns all Websockets residing in Closed or CloseReceived state for the current ConnectionManager.
+            </summary>
+            <returns>All websocket connections in Closed or CloseReceived state</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetAvailableSocketIds">
+            <summary>
+            Get a list of all current open Websocket id's.
+            </summary>
+            <returns>A List of available sockets ready to send via websockets.</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetId(System.Net.WebSockets.WebSocket)">
+            <summary>
+            Get the corresponding client id to the given websocket
+            </summary>
+            <param name="socket">Websocket to search for the id</param>
+            <returns>Client UUID of the corresponding websocket</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.AddSocket(System.String,System.Net.WebSockets.WebSocket)">
+            <summary>
+            Attempts to add a socket to the ConnectionManager
+            </summary>
+            <param name="id">Client UUID</param>
+            <param name="socket">Websocket to add</param>
+            <returns>True, if the Websocket was successfully saved under given id. False if the Client UUID already exists.</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.ReconnectClient(System.String,System.Net.WebSockets.WebSocket)">
+            <summary>
+            Update a closed socket connection for a known user.
+            </summary>
+            <param name="id">Client UUID</param>
+            <param name="socket">New Websocket</param>
+            <returns>True if the websocket for given id was updated. Otherwise False</returns>
+        </member>
+        <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.RemoveSocket(System.String)">
+            <summary>
+            Abort and dispose the websocket for the given Client UUID to clear unused resources and update the current ConnectionManager.
+            </summary>
+            <param name="id">Client UUID</param>
+            <returns>True if the websocket for given id was deleted succesfully from the current ConnectionManager. Else false.</returns>
+        </member>
         <member name="T:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.ISessionService">
             <summary>
             ISessionService

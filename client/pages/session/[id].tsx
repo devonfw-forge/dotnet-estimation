@@ -97,9 +97,7 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
       }
       case Type.UserJoined: {
         let { payload } = parsed as IMessage<IUser>;
-
         console.log(payload);
-
         addUser(payload);
         break;
       }
@@ -113,7 +111,7 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8085/" + id + "/ws",
+    "ws://localhost:8085/" + id + "/ws/" + auth.token,
     {
       onOpen: (event: any) => {
         console.log(event);
