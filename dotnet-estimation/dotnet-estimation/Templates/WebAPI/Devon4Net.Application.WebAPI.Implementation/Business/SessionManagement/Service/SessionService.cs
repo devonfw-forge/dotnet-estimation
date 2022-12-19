@@ -232,7 +232,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         public async Task<(bool, JoinSessionResultDto?)> AddUserToSession(string inviteToken, string username, Role desiredRole)
         {
-            if (desiredRole == Role.Author)
+            if (desiredRole == Role.Admin)
             {
                 return (false, null);
             }
@@ -278,7 +278,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     userNameClaim,
                     userIdClaim
                 });
-
+               
                 Devon4NetLogger.Debug("Returned token: " + token);
 
                 var joinResult = new JoinSessionResultDto
@@ -287,7 +287,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     Id = userUuid,
                     Username = username,
                     Token = token,
-                    Role = desiredRole
+                    Role = desiredRole,
+                    Online = true,
                 };
 
                 return (true, joinResult);

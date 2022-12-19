@@ -21,6 +21,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public string Token { get; set; }
 
+        public bool Online { get; set; }
+
         public void Deconstruct(out string username, out Role role)
         {
             username = Username;
