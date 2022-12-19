@@ -111,6 +111,11 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
           changeOnlineStatus(payload);
         }
       }
+      case Type.UserRefreshed:{
+        let { payload } = parsed as IMessage<IUpdateDto>;
+        console.log("Refresh Users");
+        changeOnlineStatus(payload);
+      }
       default: {
         break;
       }
