@@ -32,14 +32,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             var context = ControllerContext.HttpContext;
             var isSocketRequest = context.WebSockets.IsWebSocketRequest;
 
-            var userClaims = JwtHandler.GetUserClaims(token).ToList();
-            var clientUuid = JwtHandler.GetClaimValue(userClaims, ClaimTypes.NameIdentifier);
-
             if (isSocketRequest)
             {
                 WebSocket websocket = await context.WebSockets.AcceptWebSocketAsync();
 
-                await WebsocketHandler.Handle(clientUuid, websocket, sessionId );
+                await WebsocketHandler.Handle(token, websocket, sessionId );
             }
             else
             {

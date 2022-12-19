@@ -699,7 +699,7 @@
             <summary>
             Get a list of all current open Websocket id's.
             </summary>
-            <returns>A Message-type List of available sockets ready to send via websockets.</returns>
+            <returns>List with strings of available sockets.</returns>
         </member>
         <member name="M:Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service.IConnectionManager.GetId(System.Net.WebSockets.WebSocket)">
             <summary>

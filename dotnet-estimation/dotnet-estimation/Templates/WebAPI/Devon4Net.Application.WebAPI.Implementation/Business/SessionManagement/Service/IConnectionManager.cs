@@ -33,8 +33,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <summary>
         /// Get a list of all current open Websocket id's.
         /// </summary>
-        /// <returns>A Message-type List of available sockets ready to send via websockets.</returns>
-        Message<List<string>> GetAvailableSocketIds();
+        /// <returns>List with strings of available sockets.</returns>
+        List<string> GetAvailableSocketIds();
 
         /// <summary>
         /// Get the corresponding client id to the given websocket

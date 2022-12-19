@@ -8,6 +8,11 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Devon4Net.Infrastructure.JWT.Handlers;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Dtos;
+using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
+using Task = System.Threading.Tasks.Task;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Service
 {
@@ -16,21 +21,51 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         private ConcurrentDictionary<long, ConnectionManager> _sessions = new ConcurrentDictionary<long, ConnectionManager>();
 
         private readonly ISessionService _sessionService;
+        public IJwtHandler JwtHandler { get; }
 
-        public WebSocketHandler(ISessionService sessionService)
+        public WebSocketHandler(ISessionService sessionService, IJwtHandler jwtHandler)
         {
             _sessionService = sessionService;
+            JwtHandler = jwtHandler;
         }
 
-        public async Task Handle(string id, WebSocket webSocket, long sessionId)
+        public async Task Handle(string token, WebSocket webSocket, long sessionId)
         {
-            // Update the Lobby with the newly joined client
+            var userClaims = JwtHandler.GetUserClaims(token).ToList();
+            var id = JwtHandler.GetClaimValue(userClaims, ClaimTypes.NameIdentifier);
+            var username = JwtHandler.GetClaimValue(userClaims, ClaimTypes.Name);
+            var roleString = JwtHandler.GetClaimValue(userClaims, ClaimTypes.Role);
+            var joinedUser = new UserDto
+            {
+                Id = id,
+                Username = username,
+                Role = (Role)Enum.Parse(typeof(Role), roleString),
+                Online = true,
+            };
+
+            // Update the session lobby with the newly joined client
             UpdateSession(sessionId, id, webSocket);
             _sessions.TryGetValue(sessionId, out var currentConnectionsManager);
-            Devon4NetLogger.Debug($"Amount of current Sockets in our Lobby: {currentConnectionsManager.GetAll().Count}\nFollowing client joined: {id}");
-            // Broadcast the ids of the currently logged in clients after join
-            var availableClientIds = currentConnectionsManager.GetAvailableSocketIds();
-            await Send(availableClientIds, sessionId);
+            Devon4NetLogger.Debug($"Amount of current Sockets in Lobby: {currentConnectionsManager.GetAll().Count}\nFollowing client joined: {id}");
+            
+            // Notify all lobby users about the recently joined user.
+            var currentlyJoinedClient = new Message<UserDto>
+            {
+                Type = MessageType.UserJoined,
+                Payload = joinedUser,
+            };
+            var availableClients = currentConnectionsManager.GetAvailableSocketIds();
+            var updateClients = new Message<UpdateDto>
+            {
+                Type = MessageType.UserRefreshed,
+                Payload = new UpdateDto
+                {
+                    AvailableClients = availableClients,
+                }
+            };
+            await Send(currentlyJoinedClient, sessionId);
+            await Send(updateClients, sessionId);
+
 
             while (webSocket.State == WebSocketState.Open)
             {
@@ -44,11 +79,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             {
                 Devon4NetLogger.Debug($"Handle Client Disconnect for {id}");
                 var ClientReconnected = false;
-                // If the client does not reconnect during 5 minutes, dispose the connection to clear resources.
+                // If the client does not reconnect during 3 minutes, dispose the connection to clear resources.
                 var Startpoint = System.Diagnostics.Stopwatch.StartNew();
-                while (Startpoint.ElapsedMilliseconds < 1000*60*1)
+                while (Startpoint.ElapsedMilliseconds < 1000*5*1)
                 {
-                    var currentAvailableClients = currentConnectionsManager.GetAvailableSocketIds().Payload;
+                    var currentAvailableClients = currentConnectionsManager.GetAvailableSocketIds();
 
                     if (currentAvailableClients.Any(clientId => clientId == id))
                     {
@@ -61,8 +96,20 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 if (!ClientReconnected)
                 {
                     await AbortWebSocket(sessionId, id);
-                    await _sessionService.RemoveUserFromSession(sessionId, id);
                     Devon4NetLogger.Debug($"Amount of current Sockets in our Lobby: {currentConnectionsManager.GetAll().Count}\nDeleted following client: {id}");
+                    
+                    // Notify session users about the disconnected user.
+                    var RemainingClientIds = currentConnectionsManager.GetAvailableSocketIds();
+                    var updateRemainingClients = new Message<UpdateDto>
+                    {
+                        Type = MessageType.UserRefreshed,
+                        Payload = new UpdateDto
+                        {
+                            AvailableClients = RemainingClientIds,
+                        }
+                    };
+                    await Send(updateRemainingClients, sessionId);
+
                     // TODO: When are we going to delete the users from our database ?
                     // TODO: Add _userService and Remove User From our database here ?
                 }

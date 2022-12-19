@@ -136,12 +136,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             if (completed)
             {
-                var (sessionId, userId, _, role, token) = result;
+                var (sessionId, userId, _, role, token, online) = result;
 
                 Message<UserDto> Message = new Message<UserDto>
                 {
                     Type = MessageType.UserJoined,
-                    Payload = new UserDto { Id = userId, Role = role, Token = token, Username = username },
+                    Payload = new UserDto { Id = userId, Role = role, Token = token, Username = username, Online = online },
                 };
 
                 await _webSocketHandler.Send(Message, sessionId);
