@@ -6,4 +6,5 @@ export enum Type {
   TaskAverageAdded = 4,
   TaskFinalValueAdded = 5,
   UserJoined = 6,
+  UserRefreshed = 7,
 }

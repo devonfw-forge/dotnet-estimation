@@ -53,7 +53,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return disconnectedSockets;
         }
 
-        public Message<List<string>> GetAvailableSocketIds()
+        public List<string> GetAvailableSocketIds()
         {
             var availableSockets = GetAllOpen();
             var loggedInUsers = new List<string>();
@@ -63,12 +63,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 loggedInUsers.Add(client.Key);
             }
 
-            Message<List<string>> availableClientIds = new Message<List<string>>
-            {
-                Type = MessageType.UserJoined,
-                Payload = loggedInUsers,
-            };
-            return availableClientIds;
+            return loggedInUsers;
         }
 
         public string GetId(WebSocket socket)
@@ -102,6 +97,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             socket.Abort();
             socket.Dispose();
             return isRemoved;
+        }
+
+        public async Task<List<bool>> RemoveAllSockets()
+        {
+            var resultList = new List<bool>();
+
+            foreach (var socket in _sockets)
+            {
+                resultList.Add(await RemoveSocket(socket.Key));
+            }
+            return resultList;
         }
     }
 }

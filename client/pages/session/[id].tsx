@@ -23,10 +23,12 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { Role, toRole } from "../../app/Types/Role";
 import { UserDto } from "../../app/Types/UserDto";
 import { IUser } from "../../app/Interfaces/IUser";
+import { IUpdateDto } from "../../app/Interfaces/IUpdateDto";
 
 export default function Session({ id, tasks, users, auth, inviteToken }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
+  const { changeOnlineStatus } = useSessionUserStore();
   const { login, username } = useAuthStore();
   const { addUser } = useSessionUserStore();
 
@@ -100,6 +102,14 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
         console.log(payload);
         addUser(payload);
         break;
+      }
+      case Type.UserRefreshed:{
+        let { payload } = parsed as IMessage<IUpdateDto>;
+        if(payload.availableClients != undefined)
+        {
+          console.log("Refreshing users");
+          changeOnlineStatus(payload);
+        }
       }
       default: {
         break;
