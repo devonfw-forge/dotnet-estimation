@@ -19,7 +19,8 @@ interface ISessionTaskState {
   upsertEstimationToTask: (estimation: IEstimationDto) => void;
   setAverageComplexity: (taskResultDto: ITaskResultDto) => void;
   findEvaluatedTask: () => ITask|undefined;
-}
+  findClosedTask: () => ITask|undefined;
+} 
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   tasks: [],
@@ -132,6 +133,9 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   //returns the task thats currently in evaluation
   findEvaluatedTask: () => {
       return get().tasks.find((task) => task.status == Status.Evaluated);
+  },
+  findClosedTask: () => {
+    return get().tasks.find((task) => task.status == Status.Ended);
   },
 
 }));

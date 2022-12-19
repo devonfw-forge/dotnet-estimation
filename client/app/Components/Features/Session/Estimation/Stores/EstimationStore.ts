@@ -24,3 +24,24 @@ export const useEstimationStore = create<IEstimationState>()((set) => ({
     );
   },
 }));
+
+interface IFinalComplexityState {
+  finalValue: number;
+  setValue: (value: number) => void;
+  resetStore: () => void;
+}
+
+//noch mal angucken wg. effort und risk einfach auf 0 gestetzt und bie set rausgenommen
+export const useFinalValueStore = create<IFinalComplexityState>()((set) => ({
+  finalValue: 1,
+  resetStore: () =>
+    set((state) => ({ ...state, finalValue: 1})),
+  setValue: (value: number) => {
+    set(
+      produce((draft) => {
+        draft = value;
+      })
+    );
+  },
+}));
+

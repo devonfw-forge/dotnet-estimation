@@ -5,24 +5,31 @@ import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { ITask } from "../../../../../Interfaces/ITask";
 import { EstimationType } from "../../../../../Types/EstimationType";
 import { Status } from "../../../../../Types/Status";
+import { Type } from "../../../../../Types/Type";
 import { Center } from "../../../../Globals/Center";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
-import { useEstimationStore } from "../Stores/EstimationStore";
+import { useEstimationStore, useFinalValueStore } from "../Stores/EstimationStore";
 import {EstimationBar} from "./EstimationBar";
+//import {ITaskresultDto} from "/Interfaces/ITaskResultDto";
+import { requestStatusChange} from "../../Tasks/Components/TaskCard";
+
 
 interface EstimationProps {
   id: String;
 }
 
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
-  const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask } = useTaskStore();
+  const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask, findClosedTask } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
+  const { finalValue } = useFinalValueStore();
   const columns = new Array<String>();
 
   const [doVote, setDoVote] = useState<boolean>(true);
   const [averageExists, setAverageExists] = useState<boolean>(false);
 
   const task = findOpenTask();
+
+  const closedTask = findClosedTask();
 
   //check if an evaluated task existst
   const evaluatedTaskExists = findEvaluatedTask();
@@ -62,6 +69,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
 
   for (const type in EstimationType) {
     columns.push(type);
+    console.log(type);
   }
 
   const defaultPadding = "p-4";
@@ -86,32 +94,75 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     }
 
   };
+  
+  const submitFinalResultToRestApi = async (taskId: String) => {
+    let res = { amountOfVotes: 0, complexityAverage: averageComplexity , finalValue: 5 }; //averageComplexity, finalValue
+
+    console.log(res);
+
+    console.log("STATUSSS" + findEvaluatedTask()?.status);
+    const rating = { id: findEvaluatedTask().id, status: Status.Ended ,  result: res  }; // fehler wg. namen finalComplVal?
+    
+    console.log("rating object :" + JSON.stringify(rating));
+
+    const url = baseUrl + serviceUrl + id + "/task/status";
+
+    const result = await axios({
+      method: "put",
+      url: url,
+      data: rating,
+    });
+
+    if (result.status == 201 ) {
+      resetStore();
+      console.log("YOYOOYOYOYOOY");
+    }
+  }
+  
+  
+  /*
+  const requestStatusChange = async () => {
+    const url = baseUrl + serviceUrl + id + "/task/status";
+
+    
+    // const result = newStatus === Status.Ended ? finalResult : null;
+    const result = { amoutOfVotes: 0, complexityAverage: 0, finalValue: 5 } ;
+    console.log("Final Result: " + result);
+
+    await axios({
+      method: "put",
+      url: url,
+      data: { id: findEvaluatedTask().id, status: Status.Ended , result: result },
+    });
+  };
+  */
 
   if (tasks == undefined) {
     return <></>;
-  }
+  } 
 
   const user = "me";    
 
 
-  const renderComplexityAverage = () => (
+  const renderComplexityAverageAndFinalValueChoice = () => (
       
       <div>
         <> 
         Average Complexity for the task  &nbsp;
-        '{findEvaluatedTask()?.title}': &nbsp;
+        &apos;{findEvaluatedTask()?.title}&apos;: &nbsp;
         </>
-        
           <strong>
-          {averageComplexity}
+            {averageComplexity}
           </strong>
-          
+            <>
+              {renderFinalValueChoice(task)}
+            </>
       </div>
       
   );
 
   const renderEstimationForTask = (task: ITask) => (
-    
+  
     <Center>
       <>
         <strong className={defaultPadding}>
@@ -145,18 +196,14 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
                 "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
               }
             >
-              Submit
+              Submit 
             </button>
           </div>
         </>
       </>
     </Center>
-    
+  
   );
-
-
-
-
 
   const renderVoting = () => {
   
@@ -174,16 +221,60 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     }
     else if ( evaluatedTaskExists ) {
       return (
-        renderComplexityAverage()
+        renderComplexityAverageAndFinalValueChoice()
       )  
     }
-      else {
-          return (
-            renderWaitForLobbyhostMessage()
-          )
-      }
+     
+    else {
+        return (
+          renderWaitForLobbyhostMessage()
+        )
+    }
+
   };
 
+  const renderFinalValueChoice = (task: ITask) => (
+
+    
+      <Center>
+     <>
+       <strong className={defaultPadding}>
+         Choose final value for the Complexity
+       </strong>
+       <>
+           <div
+             key={"estimationColumn" + "Complexity"}
+             className={
+               "flex flex-row justify-between items-center " + defaultPadding
+             }
+             style={{
+               background:"#f1f4f6",
+             }}
+           >
+             <p style={{ color: "#404b56" }}>
+              Complexity :
+             </p>
+             <EstimationBar
+               key={"estimationBar" + "Complexity"}
+               // @ts-ignore
+               type={EstimationType["Complexity"] as EstimationType}
+             />
+           </div>
+         <div className="flex justify-center">
+           <button
+             onClick={() => submitFinalResultToRestApi(task)} //submitfinalresulto...
+             className={
+               "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
+             }
+           >
+             Submit
+           </button>
+         </div>
+       </>
+     </>
+   </Center>
+
+  );
 
   const renderVoteAgainButton = () => (
   

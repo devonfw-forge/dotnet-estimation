@@ -20,5 +20,11 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             id = Id;
             status = Status;
         }
+        public void Deconstruct(out string id, out Status status, out Result result)
+        {
+            id = Id;
+            status = Status;
+            result = Result;
+        }
     }
 }

@@ -13,6 +13,7 @@ using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
 using LiteDB;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
+using Newtonsoft.Json.Serialization;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
