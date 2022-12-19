@@ -371,7 +371,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             if (task == null)
             {
-                throw new TaskNotFoundException(taskId);
+                return Error.Failure(description: $"No task found with taskId: {taskId}");
             }
 
             session.Tasks.Remove(task);
