@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import {
   Status,
   convertStatusToNumber,
@@ -9,6 +9,7 @@ import {
 } from "../../../../../Types/Status";
 import { useTaskStore } from "../Stores/TaskStore";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
+
 
 export const TaskCard: FunctionComponent<{
   id: String;
@@ -80,8 +81,14 @@ export const TaskCard: FunctionComponent<{
                 </button>
               );
             case Status.Ended:
+              
+              return (
+
+                renderFinalValueOnClosedTasks()
+
+              ); 
             default:
-              return <></>;
+              return <></>
           }
         })()}
         <button
@@ -93,6 +100,28 @@ export const TaskCard: FunctionComponent<{
       </>
     );
   };
+
+  const colorStyle = {
+    color: '#2ADF6C', 
+    fontWeight: 'bold',
+  };
+  
+  /*
+  function UseUpdateFinalValue() {
+  const [value, setValue] = useState(0);
+  return () => setValue(value => value + 1)
+  }
+
+  const forceUpdate = UseUpdateFinalValue()
+  */
+  
+  const renderFinalValueOnClosedTasks  = () => (
+    <>
+      <div style= {colorStyle} >
+      Rated:  {finalValue}
+      </div>
+    </>
+  );
 
   return (
     <>

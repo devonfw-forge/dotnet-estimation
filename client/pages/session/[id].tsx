@@ -16,16 +16,20 @@ import { dummyUsers } from "../../app/Components/Globals/DummyData";
 import { IEstimationDto } from "../../app/Interfaces/IEstimationDto";
 import { ITaskResultDto } from "../../app/Interfaces/ITaskResultDto";
 
+
+
 export default function Session({ id, data }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
 
 
+
   useEffect(() => {
     const { tasks } = data;
-
+    
     setCurrentTasks(tasks);
     setCurrentUsers(dummyUsers);
+    
   }, [data, dummyUsers]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
@@ -79,6 +83,11 @@ export default function Session({ id, data }: any) {
         let { payload } = parsed as IMessage<ITaskResultDto>;
         console.log("TaskFinalValueAdded received.");
         console.log(payload);
+        console.log(" finalval von PAYLOAD  ***" + payload.finalValue);
+
+        let final = payload.finalValue;
+        console.log(" finalval von final  ***" + final);
+        setFinalComplexity(final);
         // TODO
       }
       default: {
@@ -87,7 +96,7 @@ export default function Session({ id, data }: any) {
     }
   };
 
-  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask, setAverageComplexity } =
+  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask, setAverageComplexity, setFinalComplexity } =
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(

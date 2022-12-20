@@ -112,7 +112,7 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
-  //sets average complexity of the open task & changes it to evaluated
+  //sets the averageComplexity value for each task
   setAverageComplexity: (taskResultDto: ITaskResultDto) => {
     set(
       produce((draft: ISessionTaskState) => {
@@ -128,9 +128,11 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   setFinalComplexity: (finalValue: Number) => {
     set(
       produce((draft: ISessionTaskState) => {
+        const evaluatedTask = get().tasks.find((task) => task.status == Status.Evaluated);
         draft.tasks.forEach((task) => {
-          if (task.status == Status.Evaluated) {
+          if (task.id == evaluatedTask.id) {
             task.finalValue = finalValue;
+            console.log("finalValue updated: " + task.finalValue);
           }
         });
       })
@@ -139,7 +141,8 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   //returns the task thats currently in evaluation
   findEvaluatedTask: () => {
     return get().tasks.find((task) => task.status == Status.Evaluated);
-  }
+  },
+
 }));
 
 const sortTasks = (tasks: ITask[]) => {
