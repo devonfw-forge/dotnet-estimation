@@ -24,14 +24,10 @@ export const TaskCard: FunctionComponent<{
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + parentSession + "/task/status";
 
-    // const result = newStatus === Status.Ended ? finalResult : null;
-    const result = newStatus === Status.Ended ? { amoutOfVotes: 0, complexityAverage: 0, finalValue: 5 } : null;
-    console.log("Final Result: " + result);
-
     await axios({
       method: "put",
       url: url,
-      data: { id: id, status: convertStatusToNumber(newStatus), result: result },
+      data: { id: id, status: convertStatusToNumber(newStatus) },
     });
   };
 

@@ -3,6 +3,7 @@ import {
   convertTypeToColorIfActive,
   EstimationType,
 } from "../../../../../Types/EstimationType";
+import { useTaskStore } from "../../Tasks/Stores/TaskStore";
 import { useEstimationStore } from "../Stores/EstimationStore";
 
 export const EstimationValue: FunctionComponent<{
@@ -10,8 +11,10 @@ export const EstimationValue: FunctionComponent<{
   gridColumn: number;
   isActive: boolean;
   parentType: EstimationType;
-}> = ({ value, gridColumn, isActive, parentType }) => {
+  isFinal: boolean;
+}> = ({ value, gridColumn, isActive, parentType, isFinal }) => {
   const { setValue } = useEstimationStore();
+  const { setFinalComplexity } = useTaskStore();
 
   return (
     <>
@@ -26,6 +29,10 @@ export const EstimationValue: FunctionComponent<{
           background: convertTypeToColorIfActive(parentType, isActive),
         }}
         onClick={() => {
+          if (isFinal) {
+            console.log("Setting final value: " + value);
+            setFinalComplexity(value);
+          }
           setValue(parentType, value);
         }}
       >

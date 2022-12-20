@@ -311,7 +311,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     }
 
                     session.Tasks.ToList().Find(item => item.Id == id).Result.FinalValue = statusChange.Result.FinalValue;
-                    Console.WriteLine("StatusChange Final Value is: " + session.Tasks.ToList().Find(item => item.Id == id).Result.FinalValue);
                 }
 
                 var finished = _sessionRepository.Update(session);
@@ -331,7 +330,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     if (status == Status.Ended)
                     {
                         converted.Find(item => item.Id == id).Result = session.Tasks.ToList().Find(item => item.Id == id).Result;
-                        Console.WriteLine("DTO Final Value is: " + converted.Find(item => item.Id == id).Result.FinalValue);
                     }
 
                     return (true, converted);

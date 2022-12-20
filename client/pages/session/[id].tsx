@@ -78,9 +78,9 @@ export default function Session({ id, data }: any) {
       }
       case Type.TaskAverageAdded: {
         let { payload } = parsed as IMessage<ITaskResultDto>;
-        console.log("TaskResultAdded received.");
-      
-        setAverageComplexity(payload); //implement setAverageComplexity
+        console.log("TaskAverageAdded received.");
+
+        setAverageComplexity(payload);
       }
       case Type.TaskFinalValueAdded: {
         let { payload } = parsed as IMessage<ITaskResultDto>;
@@ -93,7 +93,7 @@ export default function Session({ id, data }: any) {
     }
   };
 
-    const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask, setAverageComplexity } =
+  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask, setAverageComplexity } =
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
