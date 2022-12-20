@@ -20,7 +20,6 @@ interface ISessionTaskState {
   setAverageComplexity: (taskResultDto: ITaskResultDto) => void;
   setFinalComplexity: (finalValue: number) => void;
   findEvaluatedTask: () => ITask | undefined;
-  findClosedTask: () => ITask | undefined;
 }
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
@@ -113,7 +112,7 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
-  //sets the averageComplexity value for each task
+  //sets average complexity of the open task & changes it to evaluated
   setAverageComplexity: (taskResultDto: ITaskResultDto) => {
     set(
       produce((draft: ISessionTaskState) => {
@@ -129,11 +128,9 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   setFinalComplexity: (finalValue: Number) => {
     set(
       produce((draft: ISessionTaskState) => {
-        const evaluatedTask = get().tasks.find((task) => task.status == Status.Evaluated);
         draft.tasks.forEach((task) => {
-          if (task.id == evaluatedTask.id) {
+          if (task.status == Status.Evaluated) {
             task.finalValue = finalValue;
-            console.log("finalValue updated: " + task.finalValue);
           }
         });
       })
@@ -142,11 +139,7 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
   //returns the task thats currently in evaluation
   findEvaluatedTask: () => {
     return get().tasks.find((task) => task.status == Status.Evaluated);
-  },
-  findClosedTask: () => {
-    return get().tasks.find((task) => task.status == Status.Ended);
-  },
-
+  }
 }));
 
 const sortTasks = (tasks: ITask[]) => {

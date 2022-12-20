@@ -1,14 +1,12 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { ITask } from "../../../../../Interfaces/ITask";
 import { EstimationType } from "../../../../../Types/EstimationType";
 import { Status } from "../../../../../Types/Status";
-import { Type } from "../../../../../Types/Type";
 import { Center } from "../../../../Globals/Center";
 import { useTaskStore } from "../../Tasks/Stores/TaskStore";
-import { useEstimationStore, useFinalValueStore } from "../Stores/EstimationStore";
+import { useEstimationStore } from "../Stores/EstimationStore";
 import { EstimationBar } from "./EstimationBar";
 
 interface EstimationProps {
@@ -16,21 +14,15 @@ interface EstimationProps {
 }
 
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
-  const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask, findClosedTask } = useTaskStore();
+  const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
-  const { finalValue } = useFinalValueStore();
+
   const columns = new Array<String>();
 
   const [doVote, setDoVote] = useState<boolean>(true);
-  // delete line?
-  const [averageExists, setAverageExists] = useState<boolean>(false);
 
   const task = findOpenTask();
 
-  // delete line and function?
-  const closedTask = findClosedTask();
-
-  //check if an evaluated task existst
   const evaluatedTaskExists = findEvaluatedTask();
 
   // averageComplexity value of the current evaluated task
@@ -48,14 +40,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     } else {
       setDoVote(true);
     }
-
-    if (averageComplexity === undefined || averageComplexity === null) {
-      setAverageExists(false);
-    }
-    else {
-      setAverageExists(true);
-    }
-  }, [alreadyVoted, averageComplexity]);
+  }, [alreadyVoted]);
 
 
   for (const type in EstimationType) {
@@ -77,33 +62,31 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     });
 
     if (result.status == 201) {
-      // setDoVote to render the correct button after giving an estimation
+      // setDoVote to render the vote again button
       setDoVote(false);
-      // finally remove task from store
+      // finally reset the estimation buttons to 1
       resetStore();
     }
   };
 
   const submitFinalResultToRestApi = async () => {
-    // TODO: finalValue
-    let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: 5 };
+    const evaluatedTask = findEvaluatedTask();
 
-    console.log(res);
+    if (evaluatedTask) {
+      let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: evaluatedTask.finalValue };
 
-    const rating = { id: findEvaluatedTask().id, status: Status.Ended, result: res };
+      const url = baseUrl + serviceUrl + id + "/task/status";
 
-    console.log("rating object: " + JSON.stringify(rating));
+      const result = await axios({
+        method: "put",
+        url: url,
+        data: { id: evaluatedTask.id, status: Status.Ended, result: res },
+      });
 
-    const url = baseUrl + serviceUrl + id + "/task/status";
-
-    const result = await axios({
-      method: "put",
-      url: url,
-      data: rating,
-    });
-
-    if (result.status == 201) {
-      resetStore();
+      if (result.status == 200) {
+        // reset the estimation buttons to 1
+        resetStore();
+      }
     }
   }
 
@@ -259,11 +242,4 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   );
 
   return renderVoting();
-
-  /*
-  return userHasAlreadyVoted
-    ? renderViewWhenUserHasAlreadyVoted()
-    : renderVoting();
-
-    */
 };

@@ -30,7 +30,6 @@ export const EstimationValue: FunctionComponent<{
         }}
         onClick={() => {
           if (isFinal) {
-            console.log("Setting final value: " + value);
             setFinalComplexity(value);
           }
           setValue(parentType, value);
