@@ -9,6 +9,7 @@ import {
 } from "../../../../../Types/Status";
 import { useTaskStore } from "../Stores/TaskStore";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
+import { Checkbox } from "./Checkmark";
 
 
 export const TaskCard: FunctionComponent<{
@@ -43,6 +44,19 @@ export const TaskCard: FunctionComponent<{
     if (result.status == 200) {
       deleteTask(id);
     }
+  }
+
+  const renderCheckmark = () => {
+    
+      return (  
+      <Checkbox
+      key = {"checkbox"}  
+      size = {"25px"}
+      backgroundColor = {"#0DA65A"}
+      accentColor = {" #FFFFFF"}
+     />
+      )
+
   }
 
   const renderAdministrativeView = () => {
@@ -102,7 +116,7 @@ export const TaskCard: FunctionComponent<{
   };
 
   const colorStyle = {
-    color: '#2ADF6C',
+    color: '#253EEA',
     fontWeight: 'bold',
   };
 
@@ -117,9 +131,13 @@ export const TaskCard: FunctionComponent<{
 
   const renderFinalValueOnClosedTasks = () => (
     <>
-      <div style={colorStyle}>
-        Rated:  {finalValue}
-      </div>
+      <>
+        {renderCheckmark()}
+      </>
+        <div style={colorStyle}>
+          Rated:  {finalValue}
+        </div>
+
     </>
   );
 
