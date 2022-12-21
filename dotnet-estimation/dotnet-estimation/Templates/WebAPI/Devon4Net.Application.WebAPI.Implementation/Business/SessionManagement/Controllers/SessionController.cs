@@ -258,9 +258,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
                     await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskAverageAdded, Payload = taskResult }, sessionId);
                 }
-
                 // If the status changed to ended, another message is sent that contains the final voting result
-                if (statusChange.Status == Status.Ended)
+                else if (statusChange.Status == Status.Ended)
                 {
                     var endedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
 

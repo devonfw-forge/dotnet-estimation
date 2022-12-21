@@ -22,14 +22,12 @@ export default function Session({ id, data }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
 
-
-
   useEffect(() => {
     const { tasks } = data;
-    
+
     setCurrentTasks(tasks);
     setCurrentUsers(dummyUsers);
-    
+
   }, [data, dummyUsers]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
@@ -83,12 +81,8 @@ export default function Session({ id, data }: any) {
         let { payload } = parsed as IMessage<ITaskResultDto>;
         console.log("TaskFinalValueAdded received.");
         console.log(payload);
-        console.log(" finalval von PAYLOAD  ***" + payload.finalValue);
 
-        let final = payload.finalValue;
-        console.log(" finalval von final  ***" + final);
-        setFinalComplexity(final);
-        // TODO
+        setFinalComplexity(payload.finalValue);
       }
       default: {
         break;

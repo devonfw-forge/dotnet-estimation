@@ -32,6 +32,9 @@ export const TaskCard: FunctionComponent<{
     });
   };
 
+  console.log("Average: " + complexityAverage);
+  console.log("FinalValue: " + finalValue);
+
   const { deleteTask } = useTaskStore();
   const requestDeleteTask = async () => {
     const url = baseUrl + serviceUrl + parentSession + "/task/" + id;
@@ -81,12 +84,9 @@ export const TaskCard: FunctionComponent<{
                 </button>
               );
             case Status.Ended:
-              
               return (
-
                 renderFinalValueOnClosedTasks()
-
-              ); 
+              );
             default:
               return <></>
           }
@@ -102,10 +102,10 @@ export const TaskCard: FunctionComponent<{
   };
 
   const colorStyle = {
-    color: '#2ADF6C', 
+    color: '#2ADF6C',
     fontWeight: 'bold',
   };
-  
+
   /*
   function UseUpdateFinalValue() {
   const [value, setValue] = useState(0);
@@ -114,11 +114,11 @@ export const TaskCard: FunctionComponent<{
 
   const forceUpdate = UseUpdateFinalValue()
   */
-  
-  const renderFinalValueOnClosedTasks  = () => (
+
+  const renderFinalValueOnClosedTasks = () => (
     <>
-      <div style= {colorStyle} >
-      Rated:  {finalValue}
+      <div style={colorStyle}>
+        Rated:  {finalValue}
       </div>
     </>
   );

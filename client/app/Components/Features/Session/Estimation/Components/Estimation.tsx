@@ -26,7 +26,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const evaluatedTaskExists = findEvaluatedTask();
 
   // averageComplexity value of the current evaluated task
-  let averageComplexity = findEvaluatedTask()?.complexityAverage;
+  let averageComplexity = findEvaluatedTask()?.result?.complexityAverage;
 
   let alreadyVoted = false;
 
@@ -73,7 +73,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     const evaluatedTask = findEvaluatedTask();
 
     if (evaluatedTask) {
-      let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: evaluatedTask.finalValue };
+      let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: evaluatedTask.result.finalValue };
 
       const url = baseUrl + serviceUrl + id + "/task/status";
 

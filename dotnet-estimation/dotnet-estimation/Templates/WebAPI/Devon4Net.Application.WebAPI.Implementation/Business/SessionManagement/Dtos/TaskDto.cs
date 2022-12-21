@@ -24,6 +24,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public List<EstimationDto> Estimations { get; set; }
 
+        public Result? Result { get; set; }
+
         public void Deconstruct(out string id, out string title, out string? description, out string? url, out Status status)
         {
             id = Id;
@@ -40,5 +42,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             url = Url;
             status = Status;
         }
+
+        /*
+                public void Deconstruct(out string id, out string title, out string? description, out string? url, out Status status, out Result? result)
+                {
+                    id = Id;
+                    title = Title;
+                    description = Description;
+                    url = Url;
+                    status = Status;
+                    result = Result;
+                }
+                */
     }
 }
