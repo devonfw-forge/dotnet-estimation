@@ -24,7 +24,7 @@ export default function Session({ id, data }: any) {
 
   useEffect(() => {
     const { tasks } = data;
-
+    console.log(tasks);
     setCurrentTasks(tasks);
     setCurrentUsers(dummyUsers);
 
