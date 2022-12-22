@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../Constants/url";
 import { Frame } from "../../Globals/Frame";
 
-export default function JoinSession() {
+export default function CreateSession() {
   const router = useRouter();
 
   const [expiresAt, setExpiresAt] = useState(
@@ -13,21 +13,25 @@ export default function JoinSession() {
       .split(".")[0]
   );
 
-  const submitTokenAndRedirect = async (element: any) => {
+  const [username, setUsername] = useState("");
+
+  const submitAndRedirect = async (element: any) => {
     element.preventDefault();
 
     const url = baseUrl + serviceUrl + "newSession";
 
-    // if able to create a new session
-    //     redirect to the matching websocket
-    const result = await axios({
+    const { data, status } = await axios({
       method: "post",
       url: url,
-      data: { ExpiresAt: expiresAt },
+      data: { ExpiresAt: expiresAt, username },
     });
 
-    if (result.status == 200) {
-      router.push("/session/" + result.data.id);
+    const { id, token } = data;
+
+    console.log(id, token);
+
+    if (status == 200) {
+      router.push(`/session/${id}?token=${token}`);
     }
   };
 
@@ -35,12 +39,19 @@ export default function JoinSession() {
     <>
       <Frame>
         <div className="flex flex-row content-center items-center">
-          <form
-            onSubmit={submitTokenAndRedirect}
-            className="flex flex-col gap-2"
-          >
-            <label className="text-muted" htmlFor="title">
-              Title:
+          <form onSubmit={submitAndRedirect} className="flex flex-col gap-2">
+            <label className="text-muted" htmlFor="username">
+              Your name:
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <label className="text-muted" htmlFor="expiresAt">
+              Expire at:
             </label>
             <input
               type="datetime-local"

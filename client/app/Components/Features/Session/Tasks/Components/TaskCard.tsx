@@ -10,7 +10,7 @@ import {
 import { useTaskStore } from "../Stores/TaskStore";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { Checkbox } from "./Checkmark";
-
+import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
 
 export const TaskCard: FunctionComponent<{
   id: String;
@@ -22,7 +22,8 @@ export const TaskCard: FunctionComponent<{
   complexityAverage?: Number;
   finalValue?: Number;
 }> = ({ id, parentSession, title, url, description, status, complexityAverage, finalValue }) => {
-  const isAdmin = true;
+  const { isAdmin, userId, token } = useAuthStore();
+
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + parentSession + "/task/status";
 
@@ -30,6 +31,11 @@ export const TaskCard: FunctionComponent<{
       method: "put",
       url: url,
       data: { id: id, status: convertStatusToNumber(newStatus) },
+      headers: {
+        Accept: "application/json",
+        "Content-Type": " application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
   };
 
@@ -44,7 +50,7 @@ export const TaskCard: FunctionComponent<{
     if (result.status == 200) {
       deleteTask(id);
     }
-  }
+  };
 
   const renderCheckmark = () => {
     
@@ -94,12 +100,24 @@ export const TaskCard: FunctionComponent<{
                   }
                   onClick={() => requestStatusChange(Status.Open)}
                 >
-                  Poll again!
+                  Vote now
                 </button>
               );
             case Status.Ended:
               return (
-                renderFinalValueOnClosedTasks()
+              <>
+                <>
+                {renderFinalValueOnClosedTasks()}
+                </>
+                <button
+                  className={
+                    "bg-orange-500 p-2 mb-2 bg-warning font-bold p-1 mt-2 rounded"
+                    }
+                    onClick={() => requestStatusChange(Status.Open)}
+                >
+                  Vote again
+                </button>
+              </>
               );
             default:
               return <></>
@@ -107,7 +125,9 @@ export const TaskCard: FunctionComponent<{
         })()}
         <button
           onClick={requestDeleteTask}
-          className={"bg-red-500 hover:bg-red-700 text-white font-bold p-1 mt-2 rounded"}
+          className={
+            "bg-red-500 hover:bg-red-700 text-white font-bold p-1 mt-2 rounded"
+          }
         >
           Delete
         </button>
@@ -149,7 +169,7 @@ export const TaskCard: FunctionComponent<{
           convertStatusToBorderColor(status)
         }
       >
-        {renderAdministrativeView()}
+        {isAdmin() ? renderAdministrativeView() : <></>}
         <div className="flex flex-row justify-between py-2">
           <strong className={convertStatusToTextColor(status)}>{title}</strong>
           <p className={convertStatusToTextColor(status)}>{url}</p>

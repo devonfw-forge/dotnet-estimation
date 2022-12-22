@@ -12,7 +12,9 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
     {
         public Task<Session> GetSession(long id);
 
-        public Task<(bool, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>)> GetStatus(long sessionId);
+        public Task<Session> FindSessionWithInviteToken(string token);
+
+        public Task<(bool, string?, List<Devon4Net.Application.WebAPI.Implementation.Domain.Entities.Task>, List<User>)> GetStatus(long sessionId);
 
         /// <summary>
         /// CreateSession
@@ -29,8 +31,9 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <summary>
         /// Add an User to a given session
         /// </summary>
-        public Task<bool> AddUserToSession(long sessionId, string userId, Role role);
-        public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, TaskDto task);
+        public Task<(bool, JoinSessionResultDto?)> AddUserToSession(string inviteToken, string username, Role desiredRole);
+
+        public Task<(bool, TaskDto?)> AddTaskToSession(long sessionId, string userId, TaskDto task);
 
         /// <summary>
         /// Delete a Task
@@ -38,5 +41,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public Task<bool> DeleteTask(long sessionId, string taskId);
 
         public Task<(bool, List<TaskStatusChangeDto>)> ChangeTaskStatus(long sessionId, TaskStatusChangeDto statusChange);
+
+        public Task<bool> isPrivilegedUser(long sessionId, string userId);
     }
 }

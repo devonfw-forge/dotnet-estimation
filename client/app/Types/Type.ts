@@ -4,5 +4,6 @@ export enum Type {
   TaskDeleted = 2,
   EstimationAdded = 3,
   TaskAverageAdded = 4,
-  TaskFinalValueAdded = 5
+  TaskFinalValueAdded = 5,
+  UserJoined = 6,
 }

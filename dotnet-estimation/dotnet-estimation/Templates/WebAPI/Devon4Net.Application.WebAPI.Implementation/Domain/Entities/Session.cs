@@ -1,3 +1,5 @@
+using LiteDB;
+
 namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 {
     public partial class Session
@@ -10,6 +12,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
 
         public IList<Task> Tasks { get; set; }
 
+        [BsonRef("User")]
         public IList<User> Users { get; set; }
 
         public bool IsValid()
@@ -103,6 +106,21 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
             modifiedTasks.Add((task.Id, task.Status));
 
             return (true, modifiedTasks);
+        }
+
+        public bool isPrivilegedUser(string userId)
+        {
+            if (!this.Users.Where(item => item.Id.Equals(userId)).Any())
+            {
+                return false;
+            }
+
+            if (this.Users.First().Id.Equals(userId))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
