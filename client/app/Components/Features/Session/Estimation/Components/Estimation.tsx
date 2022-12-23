@@ -90,6 +90,11 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
         method: "put",
         url: url,
         data: { id: evaluatedTask.id, status: Status.Ended, result: res },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": " application/json",
+          Authorization: `Bearer ${token}`,
+        }
       });
 
       if (result.status == 200) {

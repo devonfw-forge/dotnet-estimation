@@ -11,6 +11,7 @@ import { useTaskStore } from "../Stores/TaskStore";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { Checkbox } from "./Checkmark";
 import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
+import React from "react";
 
 export const TaskCard: FunctionComponent<{
   id: String;
@@ -23,6 +24,11 @@ export const TaskCard: FunctionComponent<{
   finalValue?: Number;
 }> = ({ id, parentSession, title, url, description, status, complexityAverage, finalValue }) => {
   const { isAdmin, userId, token } = useAuthStore();
+  const authHeaders = {
+    Accept: "application/json",
+    "Content-Type": " application/json",
+    Authorization: `Bearer ${token}`,
+  };
 
   const requestStatusChange = async (newStatus: Status) => {
     const url = baseUrl + serviceUrl + parentSession + "/task/status";
@@ -31,39 +37,21 @@ export const TaskCard: FunctionComponent<{
       method: "put",
       url: url,
       data: { id: id, status: convertStatusToNumber(newStatus) },
-      headers: {
-        Accept: "application/json",
-        "Content-Type": " application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers: authHeaders
     });
   };
-
-  console.log("Average: " + complexityAverage);
-  console.log("FinalValue: " + finalValue);
 
   const { deleteTask } = useTaskStore();
   const requestDeleteTask = async () => {
     const url = baseUrl + serviceUrl + parentSession + "/task/" + id;
-    const result = await axios.delete(url);
+    const result = await axios.delete(url, {
+      headers: authHeaders
+    });
 
     if (result.status == 200) {
       deleteTask(id);
     }
   };
-
-  const renderCheckmark = () => {
-    
-      return (  
-      <Checkbox
-      key = {"checkbox"}  
-      size = {"25px"}
-      backgroundColor = {"#0DA65A"}
-      accentColor = {" #FFFFFF"}
-     />
-      )
-
-  }
 
   const renderAdministrativeView = () => {
     return (
@@ -105,19 +93,19 @@ export const TaskCard: FunctionComponent<{
               );
             case Status.Ended:
               return (
-              <>
                 <>
-                {renderFinalValueOnClosedTasks()}
-                </>
-                <button
-                  className={
-                    "bg-orange-500 p-2 mb-2 bg-warning font-bold p-1 mt-2 rounded"
+                  <>
+                    {renderFinalValueOnClosedTasks()}
+                  </>
+                  <button
+                    className={
+                      "bg-orange-500 p-2 mb-2 bg-warning font-bold p-1 mt-2 rounded"
                     }
                     onClick={() => requestStatusChange(Status.Open)}
-                >
-                  Vote again
-                </button>
-              </>
+                  >
+                    Vote again
+                  </button>
+                </>
               );
             default:
               return <></>
@@ -154,12 +142,22 @@ export const TaskCard: FunctionComponent<{
       <>
         {renderCheckmark()}
       </>
-        <div style={colorStyle}>
-          Rated:  {finalValue}
-        </div>
-
+      <div style={colorStyle}>
+        Rated:  {finalValue}
+      </div>
     </>
   );
+
+  const renderCheckmark = () => {
+    return (
+      <Checkbox
+        key={"checkbox"}
+        size={"25px"}
+        backgroundColor={"#0DA65A"}
+        accentColor={" #FFFFFF"}
+      />
+    )
+  }
 
   return (
     <>

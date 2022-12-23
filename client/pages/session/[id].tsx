@@ -31,9 +31,8 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
   const { addUser } = useSessionUserStore();
 
   useEffect(() => {
-    const { tasks } = data;
     setCurrentTasks(tasks);
-    
+
     setCurrentUsers(users);
     const { role, username, userId, token } = auth;
     login(username, token, userId, role);
