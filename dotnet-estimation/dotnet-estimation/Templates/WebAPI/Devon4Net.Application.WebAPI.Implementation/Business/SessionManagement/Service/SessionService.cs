@@ -359,12 +359,6 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var (id, status) = statusChange;
 
-            // debug print
-            if (statusChange.Result is not null)
-            {
-                if (statusChange.Result.FinalValue is not null) Console.WriteLine("Received Final Value: " + statusChange.Result.FinalValue);
-            }
-
             // if the session could be found and is valid
             if (session is not null && session.IsValid())
             {
@@ -383,10 +377,12 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return (false, new List<TaskStatusChangeDto>());
                 }
 
+                var task = session.Tasks.ToList().Find(item => item.Id == id);
+
                 // calculate the voting result if the task is evaluated
                 if (status == Status.Evaluated)
                 {
-                    session.Tasks.ToList().Find(item => item.Id == id).calculateResult();
+                    task.calculateResult();
                 }
 
                 // store the final estimation value if the task is ended
@@ -394,30 +390,24 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 {
                     if (statusChange.Result.FinalValue is null)
                     {
-                        Console.WriteLine("StatusChange FinalValue is null.");
                         return (false, new List<TaskStatusChangeDto>());
                     }
 
-                    session.Tasks.ToList().Find(item => item.Id == id).Result.FinalValue = statusChange.Result.FinalValue;
+                    task.Result.FinalValue = statusChange.Result.FinalValue;
                 }
 
                 var finished = _sessionRepository.Update(session);
 
-                // and we could properly update the database
+                // if we could properly update the database
                 if (finished)
                 {
                     var converted = taskChanges.Select<(String id, Status status), TaskStatusChangeDto>(item => new TaskStatusChangeDto { Id = item.id, Status = item.status }).ToList();
 
-                    // add the result to the DTO if task is evaluated
-                    if (status == Status.Evaluated)
+                    // add the result to the DTO if task is evaluated or ended
+                    if (status == Status.Evaluated || status == Status.Ended)
                     {
-                        converted.Find(item => item.Id == id).Result = session.Tasks.ToList().Find(item => item.Id == id).Result;
-                    }
-
-                    // add the final value to the DTO if task is ended
-                    if (status == Status.Ended)
-                    {
-                        converted.Find(item => item.Id == id).Result = session.Tasks.ToList().Find(item => item.Id == id).Result;
+                        var convertedTask = converted.Find(item => item.Id == id);
+                        convertedTask.Result = task.Result;
                     }
 
                     return (true, converted);

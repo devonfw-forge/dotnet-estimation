@@ -32,7 +32,6 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
 
   useEffect(() => {
     setCurrentTasks(tasks);
-
     setCurrentUsers(users);
     const { role, username, userId, token } = auth;
     login(username, token, userId, role);

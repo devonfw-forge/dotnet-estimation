@@ -119,7 +119,6 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
         draft.tasks.forEach((task) => {
           if (task.id == taskResultDto.id) {
             task.result = { amountOfVotes: 0, complexityAverage: taskResultDto.complexityAverage };
-            // task.result.complexityAverage = taskResultDto.complexityAverage;
             task.status = Status.Evaluated;
           }
         });

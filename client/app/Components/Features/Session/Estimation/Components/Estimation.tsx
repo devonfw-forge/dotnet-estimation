@@ -3,6 +3,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { ITask } from "../../../../../Interfaces/ITask";
 import { EstimationType } from "../../../../../Types/EstimationType";
+import { Role } from "../../../../../Types/Role";
 import { Status } from "../../../../../Types/Status";
 import { Center } from "../../../../Globals/Center";
 import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
@@ -17,17 +18,14 @@ interface EstimationProps {
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
-  const { userId, token } = useAuthStore();
+  const { userId, token, role } = useAuthStore();
 
   const columns = new Array<String>();
 
   const [doVote, setDoVote] = useState<boolean>(true);
 
   const task = findOpenTask();
-
   const evaluatedTaskExists = findEvaluatedTask();
-
-  // averageComplexity value of the current evaluated task
   let averageComplexity = findEvaluatedTask()?.result?.complexityAverage;
 
   let alreadyVoted = false;
@@ -148,9 +146,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
       <strong>
         {averageComplexity}
       </strong>
-      <>
-        {renderFinalValueChoice(task)}
-      </>
+      {role === Role.Admin ? renderFinalValueChoice(task) : <></>}
     </div>
   );
 

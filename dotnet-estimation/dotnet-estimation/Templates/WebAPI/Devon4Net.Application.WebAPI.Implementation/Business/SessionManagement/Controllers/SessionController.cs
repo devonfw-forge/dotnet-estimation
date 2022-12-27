@@ -15,6 +15,7 @@ using LiteDB;
 using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
 using Newtonsoft.Json.Serialization;
 using Devon4Net.Authorization;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -272,12 +273,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 {
                     var evaluatedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
 
-                    var taskResult = new TaskResultDto()
-                    {
-                        Id = statusChange.Id,
-                        AmountOfVotes = evaluatedTask.Result.AmountOfVotes,
-                        ComplexityAverage = evaluatedTask.Result.ComplexityAverage,
-                    };
+                    var taskResult = TaskResultConverter.ModelToDto(evaluatedTask);
 
                     await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskAverageAdded, Payload = taskResult }, sessionId);
                 }
@@ -286,13 +282,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                 {
                     var endedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
 
-                    var taskResult = new TaskResultDto()
-                    {
-                        Id = statusChange.Id,
-                        AmountOfVotes = endedTask.Result.AmountOfVotes,
-                        ComplexityAverage = endedTask.Result.ComplexityAverage,
-                        FinalValue = endedTask.Result.FinalValue
-                    };
+                    var taskResult = TaskResultConverter.ModelToDto(endedTask);
 
                     await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskFinalValueAdded, Payload = taskResult }, sessionId);
                 }

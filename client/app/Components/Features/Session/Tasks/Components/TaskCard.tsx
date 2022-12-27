@@ -69,17 +69,6 @@ export const TaskCard: FunctionComponent<{
                   Evaluate!
                 </button>
               );
-            case Status.Evaluated:
-              return (
-                <button
-                  className={
-                    "py-2 px-4 rounded " + convertStatusToColor(status)
-                  }
-                  onClick={() => requestStatusChange(Status.Ended)}
-                >
-                  Close!
-                </button>
-              );
             case Status.Suspended:
               return (
                 <button
@@ -94,9 +83,6 @@ export const TaskCard: FunctionComponent<{
             case Status.Ended:
               return (
                 <>
-                  <>
-                    {renderFinalValueOnClosedTasks()}
-                  </>
                   <button
                     className={
                       "bg-orange-500 p-2 mb-2 bg-warning font-bold p-1 mt-2 rounded"
@@ -124,40 +110,23 @@ export const TaskCard: FunctionComponent<{
   };
 
   const colorStyle = {
-    color: '#253EEA',
+    color: '#0DA65A',
     fontWeight: 'bold',
   };
 
-  /*
-  function UseUpdateFinalValue() {
-  const [value, setValue] = useState(0);
-  return () => setValue(value => value + 1)
-  }
-
-  const forceUpdate = UseUpdateFinalValue()
-  */
-
   const renderFinalValueOnClosedTasks = () => (
-    <>
-      <>
-        {renderCheckmark()}
-      </>
-      <div style={colorStyle}>
-        Rated:  {finalValue}
-      </div>
-    </>
-  );
-
-  const renderCheckmark = () => {
-    return (
+    <div className="inline-flex flex-row space-x-2">
       <Checkbox
         key={"checkbox"}
         size={"25px"}
         backgroundColor={"#0DA65A"}
         accentColor={" #FFFFFF"}
       />
-    )
-  }
+      <div style={colorStyle}>
+        {`Rated: ${finalValue}`}
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -167,6 +136,7 @@ export const TaskCard: FunctionComponent<{
           convertStatusToBorderColor(status)
         }
       >
+        {status === Status.Ended ? renderFinalValueOnClosedTasks() : <></>}
         {isAdmin() ? renderAdministrativeView() : <></>}
         <div className="flex flex-row justify-between py-2">
           <strong className={convertStatusToTextColor(status)}>{title}</strong>
