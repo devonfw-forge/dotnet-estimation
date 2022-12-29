@@ -18,7 +18,7 @@ interface ISessionTaskState {
   findOpenTask: () => ITask | undefined;
   upsertEstimationToTask: (estimation: IEstimationDto) => void;
   setAverageComplexity: (taskResultDto: ITaskResultDto) => void;
-  setFinalComplexity: (finalValue: number) => void;
+  setFinalComplexity: (taskId: String, finalValue: number) => void;
   findEvaluatedTask: () => ITask | undefined;
 }
 
@@ -125,11 +125,11 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
-  setFinalComplexity: (finalValue: Number) => {
+  setFinalComplexity: (taskId: String, finalValue: number) => {
     set(
       produce((draft: ISessionTaskState) => {
         draft.tasks.forEach((task) => {
-          if (task.status == Status.Evaluated) {
+          if (task.id === taskId && task.result !== undefined) {
             task.result.finalValue = finalValue;
           }
         });

@@ -24,14 +24,14 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
 
   const [doVote, setDoVote] = useState<boolean>(true);
 
-  const task = findOpenTask();
-  const evaluatedTaskExists = findEvaluatedTask();
-  let averageComplexity = findEvaluatedTask()?.result?.complexityAverage;
+  const openTask = findOpenTask();
+  const evaluatedTask = findEvaluatedTask();
+  const averageComplexity = findEvaluatedTask()?.result?.complexityAverage;
 
   let alreadyVoted = false;
 
-  if (task) {
-    alreadyVoted = userAlreadyVoted(userId as string, task.id);
+  if (openTask) {
+    alreadyVoted = userAlreadyVoted(userId as string, openTask.id);
   }
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const submitFinalResultToRestApi = async () => {
     const evaluatedTask = findEvaluatedTask();
 
-    if (evaluatedTask) {
+    if (evaluatedTask && evaluatedTask.result !== undefined) {
       let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: evaluatedTask.result.finalValue };
 
       const url = baseUrl + serviceUrl + id + "/task/status";
@@ -113,10 +113,10 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
   const user = "me";
 
   const renderVoting = () => {
-    if (task) {
+    if (openTask) {
       if (doVote) {
         return (
-          renderEstimationForTask(task)
+          renderEstimationForTask(openTask)
         )
       }
       else {
@@ -125,7 +125,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
         )
       }
     }
-    else if (evaluatedTaskExists) {
+    else if (evaluatedTask) {
       return (
         renderComplexityAverageAndFinalValueChoice()
       )
@@ -144,9 +144,9 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
         &apos;{findEvaluatedTask()?.title}&apos;: &nbsp;
       </>
       <strong>
-        {averageComplexity}
+        {`${averageComplexity}`}
       </strong>
-      {role === Role.Admin ? renderFinalValueChoice(task) : <></>}
+      {(role === Role.Admin && evaluatedTask) ? renderFinalValueChoice(evaluatedTask) : <></>}
     </div>
   );
 
@@ -175,6 +175,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
                 // @ts-ignore
                 type={EstimationType[type] as EstimationType}
                 isFinal={false}
+                taskId={task.id}
               />
             </div>
           ))}
@@ -217,6 +218,7 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
               // @ts-ignore
               type={EstimationType["Complexity"] as EstimationType}
               isFinal={true}
+              taskId={task.id}
             />
           </div>
           <div className="flex justify-center">

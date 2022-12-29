@@ -20,9 +20,8 @@ export const TaskCard: FunctionComponent<{
   url?: String;
   description?: String;
   status: Status;
-  complexityAverage?: Number;
   finalValue?: Number;
-}> = ({ id, parentSession, title, url, description, status, complexityAverage, finalValue }) => {
+}> = ({ id, parentSession, title, url, description, status, finalValue }) => {
   const { isAdmin, userId, token } = useAuthStore();
   const authHeaders = {
     Accept: "application/json",

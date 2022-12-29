@@ -12,7 +12,8 @@ export const EstimationValue: FunctionComponent<{
   isActive: boolean;
   parentType: EstimationType;
   isFinal: boolean;
-}> = ({ value, gridColumn, isActive, parentType, isFinal }) => {
+  taskId: String;
+}> = ({ value, gridColumn, isActive, parentType, isFinal, taskId }) => {
   const { setValue } = useEstimationStore();
   const { setFinalComplexity } = useTaskStore();
 
@@ -30,7 +31,7 @@ export const EstimationValue: FunctionComponent<{
         }}
         onClick={() => {
           if (isFinal) {
-            setFinalComplexity(value);
+            setFinalComplexity(taskId, value);
           }
           setValue(parentType, value);
         }}

@@ -35,7 +35,7 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
     setCurrentUsers(users);
     const { role, username, userId, token } = auth;
     login(username, token, userId, role);
-  }, [auth, tasks, users]);
+  }, [auth, tasks, users, login, setCurrentTasks, setCurrentUsers]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -83,13 +83,17 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
         console.log("TaskAverageAdded received.");
 
         setAverageComplexity(payload);
+        break;
       }
       case Type.TaskFinalValueAdded: {
         let { payload } = parsed as IMessage<ITaskResultDto>;
-        console.log("TaskFinalValueAdded received.");
-        console.log(payload);
+        console.log("TaskFinalValueAdded received: " + payload.finalValue);
 
-        setFinalComplexity(payload.finalValue);
+        if (payload.finalValue !== undefined) {
+          setFinalComplexity(payload.id, payload.finalValue.valueOf());
+        }
+
+        break;
       }
       case Type.UserJoined: {
         let { payload } = parsed as IMessage<IUser>;
@@ -97,6 +101,7 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
         console.log(payload);
 
         addUser(payload);
+        break;
       }
       default: {
         break;
