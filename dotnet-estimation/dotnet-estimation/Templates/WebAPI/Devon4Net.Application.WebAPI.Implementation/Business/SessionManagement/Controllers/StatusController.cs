@@ -37,32 +37,26 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             Devon4NetLogger.Debug($"Get-Request for session status with id: {id}");
 
-            try
+            var errorOrStatus = await _sessionService.GetStatus(id);
+
+            if (errorOrStatus.IsError)
             {
-                var (isValid, inviteToken, tasks, users) = await _sessionService.GetStatus(id);
-
-                Devon4NetLogger.Debug($"Session is valid: {isValid}");
-
-                var statusResult = new StatusDto
-                {
-                    IsValid = isValid,
-                    InviteToken = inviteToken,
-                    Tasks = tasks.Select(item => TaskConverter.ModelToDto(item)).ToList(),
-                    Users = users.Select(item => UserConverter.ModelToDto(item)).ToList(),
-                };
-
-                return new ObjectResult(JsonConvert.SerializeObject(statusResult));
+                Devon4NetLogger.Debug(errorOrStatus.FirstError.Description);
+                return BadRequest();
             }
-            catch (Exception exception)
+
+            Devon4NetLogger.Debug($"Session is valid: {errorOrStatus.Value.Item1}");
+
+            var statusResult = new StatusDto
             {
-                Devon4NetLogger.Debug($"Exception thrown: {exception.Message}");
+                IsValid = errorOrStatus.Value.Item1,
+                InviteToken = errorOrStatus.Value.Item2,
+                Tasks = errorOrStatus.Value.Item3.Select(item => TaskConverter.ModelToDto(item)).ToList(),
+                Users = errorOrStatus.Value.Item4.Select(item => UserConverter.ModelToDto(item)).ToList(),
+            };
 
-                return exception switch
-                {
-                    NotFoundException _ => NotFound(),
-                    _ => StatusCode(500),
-                };
-            }
+            return new ObjectResult(JsonConvert.SerializeObject(statusResult));
         }
+           
     }
 }

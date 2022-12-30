@@ -47,18 +47,16 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public async Task<ActionResult> CreateSession(SessionDto sessionDto)
         {
             Devon4NetLogger.Debug($"Create session that will expire at {sessionDto.ExpiresAt}");
-            try
+            var errorOrResult = await _sessionService.CreateSession(sessionDto);
+
+            if (errorOrResult.IsError)
             {
-                return Ok(await _sessionService.CreateSession(sessionDto));
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
+                return BadRequest();
             }
-            catch (Exception exception)
-            {
-                return exception switch
-                {
-                    InvalidExpiryDateException _ => BadRequest(),
-                    _ => StatusCode(500)
-                };
-            }
+
+                return Ok(errorOrResult.Value);
+            
         }
         [HttpPut]
         [AllowAnonymous]
@@ -70,20 +68,16 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         public async Task<IActionResult> InvalidateSession(long id)
         {
             Devon4NetLogger.Debug($"Put-Request to invalidate session with id: {id}");
+            var errorOrResult = await _sessionService.InvalidateSession(id);
 
-            try
+            if (errorOrResult.IsError)
             {
-                return Ok(await _sessionService.InvalidateSession(id));
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
+                return BadRequest();
             }
-            catch (Exception exception)
-            {
-                return exception switch
-                {
-                    NotFoundException _ => NotFound(),
-                    InvalidSessionException _ => BadRequest(),
-                    _ => StatusCode(500)
-                };
-            }
+            
+            return Ok(errorOrResult.Value);
+            
         }
 
         /// <summary>
@@ -101,19 +95,15 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             Devon4NetLogger.Debug($"Put-Request for removing user with id: {userId} from session status with id: {sessionId}");
 
-            try
-            {
-                var leaveResult = await _sessionService.RemoveUserFromSession(sessionId, userId);
+            var errorOrResult = await _sessionService.RemoveUserFromSession(sessionId, userId);
 
-                return new ObjectResult(JsonConvert.SerializeObject(leaveResult));
-            }
-            catch (Exception exception)
+            if (errorOrResult.IsError)
             {
-                return exception switch
-                {
-                    NotFoundException _ => StatusCode(500),
-                };
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
+                return BadRequest();
             }
+
+            return new ObjectResult(JsonConvert.SerializeObject(errorOrResult.Value));
         }
 
         /// <summary>
@@ -132,26 +122,25 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var (username, desiredRole) = joinDto;
 
-            var (completed, result) = await _sessionService.AddUserToSession(inviteToken, username, desiredRole);
+            var errorOrResult = await _sessionService.AddUserToSession(inviteToken, username, desiredRole);
 
-            if (completed)
+            if (errorOrResult.IsError)
             {
-                var (sessionId, userId, _, role, token) = result;
-
-                Message<UserDto> Message = new Message<UserDto>
-                {
-                    Type = MessageType.UserJoined,
-                    Payload = new UserDto { Id = userId, Role = role, Token = token, Username = username },
-                };
-
-                await _webSocketHandler.Send(Message, sessionId);
-
-                return new ObjectResult(JsonConvert.SerializeObject(result));
-            }
-            else
-            {
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
                 return BadRequest();
             }
+
+            var (sessionId, userId, _, role, token) = errorOrResult.Value.Item2;
+
+            Message<UserDto> Message = new Message<UserDto>
+            {
+                Type = MessageType.UserJoined,
+                Payload = new UserDto { Id = userId, Role = role, Token = token, Username = username },
+            };
+
+            await _webSocketHandler.Send(Message, sessionId);
+
+            return new ObjectResult(JsonConvert.SerializeObject(errorOrResult.Value.Item2));
         }
 
         [HttpPost]
@@ -169,22 +158,24 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             Devon4NetLogger.Debug($"{userId}");
 
-            var (finished, taskDto) = await _sessionService.AddTaskToSession(sessionId, userId, task);
+            var errorOrResult = await _sessionService.AddTaskToSession(sessionId, userId, task);
 
-            if (finished)
+            if (errorOrResult.IsError)
             {
-                Message<TaskDto> Message = new Message<TaskDto>
-                {
-                    Type = MessageType.TaskCreated,
-                    Payload = taskDto
-                };
-
-                await _webSocketHandler.Send(Message, sessionId);
-
-                return Ok();
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
+                return BadRequest();
             }
 
-            return BadRequest();
+            Message<TaskDto> Message = new Message<TaskDto>
+            {
+                Type = MessageType.TaskCreated,
+                Payload = errorOrResult.Value.Item2
+            };
+
+            await _webSocketHandler.Send(Message, sessionId);
+
+            return Ok();
+
         }
 
         [HttpDelete]
@@ -197,31 +188,24 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             Devon4NetLogger.Debug($"Delete-Request to delete task with id: {taskId} from session with id: {sessionId}");
 
-            try
+           
+            var errorOrResult = await _sessionService.DeleteTask(sessionId, taskId);
+
+            if (errorOrResult.IsError)
             {
-                var finished = await _sessionService.DeleteTask(sessionId, taskId);
-
-                if (finished)
-                {
-                    Message<string> message = new Message<string>
-                    {
-                        Type = MessageType.TaskDeleted,
-                        Payload = taskId
-                    };
-                    await _webSocketHandler.Send(message, sessionId);
-                    return Ok();
-                }
-
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
                 return BadRequest();
             }
-            catch (Exception exception)
+
+            Message<string> message = new Message<string>
             {
-                return exception switch
-                {
-                    NotFoundException or TaskNotFoundException => NotFound(),
-                    _ => StatusCode(500)
-                };
-            }
+                Type = MessageType.TaskDeleted,
+                Payload = taskId
+            };
+            await _webSocketHandler.Send(message, sessionId);
+            return Ok();
+
+         
         }
 
         /// <summary>
@@ -240,11 +224,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
             var (taskId, voteBy, complexity) = estimationDto;
 
-            var result = await _sessionService.AddNewEstimation(sessionId, taskId, voteBy, complexity);
+            var errorOrResult = await _sessionService.AddNewEstimation(sessionId, taskId, voteBy, complexity);
+
+            if (errorOrResult.IsError)
+            {
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
+                return BadRequest();
+            }
 
             await _webSocketHandler.Send(new Message<EstimationDto> { Type = MessageType.EstimationAdded, Payload = estimationDto }, sessionId);
 
-            return StatusCode(StatusCodes.Status201Created, result);
+            return StatusCode(StatusCodes.Status201Created, errorOrResult.Value);
         }
 
         [HttpPut]
@@ -257,18 +247,19 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         {
             // Changing the status of a task requires other elements to be modified.
             // There can always be only one open or evaluated task at the same time.
-            var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
 
-            if (finished)
-            {
-                await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
+            var errorOrResult = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
 
-                return Ok(modifiedTasks);
-            }
-            else
+            if (errorOrResult.IsError)
             {
-                return BadRequest("Zero entries got updated due to errors. Please ensure the task exists.");
+                Devon4NetLogger.Debug(errorOrResult.FirstError.Description);
+                return BadRequest();
             }
+
+            await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = errorOrResult.Value.Item2 }, sessionId);
+
+            return Ok(errorOrResult.Value.Item2);
+
         }
     }
 }
