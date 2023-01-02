@@ -8,6 +8,18 @@ docker-compose up
 ``
 command in the root folder.
 
+## How to setup the project to use a self-signed certificate for signing JSON Web Tokens
+Please read the following guide to set up your development environment to use a given certificate for signing the generated JSON Web Tokens correctly.
+Read the short introduction until row 15 and then choose one of the preferred options below.
+I assume you already have a certificate. In case you do not, you can follow the following link to create one [Create a self-signed certificate](https://github.com/devonfw-forge/dotnet-estimation/blob/main/dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/Certificates/HowToSetupJwtViaSelfSignedCa.txt)  or you just ask your projectmembers if there already exists one.
+
+- If you're using **Visual Studio**, I recommend you to follow the steps beginning from row 42.
+- Otherwise, I would recommend you to use the **Script**. The steps are explained from row 17 to 22.
+- In case you prefer the **CLI**, read on from row 24 to 40.
+
+[Guide to setup JWT generation signed by a given certificate in developement environment](https://github.com/devonfw-forge/dotnet-estimation/blob/main/dotnet-estimation/dotnet-estimation/Templates/WebAPI/Devon4Net.Application.WebAPI/Certificates/HowToSetupJwt.txt "Link")
+
+
 ## Routes
 The estimation application's backend provides the following services and routes:
 
