@@ -80,7 +80,10 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     const evaluatedTask = findEvaluatedTask();
 
     if (evaluatedTask && evaluatedTask.result !== undefined) {
-      let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: evaluatedTask.result.finalValue };
+
+      const hasDefaultValue = evaluatedTask.result.finalValue ? false : true;
+
+      let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: hasDefaultValue ? 1 : evaluatedTask.result.finalValue };
 
       const url = baseUrl + serviceUrl + id + "/task/status";
 
