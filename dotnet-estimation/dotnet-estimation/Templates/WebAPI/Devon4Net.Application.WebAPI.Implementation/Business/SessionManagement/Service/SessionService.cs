@@ -101,6 +101,21 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             return _sessionRepository.GetFirstOrDefault(expression);
         }
 
+        public async Task<Session> GetSessionAndUsers(long id)
+        {
+            var session = await GetSession(id);
+            var usersResult = new List<Domain.Entities.User>();
+
+            foreach (var user in session.Users)
+            {
+                var expression = LiteDB.Query.EQ("_id", user.Id);
+                var dbUser = _userRepository.GetFirstOrDefault(expression);
+                usersResult.Add(dbUser);
+            }
+            session.Users = usersResult;
+            return session;
+        }
+
         public async Task<bool> InvalidateSession(long sessionId)
         {
             Session sessionResult = await GetSession(sessionId);
@@ -122,8 +137,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
 
         public async Task<(bool, string?, List<Domain.Entities.Task>, List<User>)> GetStatus(long sessionId)
         {
-            var entity = await GetSession(sessionId);
-
+            var entity = await GetSessionAndUsers(sessionId);
             if (entity == null)
             {
                 throw new NotFoundException(sessionId);
@@ -218,7 +232,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         /// <returns></returns>
         public async Task<(bool, JoinSessionResultDto?)> AddUserToSession(string inviteToken, string username, Role desiredRole)
         {
-            if (desiredRole == Role.Author)
+            if (desiredRole == Role.Admin)
             {
                 return (false, null);
             }
@@ -264,7 +278,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     userNameClaim,
                     userIdClaim
                 });
-
+               
                 Devon4NetLogger.Debug("Returned token: " + token);
 
                 var joinResult = new JoinSessionResultDto
@@ -273,7 +287,8 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     Id = userUuid,
                     Username = username,
                     Token = token,
-                    Role = desiredRole
+                    Role = desiredRole,
+                    Online = true,
                 };
 
                 return (true, joinResult);

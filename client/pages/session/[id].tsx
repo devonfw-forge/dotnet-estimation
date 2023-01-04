@@ -23,10 +23,12 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { Role, toRole } from "../../app/Types/Role";
 import { UserDto } from "../../app/Types/UserDto";
 import { IUser } from "../../app/Interfaces/IUser";
+import { IUpdateDto } from "../../app/Interfaces/IUpdateDto";
 
 export default function Session({ id, tasks, users, auth, inviteToken }: any) {
   const { setCurrentTasks } = useTaskStore();
   const { setCurrentUsers } = useSessionUserStore();
+  const { changeOnlineStatus } = useSessionUserStore();
   const { login, username } = useAuthStore();
   const { addUser } = useSessionUserStore();
 
@@ -97,11 +99,22 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
       }
       case Type.UserJoined: {
         let { payload } = parsed as IMessage<IUser>;
-
         console.log(payload);
-
         addUser(payload);
         break;
+      }
+      case Type.UserRefreshed:{
+        let { payload } = parsed as IMessage<IUpdateDto>;
+        if(payload.availableClients != undefined)
+        {
+          console.log("Refreshing users");
+          changeOnlineStatus(payload);
+        }
+      }
+      case Type.UserRefreshed:{
+        let { payload } = parsed as IMessage<IUpdateDto>;
+        console.log("Refresh Users");
+        changeOnlineStatus(payload);
       }
       default: {
         break;
@@ -113,7 +126,7 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(
-    "ws://localhost:8085/" + id + "/ws",
+    "ws://localhost:8085/" + id + "/ws/" + auth.token,
     {
       onOpen: (event: any) => {
         console.log(event);
