@@ -12,7 +12,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         TaskStatusModified,
         TaskDeleted,
         EstimationAdded,
-        UserJoined,
-        UserRefreshed,
+        UserJoined = 6,
+        UserRefreshed = 7,
     }
 }
