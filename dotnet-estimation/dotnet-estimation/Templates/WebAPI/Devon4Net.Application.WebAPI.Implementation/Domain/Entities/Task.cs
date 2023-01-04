@@ -17,5 +17,17 @@ namespace Devon4Net.Application.WebAPI.Implementation.Domain.Entities
         public IList<Estimation> Estimations { get; set; }
 
         public Result? Result { get; set; }
+
+        public Result calculateResult()
+        {
+            var taskResult = new Result()
+            {
+                AmountOfVotes = Estimations.Count,
+                ComplexityAverage = (float)Estimations.Select(est => est.Complexity).Average()
+            };
+
+            Result = taskResult;
+            return Result;
+        }
     }
 }

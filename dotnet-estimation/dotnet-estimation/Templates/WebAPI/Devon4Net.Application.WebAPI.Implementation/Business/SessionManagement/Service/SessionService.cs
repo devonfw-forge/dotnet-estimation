@@ -369,7 +369,7 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return (false, new List<TaskStatusChangeDto>());
                 }
 
-                // and it contains the task requested to be chnaged
+                // and it contains the task requested to be changed
                 var (modified, taskChanges) = session.ChangeStatusOfTask(id, status);
 
                 if (!modified)
@@ -377,12 +377,38 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
                     return (false, new List<TaskStatusChangeDto>());
                 }
 
+                var task = session.Tasks.ToList().Find(item => item.Id == id);
+
+                // calculate the voting result if the task is evaluated
+                if (status == Status.Evaluated)
+                {
+                    task.calculateResult();
+                }
+
+                // store the final estimation value if the task is ended
+                if (status == Status.Ended)
+                {
+                    if (statusChange.Result.FinalValue is null)
+                    {
+                        return (false, new List<TaskStatusChangeDto>());
+                    }
+
+                    task.Result.FinalValue = statusChange.Result.FinalValue;
+                }
+
                 var finished = _sessionRepository.Update(session);
 
-                // and we could properly update the database
+                // if we could properly update the database
                 if (finished)
                 {
                     var converted = taskChanges.Select<(String id, Status status), TaskStatusChangeDto>(item => new TaskStatusChangeDto { Id = item.id, Status = item.status }).ToList();
+
+                    // add the result to the DTO if task is evaluated or ended
+                    if (status == Status.Evaluated || status == Status.Ended)
+                    {
+                        var convertedTask = converted.Find(item => item.Id == id);
+                        convertedTask.Result = task.Result;
+                    }
 
                     return (true, converted);
                 }

@@ -3,8 +3,8 @@ import { EstimationValue } from "./EstimationButton";
 import { useEstimationStore } from "../Stores/EstimationStore";
 import { EstimationType } from "../../../../../Types/EstimationType";
 
-export const EstimationBar: FunctionComponent<{ type: EstimationType }> = ({
-  type,
+export const EstimationBar: FunctionComponent<{ type: EstimationType; isFinal: boolean; taskId: String; }> = ({
+  type, isFinal, taskId
 }) => {
   const state = useEstimationStore();
 
@@ -28,6 +28,8 @@ export const EstimationBar: FunctionComponent<{ type: EstimationType }> = ({
                 gridColumn={validValues.indexOf(item) * 2 + 2}
                 isActive={item == state[type] ? true : false}
                 parentType={type}
+                isFinal={isFinal}
+                taskId={taskId}
               />
             );
           })}

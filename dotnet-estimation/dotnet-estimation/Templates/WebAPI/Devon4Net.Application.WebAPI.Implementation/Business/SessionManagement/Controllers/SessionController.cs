@@ -12,7 +12,10 @@ using System.Net;
 using Task = System.Threading.Tasks.Task;
 using System.Net.WebSockets;
 using LiteDB;
+using Devon4Net.Application.WebAPI.Implementation.Domain.Entities;
+using Newtonsoft.Json.Serialization;
 using Devon4Net.Authorization;
+using Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Converters;
 
 namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement.Controllers
 {
@@ -248,13 +251,15 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("/estimation/v1/session/{sessionId:long}/task/status")]
         public async Task<IActionResult> ChangeTaskStatus(long sessionId, [FromBody] TaskStatusChangeDto statusChange)
         {
+            Devon4NetLogger.Debug($"Executing ChangeTaskStatus from SessionController. Task: {statusChange.Id}. New status: {statusChange.Status}.");
+
             // Changing the status of a task requires other elements to be modified.
             // There can always be only one open or evaluated task at the same time.
             var (finished, modifiedTasks) = await _sessionService.ChangeTaskStatus(sessionId, statusChange);
@@ -262,6 +267,25 @@ namespace Devon4Net.Application.WebAPI.Implementation.Business.SessionManagement
             if (finished)
             {
                 await _webSocketHandler.Send(new Message<List<TaskStatusChangeDto>> { Type = MessageType.TaskStatusModified, Payload = modifiedTasks }, sessionId);
+
+                // If the status changed to evaluated, another message is sent that contains the average voting result
+                if (statusChange.Status == Status.Evaluated)
+                {
+                    var evaluatedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
+
+                    var taskResult = TaskResultConverter.ModelToDto(evaluatedTask);
+
+                    await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskAverageAdded, Payload = taskResult }, sessionId);
+                }
+                // If the status changed to ended, another message is sent that contains the final voting result
+                else if (statusChange.Status == Status.Ended)
+                {
+                    var endedTask = modifiedTasks.Find(item => item.Id == statusChange.Id);
+
+                    var taskResult = TaskResultConverter.ModelToDto(endedTask);
+
+                    await _webSocketHandler.Send(new Message<TaskResultDto> { Type = MessageType.TaskFinalValueAdded, Payload = taskResult }, sessionId);
+                }
 
                 return Ok(modifiedTasks);
             }

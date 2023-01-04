@@ -11,15 +11,14 @@ import { useSessionUserStore } from "../../app/Components/Features/Session/Users
 import { App } from "../../app/Components/Globals/App";
 import { Frame } from "../../app/Components/Globals/Frame";
 import { StickyHeader } from "../../app/Components/Globals/StickyHeader";
-import { baseUrl, serviceUrl } from "../../app/Constants/url";
 import { IMessage, ITypedMessage } from "../../app/Interfaces/IMessage";
 import { ITask, ITaskStatusChange } from "../../app/Interfaces/ITask";
 import { IWebSocketMessage } from "../../app/Interfaces/IWebSocketMessage";
 import { Type } from "../../app/Types/Type";
 import { dummyUsers } from "../../app/Components/Globals/DummyData";
 import { IEstimationDto } from "../../app/Interfaces/IEstimationDto";
+import { ITaskResultDto } from "../../app/Interfaces/ITaskResultDto";
 import { useAuthStore } from "../../app/Components/Features/Authentication/Stores/AuthStore";
-
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Role, toRole } from "../../app/Types/Role";
 import { UserDto } from "../../app/Types/UserDto";
@@ -34,11 +33,9 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
   useEffect(() => {
     setCurrentTasks(tasks);
     setCurrentUsers(users);
-
     const { role, username, userId, token } = auth;
-
     login(username, token, userId, role);
-  }, [auth, tasks, users]);
+  }, [auth, tasks, users, login, setCurrentTasks, setCurrentUsers]);
 
   //  process onUserConnect, onAnotherUserConnect, markTaskAsActive,
   const processMessage = (message: IWebSocketMessage) => {
@@ -81,12 +78,30 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
 
         break;
       }
+      case Type.TaskAverageAdded: {
+        let { payload } = parsed as IMessage<ITaskResultDto>;
+        console.log("TaskAverageAdded received.");
+
+        setAverageComplexity(payload);
+        break;
+      }
+      case Type.TaskFinalValueAdded: {
+        let { payload } = parsed as IMessage<ITaskResultDto>;
+        console.log("TaskFinalValueAdded received: " + payload.finalValue);
+
+        if (payload.finalValue !== undefined) {
+          setFinalComplexity(payload.id, payload.finalValue.valueOf());
+        }
+
+        break;
+      }
       case Type.UserJoined: {
         let { payload } = parsed as IMessage<IUser>;
 
         console.log(payload);
 
         addUser(payload);
+        break;
       }
       default: {
         break;
@@ -94,7 +109,7 @@ export default function Session({ id, tasks, users, auth, inviteToken }: any) {
     }
   };
 
-  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask } =
+  const { upsertTask, changeStatusOfTask, deleteTask, upsertEstimationToTask, setAverageComplexity, setFinalComplexity } =
     useTaskStore();
 
   const { sendMessage, getWebSocket } = useWebSocket(

@@ -1,3 +1,10 @@
+export interface IResult {
+    amountOfVotes: Number,
+    complexityAverage: Number,
+    finalValue?: Number
+}
+
+/*
 export interface IVoteResult {
     value: Number;
 }
@@ -11,3 +18,4 @@ export interface ITaskResult {
 export interface IResult {
     results: ITaskResult[],
 }
+*/

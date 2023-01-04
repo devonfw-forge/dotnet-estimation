@@ -5,6 +5,7 @@ import { IEstimation, ITask } from "../../../../../../app/Interfaces/ITask";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { IEstimationDto } from "../../../../../Interfaces/IEstimationDto";
 import { Status } from "../../../../../Types/Status";
+import { ITaskResultDto } from "../../../../../Interfaces/ITaskResultDto";
 
 interface ISessionTaskState {
   tasks: ITask[];
@@ -16,6 +17,9 @@ interface ISessionTaskState {
   userAlreadyVoted: (userId: String, taskId: String) => boolean;
   findOpenTask: () => ITask | undefined;
   upsertEstimationToTask: (estimation: IEstimationDto) => void;
+  setAverageComplexity: (taskResultDto: ITaskResultDto) => void;
+  setFinalComplexity: (taskId: String, finalValue: number) => void;
+  findEvaluatedTask: () => ITask | undefined;
 }
 
 export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
@@ -108,6 +112,34 @@ export const useTaskStore = create<ISessionTaskState>()((set, get) => ({
       })
     );
   },
+  // sets average complexity of the open task & changes it to evaluated
+  setAverageComplexity: (taskResultDto: ITaskResultDto) => {
+    set(
+      produce((draft: ISessionTaskState) => {
+        draft.tasks.forEach((task) => {
+          if (task.id == taskResultDto.id) {
+            task.result = { amountOfVotes: 0, complexityAverage: taskResultDto.complexityAverage };
+            task.status = Status.Evaluated;
+          }
+        });
+      })
+    );
+  },
+  setFinalComplexity: (taskId: String, finalValue: number) => {
+    set(
+      produce((draft: ISessionTaskState) => {
+        draft.tasks.forEach((task) => {
+          if (task.id === taskId && task.result !== undefined) {
+            task.result.finalValue = finalValue;
+          }
+        });
+      })
+    );
+  },
+  findEvaluatedTask: () => {
+    return get().tasks.find((task) => task.status == Status.Evaluated);
+  },
+
 }));
 
 const sortTasks = (tasks: ITask[]) => {

@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { baseUrl, serviceUrl } from "../../../../../Constants/url";
 import { ITask } from "../../../../../Interfaces/ITask";
 import { EstimationType } from "../../../../../Types/EstimationType";
+import { Role } from "../../../../../Types/Role";
 import { Status } from "../../../../../Types/Status";
 import { Center } from "../../../../Globals/Center";
 import { useAuthStore } from "../../../Authentication/Stores/AuthStore";
@@ -16,21 +16,22 @@ interface EstimationProps {
 }
 
 export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
-  const { findOpenTask, tasks, userAlreadyVoted } = useTaskStore();
+  const { findOpenTask, tasks, userAlreadyVoted, findEvaluatedTask } = useTaskStore();
   const { complexity, effort, risk, resetStore } = useEstimationStore();
-
-  const { userId, token } = useAuthStore();
+  const { userId, token, role } = useAuthStore();
 
   const columns = new Array<String>();
 
   const [doVote, setDoVote] = useState<boolean>(true);
 
-  const task = findOpenTask();
+  const openTask = findOpenTask();
+  const evaluatedTask = findEvaluatedTask();
+  const averageComplexity = findEvaluatedTask()?.result?.complexityAverage;
 
   let alreadyVoted = false;
 
-  if (task) {
-    alreadyVoted = userAlreadyVoted(userId as string, task.id);
+  if (openTask) {
+    alreadyVoted = userAlreadyVoted(userId as string, openTask.id);
   }
 
   useEffect(() => {
@@ -39,7 +40,8 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     } else {
       setDoVote(true);
     }
-  }, [task, alreadyVoted]);
+  }, [alreadyVoted]);
+
 
   for (const type in EstimationType) {
     columns.push(type);
@@ -67,10 +69,41 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
     });
 
     if (result.status == 201) {
-      // finally remove task from store
+      // setDoVote to render the vote again button
+      setDoVote(false);
+      // finally reset the estimation buttons to 1
       resetStore();
     }
   };
+
+  const submitFinalResultToRestApi = async () => {
+    const evaluatedTask = findEvaluatedTask();
+
+    if (evaluatedTask && evaluatedTask.result !== undefined) {
+
+      const hasDefaultValue = evaluatedTask.result.finalValue ? false : true;
+
+      let res = { amountOfVotes: 0, complexityAverage: averageComplexity, finalValue: hasDefaultValue ? 1 : evaluatedTask.result.finalValue };
+
+      const url = baseUrl + serviceUrl + id + "/task/status";
+
+      const result = await axios({
+        method: "put",
+        url: url,
+        data: { id: evaluatedTask.id, status: Status.Ended, result: res },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": " application/json",
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      if (result.status == 200) {
+        // reset the estimation buttons to 1
+        resetStore();
+      }
+    }
+  }
 
   if (!userId) {
     return <>You are currently not logged in!</>;
@@ -82,8 +115,46 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
 
   const user = "me";
 
-  const renderEstimationForTask = (task: ITask) => {
-    return (
+  const renderVoting = () => {
+    if (openTask) {
+      if (doVote) {
+        return (
+          renderEstimationForTask(openTask)
+        )
+      }
+      else {
+        return (
+          renderVoteAgainButton()
+        )
+      }
+    }
+    else if (evaluatedTask) {
+      return (
+        renderComplexityAverageAndFinalValueChoice()
+      )
+    }
+    else {
+      return (
+        renderWaitForLobbyhostMessage()
+      )
+    }
+  };
+
+  const renderComplexityAverageAndFinalValueChoice = () => (
+    <div>
+      <>
+        Average Complexity for the task &nbsp;
+        &apos;{findEvaluatedTask()?.title}&apos;: &nbsp;
+      </>
+      <strong>
+        {`${averageComplexity}`}
+      </strong>
+      {(role === Role.Admin && evaluatedTask) ? renderFinalValueChoice(evaluatedTask) : <></>}
+    </div>
+  );
+
+  const renderEstimationForTask = (task: ITask) => (
+    <Center>
       <>
         <strong className={defaultPadding}>
           How would you rate this task?
@@ -106,6 +177,8 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
                 key={"estimationBar" + type}
                 // @ts-ignore
                 type={EstimationType[type] as EstimationType}
+                isFinal={false}
+                taskId={task.id}
               />
             </div>
           ))}
@@ -121,44 +194,71 @@ export const Estimation: FunctionComponent<EstimationProps> = ({ id }) => {
           </div>
         </>
       </>
-    );
-  };
+    </Center>
+  );
 
-  const renderVoting = () => {
-    return (
-      <Center>
-        {task ? (
-          doVote ? (
-            renderEstimationForTask(task)
-          ) : (
-            <div className="flex justify-center">
-              <button
-                onClick={() => {
-                  setDoVote(true);
-                }}
-                className={
-                  "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
-                }
-              >
-                I want to vote again!
-              </button>
-            </div>
-          )
-        ) : (
-          <strong className={defaultPadding}>
-            Please wait for your lobby host to create a task!
-          </strong>
-        )}
-      </Center>
-    );
-  };
+  const renderFinalValueChoice = (task: ITask) => (
+    <Center>
+      <>
+        <strong className={defaultPadding}>
+          Choose final value for the Complexity
+        </strong>
+        <>
+          <div
+            key={"estimationColumn" + "Complexity"}
+            className={
+              "flex flex-row justify-between items-center " + defaultPadding
+            }
+            style={{
+              background: "#f1f4f6",
+            }}
+          >
+            <p style={{ color: "#404b56" }}>
+              Complexity:
+            </p>
+            <EstimationBar
+              key={"estimationBar" + "Complexity"}
+              // @ts-ignore
+              type={EstimationType["Complexity"] as EstimationType}
+              isFinal={true}
+              taskId={task.id}
+            />
+          </div>
+          <div className="flex justify-center">
+            <button
+              onClick={() => submitFinalResultToRestApi()}
+              className={
+                "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
+              }
+            >
+              Submit
+            </button>
+          </div>
+        </>
+      </>
+    </Center>
+  );
+
+  const renderVoteAgainButton = () => (
+    <div className="flex justify-center">
+      <button
+        onClick={() => {
+          setDoVote(true);
+        }}
+        className={
+          "border-b-blue-700 bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 p-2 rounded "
+        }
+      >
+        I want to vote again
+      </button>
+    </div>
+  );
+
+  const renderWaitForLobbyhostMessage = () => (
+    <strong className={defaultPadding}>
+      Please wait for your lobby host to create a task!
+    </strong>
+  );
 
   return renderVoting();
-
-  /*
-  return userHasAlreadyVoted
-    ? renderViewWhenUserHasAlreadyVoted()
-    : renderVoting();
-
-    */
 };

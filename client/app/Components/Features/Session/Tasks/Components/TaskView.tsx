@@ -36,6 +36,7 @@ export const TaskView: FunctionComponent<TaskViewProps> = ({ id }) => {
               title={item.title}
               description={item.description}
               url={item.url}
+              finalValue={item.result?.finalValue}
             />
           ))}
         </div>
