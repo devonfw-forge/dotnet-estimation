@@ -88,7 +88,7 @@ export async function getServerSideProps(context: any) {
   const { id } = params;
 
   const res = await fetch(
-    "http://127.0.0.1:8085/estimation/v1/session/" + id + "/status"
+    "http://estimation-backend:8085/estimation/v1/session/" + id + "/status"
   );
 
   const data = await res.json();

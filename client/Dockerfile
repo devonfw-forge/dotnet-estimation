@@ -1,22 +1,19 @@
-# 1. Build
-FROM node:lts AS build
+# ==== CONFIGURE =====
+# Use a Node 16 base image
+FROM node:lts
+# Set the working directory to /app inside the container
 WORKDIR /app
-
-COPY package.json ./package.json
-RUN npm install
-COPY . /app
+# Copy app files
+COPY . .
+# ==== BUILD =====
+# Install dependencies (npm ci makes sure the exact versions in the lockfile gets installed)
+RUN npm ci
+# Build the app
 RUN npm run build
-
-# 2. Deploy
-FROM nginx:latest
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-  apache2-utils curl \
-  && rm -rf /var/lib/apt/lists/*
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/. /usr/share/nginx/html
-COPY docker-external-config.json /usr/share/nginx/html/docker-external-config.json
+# ==== RUN =======
+# Set the env to "production"
+ENV NODE_ENV development
+# Expose the port on which the app will be running
 EXPOSE 3000
-
-HEALTHCHECK --interval=60s --timeout=30s --start-period=1s --retries=3 CMD curl --fail http://localhost/health || exit 1
-CMD ["nginx", "-g", "daemon off;"]
+# Start the app
+CMD [ "npm", "start"]

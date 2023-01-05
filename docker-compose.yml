@@ -19,8 +19,15 @@ services:
     networks:
       backend-net:
         aliases: [backend]
+  reverse-proxy:
+    build: ./reverse-proxy
+    restart: always
+    container_name: 'reverse_proxy'
     ports:
-      - 3000:3000
+      - 80:80
+    networks:
+      backend-net:
+        aliases: [backend]
 
 networks:
   backend-net:
